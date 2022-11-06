@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kioskmake.projectkiosk.domain.menu.MenuRepository">
+    <select id="findMenuListBySelectType" parameterType="kioskmake.projectkiosk.domain.menu.Menu" resultType="kioskmake.projectkiosk.domain.menu.Menu">
+        SELECT
+            <choose>
+                <when test="menu_type == 'sideMenu'">
+                    concat(side_menu_name, ' (', size, ')') AS menu_name,
+                </when>
+                <otherwise>
+                    concat(drink_name, ' (', size, ')') AS menu_name,
+                </otherwise>
+            </choose>
+            price,
+            kcal
+        FROM
+            <choose>
+                <when test="menu_type == 'sideMenu'">
+                    side_menu_table
+                </when>
+                <otherwise>
+                    drink_table
+                </otherwise>
+            </choose>
+        <if test="set_flag == true">
+            WHERE
+                size LIKE #{size}
+                <if test="menu_type == 'sideMenu'">
+                    and
+                    set_menu_flag = 1
+                </if>
+        </if>
+        ;
+    </select>
+</mapper>
