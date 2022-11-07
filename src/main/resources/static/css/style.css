@@ -12,8 +12,18 @@
     padding: 0;
 }
 
-html, body {
-    height: 100%;
+body {
+    display: flex;
+    justify-content: center;
+
+    background-color: #dbdbdb;
+}
+
+#container {
+    width: 1000px;
+    height: 1600px;
+
+    background-color: white;
 }
 
 ul, a {
