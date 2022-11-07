@@ -7,10 +7,10 @@
         SELECT
             <choose>
                 <when test="menu_type == 'sideMenu'">
-                    concat(side_menu_name, ' (', size, ')') AS menu_name,
+                    concat(side_menu_name, ' - ', if(size LIKE 'M', '미디엄', '라지')) AS menu_name,
                 </when>
                 <otherwise>
-                    concat(drink_name, ' (', size, ')') AS menu_name,
+                    concat(drink_name, ' - ', if(size LIKE 'M', '미디엄', '라지')) AS menu_name,
                 </otherwise>
             </choose>
             price,

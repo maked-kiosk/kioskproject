@@ -10,6 +10,7 @@ setCancelButtonClickEvent();
 setLoadMainPageButtonClickEvent();
 setShoppingBasketAddButtonClickEvent();
 
+
 function setPlusButtonClickEvetn() {
     plusButton.onclick = increaseAmount;
 }
@@ -61,5 +62,5 @@ function setLoadMainPageButtonClickEvent() {
 }
 
 function setShoppingBasketAddButtonClickEvent() {
-    
+
 }
