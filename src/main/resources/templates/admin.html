@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+    <link rel="stylesheet" href="/static/css/admin.css">
+</head>
+<body>
+    <div id="container">
+        <main>
+            <div class="admin-main">
+                <div class="product">
+                    <select class="product-input product-type">
+                        <option value="none" selected>종류</option>
+                        <option value="burger">burger</option>
+                        <option value="side">side</option>
+                        <option value="dessert">dessert</option>
+                        <option value="drink">drink</option>
+                    </select>
+                    <select class="product-input burger-type burger-visible">
+                        <option value="none" selected>햄버거</option>
+                        <option value="beef">beef</option>
+                        <option value="seafood">seafood</option>
+                        <option value="chicken">chicken</option>
+                    </select>
+                </div>
+                <input type="text" class="product-input" placeholder="name">
+                <input type="text" class="product-input" placeholder="price">
+                <input type="text" class="product-input" placeholder="kcal">
+                
+                <form enctype="multipart/form-data">
+                    <div class="product-img-inputs">
+                        <label>상품 이미지</label>
+                        <button type="button" class="add-button">추가</button>
+                        <input type="file" class="file-input" name="file" multiple>
+                    </div>
+                </form>
+                <div class="product-images">
+                    
+                </div>
+                <button type="button" class="submit-button product-button">등록하기</button>
+            </div>
+        </main>
+    </div> 
+    <script src="/static/js/admin.js"></script>
+</body>
+</html>
