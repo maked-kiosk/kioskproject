@@ -149,7 +149,7 @@ main {
     display: flex;
     justify-content: space-between;
 
-    width: 500px;
+    width: 450px;
 }
 
 .sub-total-amount {
@@ -182,7 +182,7 @@ main {
     border: 1px solid black;
     border-radius: 5px;
 
-    width: 270px;
+    width: 220px;
     height: 60px;
     
     background-color: white;
@@ -194,7 +194,7 @@ main {
     border: 1px solid #fcb828;
     border-radius: 5px;
 
-    width: 540px;
+    width: 480px;
     height: 60px;
 
     font-size: 35px;
@@ -241,7 +241,7 @@ main {
     display: flex;
     flex-direction: column;
 
-    width: 540px;
+    width: 480px;
 }
 
 .sub-button {
@@ -255,7 +255,7 @@ main {
     border: 1px solid black;
     border-radius: 5px;
 
-    width: 260px;
+    width: 220px;
     height: 35px;
 
     background-color: white;

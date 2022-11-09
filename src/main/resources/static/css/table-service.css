@@ -34,12 +34,12 @@ main {
 
     border: 1px solid black;
 
-    box-shadow: 1px 0px 2px;
+    box-shadow: 0px 4px 15px;
 
     padding: 30px 20px 0px;
 
-    width: 390px;
-    height: 390px;
+    width: 340px;
+    height: 340px;
 }
 
 .service-box span {
@@ -47,7 +47,7 @@ main {
 }
 
 .service-box img {
-    width: 300px;
+    width: 270px;
     height: 250px;
     background-color: black;
 }
@@ -75,8 +75,8 @@ footer {
 .sub-button-notice {
     display: flex;
     flex-direction: column;
-    
-    width: 540px;
+
+    width: 480px;
 }
 
 .sub-button {
@@ -90,7 +90,7 @@ footer {
     border: 1px solid black;
     border-radius: 5px;
 
-    width: 260px;
+    width: 220px;
     height: 35px;
 
     background-color: white;
