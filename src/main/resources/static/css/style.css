@@ -19,7 +19,10 @@ body{
     justify-content: center;
     background-color: #dbdbdb;
 }
-#container{
+
+
+#container {
+
     width: 900px;
     height: 1600px;
 
