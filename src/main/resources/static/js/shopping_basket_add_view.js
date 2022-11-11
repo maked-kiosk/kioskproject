@@ -4,14 +4,13 @@ const plusButton = document.querySelector(".plus-button");
 const minusButton = document.querySelector(".minus-button");
 const amountDetailSpan = document.querySelector(".amount-detail-span");
 
-setPlusButtonClickEvetn();
+setPlusButtonClickEvent();
 setMinusButtonClickEvent();
 setCancelButtonClickEvent();
 setLoadMainPageButtonClickEvent();
 setShoppingBasketAddButtonClickEvent();
 
-
-function setPlusButtonClickEvetn() {
+function setPlusButtonClickEvent() {
     plusButton.onclick = increaseAmount;
 }
 

@@ -1,5 +1,7 @@
 #container {
-    padding: 50px 100px;
+    padding: 50px 50px;
+    
+    position: relative;
 }
 
 header {
@@ -64,7 +66,12 @@ header {
 .modify-menu-div {
     display: flex;
     justify-content: space-between;
-    align-items: center;
+
+    padding-top: 20px;
+
+    height: 400px;
+
+    overflow: auto;
 }
 
 .modify-menu-div > div {
@@ -185,14 +192,6 @@ header {
     height: 200px;
 }
 
-.request-div > div:last-child {
-    width: 604px;
-}
-
-.request-div > div:last-child button {
-    margin-bottom: 30px;
-}
-
 .cancel-button {
     border: 1px solid black;
 
@@ -211,10 +210,25 @@ header {
     background-color: rgb(255, 208, 0);
 }
 
+
+/* >>>>>>>>>>>>>>>>>>>>>>>>>> footer menu <<<<<<<<<<<<<<<<<<<<<<<<<<<<<< */
+
+.footer-menu {
+    width: 600px;
+
+    position: absolute;
+    right: 50px;
+    bottom: 40px;
+}
+
+.footer-menu > div {
+    margin-bottom: 30px;
+}
+
 .load-main-page-button {
     border: 1px solid black;
 
-    width: 300px;
+    width: 298px;
     height: 50px;
 
     background-color: white;
@@ -223,8 +237,11 @@ header {
 .help-menu-button {
     border: 1px solid black;
 
-    width: 300px;
+    width: 298px;
     height: 50px;
 
     background-color: white;
 }
+
+
+/* >>>>>>>>>>>>>>>>>>>>>>>>>> footer menu <<<<<<<<<<<<<<<<<<<<<<<<<<<<<< */
