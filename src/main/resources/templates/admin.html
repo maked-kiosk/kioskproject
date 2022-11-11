@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="/static/css/admin.css">
 </head>
 <body>
-    <div id="container">
+    <!-- <div id="container"> -->
         <main>
             <div class="admin-main">
                 <div class="product">
@@ -17,15 +17,31 @@
                         <option value="none" selected>종류</option>
                         <option value="burger">burger</option>
                         <option value="side">side</option>
-                        <option value="dessert">dessert</option>
                         <option value="drink">drink</option>
+                        <option value="dessert">dessert</option>
                     </select>
+                    <span class="mc-morning-check mc-morning-visible">
+                        <input type="checkbox" name="radio-check" class="mc-morning">맥모닝
+                        <input type="checkbox" name="radio-check" class="burger">버거
+                    </span>
                     <select class="product-input burger-type burger-visible">
                         <option value="none" selected>햄버거</option>
                         <option value="beef">beef</option>
                         <option value="seafood">seafood</option>
                         <option value="chicken">chicken</option>
                     </select>
+                    <select class="product-input size-type size-visible">
+                        <option value="none" selected>사이즈</option>
+                        <option value="none">none</option>
+                        <option value="M">M</option>
+                        <option value="L">L</option>
+                    </select>
+                    <select class="product-input drink-type drink-visible">
+                        <option value="none" selected>종류</option>
+                        <option value="beverage">음료</option>
+                        <option value="coffee">커피</option>
+                    </select>
+                    
                 </div>
                 <input type="text" class="product-input" placeholder="name">
                 <input type="text" class="product-input" placeholder="price">
@@ -44,7 +60,7 @@
                 <button type="button" class="submit-button product-button">등록하기</button>
             </div>
         </main>
-    </div> 
+    <!-- </div>  -->
     <script src="/static/js/admin.js"></script>
 </body>
 </html>
