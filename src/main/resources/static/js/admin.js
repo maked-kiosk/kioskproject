@@ -13,24 +13,51 @@ function burgerTypeInput() {
     const burgerType = document.querySelector(".burger-type");
     const sizeType = document.querySelector(".size-type");
     const drinkType = document.querySelector(".drink-type");
+    const mcMorningCheck = document.querySelector(".mc-morning-check");
+
+
+    setCheckBoxChangeEvent(burgerType);
 
     productType.onchange = () => {
         if(productType.value == "burger") {
-            burgerType.classList.remove("burger-visible");
+            mcMorningCheck.classList.remove("mc-morning-visible");
         } else if(productType.value == "side") {
             burgerType.classList.add("burger-visible");
             sizeType.classList.remove("size-visible");
             drinkType.classList.add("drink-visible");
+            mcMorningCheck.classList.add("mc-morning-visible");
         } else if(productType.value == "drink") {
             burgerType.classList.add("burger-visible");
             sizeType.classList.remove("size-visible");
             drinkType.classList.remove("drink-visible");
+            mcMorningCheck.classList.add("mc-morning-visible");
         }else {
             burgerType.classList.add("burger-visible");
             sizeType.classList.add("size-visible");
             drinkType.classList.add("drink-visible");
+            mcMorningCheck.classList.add("mc-morning-visible");
         }
     }
+}
+
+function setCheckBoxChangeEvent(burgerType) {
+    const checkBoxItmes = document.querySelectorAll(".mc-morning-check input");
+    const burger = document.querySelector(".burger");
+    const mcMorning = document.querySelector(".mc-morning");
+
+    checkBoxItmes.forEach(checkBox => {
+        checkBox.onchange = (e) => {
+            if(e.target.classList[0] == "burger" && e.target.checked) {
+                burgerType.classList.remove("burger-visible");
+                mcMorning.checked = false;
+            }else if(e.target.classList[0] == "mc-morning" && e.target.checked) {
+                burger.checked = false;
+                burgerType.classList.add("burger-visible");
+            }else {
+                burgerType.classList.add("burger-visible");
+            }
+        }
+    })
 }
 
 addButton.onclick = () => {
