@@ -12,15 +12,15 @@
     padding: 0;
 }
 
-body {
+
+
+body{
     display: flex;
     justify-content: center;
-
     background-color: #dbdbdb;
 }
-
-#container {
-    width: 1000px;
+#container{
+    width: 900px;
     height: 1600px;
 
     background-color: white;

@@ -1,0 +1,28 @@
+h2{
+    font-size: 35px;
+    font-weight: 700;
+    padding-bottom: 30px;
+}
+
+
+
+#container{
+    padding: 50px;
+    
+}
+
+
+#button{
+    width: 250px;
+    height: 250px;
+}
+#cancle-button{
+    width: 757px;
+    height: 30px;
+    font-size: 12px;
+    margin-top: 30px;
+}
+#button img {
+    width: 200px;
+    height: 200px;
+}
