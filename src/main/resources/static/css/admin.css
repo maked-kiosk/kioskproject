@@ -30,6 +30,18 @@ main {
     display: none;
 }
 
+.size-visible {
+    display: none;
+}
+
+.drink-visible {
+    display: none;
+}
+
+.mc-morning {
+    display: none;
+}
+
 .product-img-inputs {
     display: flex;
     justify-content: space-between;

@@ -3,6 +3,7 @@ const submitButton = document.querySelector(".submit-button");
 const addButton = document.querySelector(".add-button");
 const fileInput = document.querySelector(".file-input");
 
+
 let productImageFiles = new Array();
 
 burgerTypeInput();
@@ -10,12 +11,24 @@ burgerTypeInput();
 function burgerTypeInput() {
     const productType = document.querySelector(".product-type");
     const burgerType = document.querySelector(".burger-type");
+    const sizeType = document.querySelector(".size-type");
+    const drinkType = document.querySelector(".drink-type");
 
-    productType.onclick = () => {
+    productType.onchange = () => {
         if(productType.value == "burger") {
             burgerType.classList.remove("burger-visible");
-        } else {
+        } else if(productType.value == "side") {
             burgerType.classList.add("burger-visible");
+            sizeType.classList.remove("size-visible");
+            drinkType.classList.add("drink-visible");
+        } else if(productType.value == "drink") {
+            burgerType.classList.add("burger-visible");
+            sizeType.classList.remove("size-visible");
+            drinkType.classList.remove("drink-visible");
+        }else {
+            burgerType.classList.add("burger-visible");
+            sizeType.classList.add("size-visible");
+            drinkType.classList.add("drink-visible");
         }
     }
 }
@@ -81,9 +94,15 @@ submitButton.onclick = () => {
     if(productInput[0].value == "burger") {
         formData.append(" burger-type", productInput[1].value);
     }
-    formData.append("name", productInput[2].value);
-    formData.append("price", productInput[3].value);
-    formData.append("kcal", productInput[4].value);
+    if(productInput[0].value == "side" || productInput[0].value == "drink") {
+        formData.append(" size", productInput[2].value);
+    }
+    if(productInput[0].value == "drink") {
+        formData.append("type", productInput[3].value);
+    }
+    formData.append("name", productInput[4].value);
+    formData.append("price", productInput[5].value);
+    formData.append("kcal", productInput[6].value);
         
 
     productImageFiles.forEach((file) => {
@@ -95,7 +114,7 @@ submitButton.onclick = () => {
         console.log(item[0] + " : " + item[1]);
     }
     
-    // console.log(formData);
+ 
     // add(formData);
 }
 
