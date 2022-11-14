@@ -6,5 +6,6 @@ import kioskmake.projectkiosk.web.dto.menu.ReadMenuResponseDto;
 import java.util.List;
 
 public interface MenuService {
-    public List<ReadMenuResponseDto> getMenuListBySelectType(ReadMenuRequestDto readMenuRequestDto) throws Exception;
+    public List<ReadMenuResponseDto> getBurgerList() throws Exception;
+    public List<ReadMenuResponseDto> getBurgerByBurgerCode(int id, boolean mcLunchFlag) throws Exception;
 }

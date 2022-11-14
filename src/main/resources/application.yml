@@ -29,7 +29,7 @@ mybatis:
   - /mappers/*.xml
   
 file:
-  path: C:/project/workspace/git/project-kiosk/upload/
+  path: C:/project/workspace/git/kioskproject/src/main/resources/static/images/
 
 # log4jdbc, Mybatis Console Log
 logging:

@@ -13,17 +13,24 @@ import lombok.NoArgsConstructor;
 public class Menu {
     private String menu_type;
     private boolean set_flag;
+    private String size;
 
+    private int id;
+    private String set_size;
     private String menu_name;
     private int price;
     private int kcal;
-    private String size;
+    private String image;
+    private int mc_lunch_flag;
 
     public ReadMenuResponseDto toReadMenuResponseDto() {
         return ReadMenuResponseDto.builder()
+                .id(id)
                 .menuName(menu_name)
                 .price(price)
                 .kcal(kcal)
+                .image(image)
+                .mcLunchFlag(mc_lunch_flag == 1)
                 .build();
     }
 }

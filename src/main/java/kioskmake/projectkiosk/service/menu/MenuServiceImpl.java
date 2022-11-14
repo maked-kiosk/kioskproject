@@ -8,7 +8,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -19,25 +21,23 @@ public class MenuServiceImpl implements MenuService {
     private final MenuRepository menuRepository;
 
     @Override
-    public List<ReadMenuResponseDto> getMenuListBySelectType(ReadMenuRequestDto readMenuRequestDto) throws Exception {
-        Menu menuEntity = null;
-        List<Menu> menuEntityList = null;
-        List<ReadMenuResponseDto> menuDtoList = null;
-
-        menuEntity = readMenuRequestDto.toMenu();
-
-        menuEntityList = menuRepository.findMenuListBySelectType(menuEntity);
-
-        if(!menuEntityList.isEmpty()) {
-            menuDtoList = changeToReadMenuResponseDto(menuEntityList);
-
-        }
-        return menuDtoList;
+    public List<ReadMenuResponseDto> getBurgerList() throws Exception {
+        return changeToReadMenuResponseDto(menuRepository.findBurgerList());
     }
 
     private List<ReadMenuResponseDto> changeToReadMenuResponseDto(List<Menu> menuEntityList) {
-        return menuEntityList.stream()
+        return menuEntityList.isEmpty() ? null
+                : menuEntityList.stream()
                 .map(Menu::toReadMenuResponseDto)
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<ReadMenuResponseDto> getBurgerByBurgerCode(int id, boolean mcLunchFlag) throws Exception {
+        Map<String, Object> configMap = new HashMap<>();
+        configMap.put("id", id);
+        configMap.put("mc_lunch_flag", mcLunchFlag);
+
+        return changeToReadMenuResponseDto(menuRepository.findBurgerByBurgerCode(configMap));
     }
 }

@@ -3,35 +3,109 @@
         PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="kioskmake.projectkiosk.domain.menu.MenuRepository">
-    <select id="findMenuListBySelectType" parameterType="kioskmake.projectkiosk.domain.menu.Menu" resultType="kioskmake.projectkiosk.domain.menu.Menu">
+    <select id="findBurgerList" resultType="kioskmake.projectkiosk.domain.menu.Menu">
         SELECT
-            <choose>
-                <when test="menu_type == 'sideMenu'">
-                    concat(side_menu_name, ' - ', if(size LIKE 'M', '미디엄', '라지')) AS menu_name,
-                </when>
-                <otherwise>
-                    concat(drink_name, ' - ', if(size LIKE 'M', '미디엄', '라지')) AS menu_name,
-                </otherwise>
-            </choose>
+            id,
+            hamburger_name as menu_name,
             price,
-            kcal
+            kcal,
+            image,
+            mc_lunch_flag
         FROM
+            hamburger_table
+        WHERE
+            hamburger_category_code != -1;
+    </select>
+
+    <select id="findBurgerByBurgerCode" parameterType="HashMap" resultType="kioskmake.projectkiosk.domain.menu.Menu">
+        SELECT
+            id,
+            'single' AS set_size,
+            hamburger_name,
+            kcal,
+            image,
+            price
+        FROM
+            hamburger_table
+        WHERE
+            id = #{id}
+
+        union
+
+        SELECT
+            id,
+            'M' AS set_size,
+            ht.hamburger_name,
+            ht.kcal + dt.kcal + smt.kcal AS set_kcal,
+            image,
             <choose>
-                <when test="menu_type == 'sideMenu'">
-                    side_menu_table
+                <when test="mc_lunch_flag == false">
+                    ht.price + dt.price + smt.price AS price
                 </when>
                 <otherwise>
-                    drink_table
+                    ht.price + dt.price + smt.price - 500 AS price
                 </otherwise>
             </choose>
-        <if test="set_flag == true">
-            WHERE
-                size LIKE #{size}
-                <if test="menu_type == 'sideMenu'">
-                    and
-                    set_menu_flag = 1
-                </if>
-        </if>
-        ;
+        FROM
+            hamburger_table ht
+        LEFT OUTER JOIN (select
+                            price,
+                            kcal
+                        from
+                            drink_table
+                         where
+                            drink_name LIKE '코카콜라 제로'
+                                AND
+                            size LIKE 'M') dt ON(1 = 1)
+        LEFT OUTER JOIN (select
+                            price,
+                            kcal
+                        from
+                            side_menu_table
+                        where
+                            side_menu_name LIKE '감자튀김'
+                                AND
+                            size LIKE 'M') smt ON(1 = 1)
+        WHERE
+            ht.id = #{id}
+
+        UNION
+
+        SELECT
+            id,
+            'L' AS set_size,
+            ht.hamburger_name,
+            ht.kcal + dt.kcal + smt.kcal AS set_kcal,
+            image,
+            <choose>
+                <when test="mc_lunch_flag == false">
+                    ht.price + dt.price + smt.price AS price
+                </when>
+                <otherwise>
+                    ht.price + dt.price + smt.price - 500 AS price
+                </otherwise>
+            </choose>
+        FROM
+            hamburger_table ht
+        LEFT OUTER JOIN (select
+                            price,
+                            kcal
+                        from
+                            drink_table
+                        where
+                            drink_name LIKE '코카콜라 제로'
+                                AND
+                            size LIKE 'L') dt ON(1 = 1)
+        LEFT OUTER JOIN (select
+                            price,
+                            kcal
+                        from
+                            side_menu_table
+                        where
+                            side_menu_name LIKE '감자튀김'
+                                AND
+                            size LIKE 'L') smt ON(1 = 1)
+        WHERE
+            ht.id = #{id};
     </select>
 </mapper>
