@@ -127,7 +127,7 @@ submitButton.onclick = () => {
 
     let formData = new FormData();
 
-    formData.append("productType", productInput[0].value);
+    formData.append("menuType", productInput[0].value);
     if(productInput[0].value == "burger") {
         if(productInput[1].checked == true) {
             formData.append("mcMorningFlag", productInput[1].checked)

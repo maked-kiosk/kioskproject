@@ -24,12 +24,15 @@ public class InsertProductController {
 		
 		boolean status = false;
 		
+		System.out.println(insertMenuReqDto);
+		
 		try {
 			status = menuService.insertMenu(insertMenuReqDto);
 		} catch (Exception e) {
 			e.printStackTrace();
 			return ResponseEntity.internalServerError().body(new CustomResponseDto<>(-1, "menu insert failed", status));
 		}
+		
 		
 		return ResponseEntity.ok(new CustomResponseDto<>(1, "menu insert success", status));
 	}

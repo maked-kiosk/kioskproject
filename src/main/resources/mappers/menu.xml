@@ -7,21 +7,21 @@
     <insert id="insertMenu" parameterType="kioskmake.projectkiosk.domain.menu.Menu">
     	insert into
     		<choose>
-    			<when test="menu_type == burger">
+    			<when test="menu_type == 'burger'">
     				hamburger_table
     			</when>
-    			<when test="menu_type == side">
+    			<when test="menu_type == 'side'">
     				side_menu_table
     			</when>
-    			<when test="menu_type == drink">
+    			<when test="menu_type == 'drink'">
     				drink_table
     			</when>
-    			<when test="menu_type == dessert">
+    			<when test="menu_type == 'dessert'">
     				dessert_table
     			</when>
    			</choose>
-    		values
-    		(
+   		values
+   			(
     			0,
     			#{name},
     			#{price},
@@ -29,30 +29,30 @@
     			#{kcal},
     			#{img},
     			<choose>
-	   				<when test="menu_type == burger">
+	   				<when test="menu_type == 'burger'">
 	    				<choose>
-	    					<when test="">
+	    					<when test="mc_morning_flag == false">
 	    						#{burger_type},
 	    					</when>
 	    					<otherwise>
-	    						-1
+	    						-1,
 	    					</otherwise>
 	    				</choose>
 	    				1,
 	    				0	    				
 	    			</when>
-	    			<when test="menu_type == side">
+	    			<when test="menu_type == 'side'">
 	    				#{size},
 	    				0,
 	    				2,
 	    				0
 	    			</when>
-	    			<when test="menu_type == drink">
+	    			<when test="menu_type == 'drink'">
 	    				#{size},
 	    				#{drink_type},
 	    				3
 	    			</when>
-	    			<when test="menu_type == dessert">
+	    			<when test="menu_type == 'dessert'">
 	    				4
 	    			</when>
     			</choose>
