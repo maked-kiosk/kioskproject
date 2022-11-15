@@ -11,17 +11,23 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Menu {
-    private String menu_type;
+    private int menu_code;
     private boolean set_flag;
-
-    private String menu_name;
-    private int price;
-    private int kcal;
-    private String size;
+    private String menu_type;
+	private boolean mc_morning_flag;
+	private String burger_type;
+	private String size;
+	private String drink_type;
+	private String name;
+	private int sales;
+	private int price;
+	private int kcal;
+	
+	private String img;
 
     public ReadMenuResponseDto toReadMenuResponseDto() {
         return ReadMenuResponseDto.builder()
-                .menuName(menu_name)
+                .menuName(name)
                 .price(price)
                 .kcal(kcal)
                 .build();

@@ -1,3 +1,4 @@
+const productType = document.querySelector(".product-type");
 
 const submitButton = document.querySelector(".submit-button");
 const addButton = document.querySelector(".add-button");
@@ -9,18 +10,20 @@ let productImageFiles = new Array();
 burgerTypeInput();
 
 function burgerTypeInput() {
-    const productType = document.querySelector(".product-type");
+    const checkBoxItems = document.querySelectorAll(".mc-morning-check input");
     const burgerType = document.querySelector(".burger-type");
     const sizeType = document.querySelector(".size-type");
     const drinkType = document.querySelector(".drink-type");
     const mcMorningCheck = document.querySelector(".mc-morning-check");
 
 
-    setCheckBoxChangeEvent(burgerType);
+    setCheckBoxChangeEvent(burgerType, checkBoxItems);
 
     productType.onchange = () => {
         if(productType.value == "burger") {
             mcMorningCheck.classList.remove("mc-morning-visible");
+            drinkType.classList.add("drink-visible");
+            sizeType.classList.add("size-visible");
         } else if(productType.value == "side") {
             burgerType.classList.add("burger-visible");
             sizeType.classList.remove("size-visible");
@@ -37,20 +40,23 @@ function burgerTypeInput() {
             drinkType.classList.add("drink-visible");
             mcMorningCheck.classList.add("mc-morning-visible");
         }
+
+        if(productType != "burger") {
+            unCheckedCheckBoxItems(checkBoxItems);
+        }
     }
 }
 
-function setCheckBoxChangeEvent(burgerType) {
-    const checkBoxItmes = document.querySelectorAll(".mc-morning-check input");
+function setCheckBoxChangeEvent(burgerType, checkBoxItems) {
     const burger = document.querySelector(".burger");
     const mcMorning = document.querySelector(".mc-morning");
 
-    checkBoxItmes.forEach(checkBox => {
+    checkBoxItems.forEach(checkBox => {
         checkBox.onchange = (e) => {
-            if(e.target.classList[0] == "burger" && e.target.checked) {
+            if(e.target.classList.contains("burger" )&& e.target.checked) {
                 burgerType.classList.remove("burger-visible");
                 mcMorning.checked = false;
-            }else if(e.target.classList[0] == "mc-morning" && e.target.checked) {
+            }else if(e.target.classList.contains("mc-morning") && e.target.checked) {
                 burger.checked = false;
                 burgerType.classList.add("burger-visible");
             }else {
@@ -58,6 +64,10 @@ function setCheckBoxChangeEvent(burgerType) {
             }
         }
     })
+}
+
+function unCheckedCheckBoxItems(checkBoxItems) {
+    checkBoxItems.forEach(checkBox => checkBox.checked = false);
 }
 
 addButton.onclick = () => {
@@ -117,23 +127,27 @@ submitButton.onclick = () => {
 
     let formData = new FormData();
 
-    formData.append("product-type", productInput[0].value);
+    formData.append("productType", productInput[0].value);
     if(productInput[0].value == "burger") {
-        formData.append(" burger-type", productInput[1].value);
+        if(productInput[1].checked == true) {
+            formData.append("mcMorningFlag", productInput[1].checked)
+        }else {
+            formData.append("burgerType", productInput[3].value);
+        }
     }
     if(productInput[0].value == "side" || productInput[0].value == "drink") {
-        formData.append(" size", productInput[2].value);
+        formData.append("size", productInput[4].value);
     }
     if(productInput[0].value == "drink") {
-        formData.append("type", productInput[3].value);
+        formData.append("drinkType", productInput[5].value);
     }
-    formData.append("name", productInput[4].value);
-    formData.append("price", productInput[5].value);
-    formData.append("kcal", productInput[6].value);
+    formData.append("name", productInput[6].value);
+    formData.append("price", productInput[7].value);
+    formData.append("kcal", productInput[8].value);
         
 
     productImageFiles.forEach((file) => {
-        formData.append("files", file);
+        formData.append("img", file);
     });
 
     
@@ -142,28 +156,28 @@ submitButton.onclick = () => {
     }
     
  
-    // add(formData);
+    add(formData);
 }
 
-// function add(formData) {
-//     $.ajax({
-//         async: false,
-//         type: "post",
-//         url: "",
-//         enctype: "multipart/form-data",
-//         contentType: false,
-//         processData: false,
-//         data: formData,
-//         dataType: "json",
-//         success: (response) => {
-//             alert("상품 등록 완료");
-//             console.log(response.data);
-//         },
-//         error: (error) => {
-//             alert("상품 등록 실패");
-//             console.log(error);
-//         }
-//     });
-// }
+function add(formData) {
+    $.ajax({
+        async: false,
+        type: "post",
+        url: `/api/v1/menu/${productType.value}`,
+        enctype: "multipart/form-data",
+        contentType: false,
+        processData: false,
+        data: formData,
+        dataType: "json",
+        success: (response) => {
+            alert("상품 등록 완료");
+            console.log(response.data);
+        },
+        error: (error) => {
+            alert("상품 등록 실패");
+            console.log(error);
+        }
+    });
+}
 
 

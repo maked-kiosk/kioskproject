@@ -3,6 +3,62 @@
         PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="kioskmake.projectkiosk.domain.menu.MenuRepository">
+    
+    <insert id="insertMenu" parameterType="kioskmake.projectkiosk.domain.menu.Menu">
+    	insert into
+    		<choose>
+    			<when test="menu_type == burger">
+    				hamburger_table
+    			</when>
+    			<when test="menu_type == side">
+    				side_menu_table
+    			</when>
+    			<when test="menu_type == drink">
+    				drink_table
+    			</when>
+    			<when test="menu_type == dessert">
+    				dessert_table
+    			</when>
+   			</choose>
+    		values
+    		(
+    			0,
+    			#{name},
+    			#{price},
+    			#{sales},
+    			#{kcal},
+    			#{img},
+    			<choose>
+	   				<when test="menu_type == burger">
+	    				<choose>
+	    					<when test="">
+	    						#{burger_type},
+	    					</when>
+	    					<otherwise>
+	    						-1
+	    					</otherwise>
+	    				</choose>
+	    				1,
+	    				0	    				
+	    			</when>
+	    			<when test="menu_type == side">
+	    				#{size},
+	    				0,
+	    				2,
+	    				0
+	    			</when>
+	    			<when test="menu_type == drink">
+	    				#{size},
+	    				#{drink_type},
+	    				3
+	    			</when>
+	    			<when test="menu_type == dessert">
+	    				4
+	    			</when>
+    			</choose>
+    		)
+    </insert>
+    
     <select id="findMenuListBySelectType" parameterType="kioskmake.projectkiosk.domain.menu.Menu" resultType="kioskmake.projectkiosk.domain.menu.Menu">
         SELECT
             <choose>
