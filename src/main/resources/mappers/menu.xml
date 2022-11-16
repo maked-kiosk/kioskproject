@@ -59,6 +59,164 @@
     		)
     </insert>
     
+    <select id="getAdminMenuList" parameterType="kioskmake.projectkiosk.domain.menu.Menu" resultType="kioskmake.projectkiosk.domain.menu.Menu">
+    	SELECT
+			0 AS id,
+			'' as menu_type,
+		   '' AS NAME,
+		   0 as price,
+		   0 as kcal,
+		   '' AS size,
+		   '' as image,
+		   
+			(select
+				COUNT(*)
+			from
+				hamburger_table ht
+				LEFT OUTER JOIN menu_category_table mct ON(mct.id = ht.menu_category_code)
+			<if test="menu_type != 'ALL'">
+			where
+				mct.id = #{menu_type}
+			</if>
+			)    	
+			
+			+
+			
+			(select
+				COUNT(*)
+			from
+				side_menu_table smt
+				LEFT OUTER JOIN menu_category_table mct ON(mct.id = smt.menu_category_code)
+			<if test="menu_type != 'ALL'">
+			where
+				mct.id = #{menu_type}
+			</if>
+			)    	
+			
+			+
+			
+			(select
+				COUNT(*)
+			from
+				drink_table dt
+				LEFT OUTER JOIN menu_category_table mct ON(mct.id = dt.menu_category_code)
+			<if test="menu_type != 'ALL'">
+			where
+				mct.id = #{menu_type}
+			</if>
+			)    	
+			
+			+
+			
+			(select
+				COUNT(*)
+			from
+				dessert_table dt
+				LEFT OUTER JOIN menu_category_table mct ON(mct.id = dt.menu_category_code)
+			<if test="menu_type != 'ALL'">
+			where
+				mct.id = #{menu_type}
+			</if>
+			)    	 AS total_count
+			
+	union
+
+	(SELECT
+			ht.id,
+		   mct.menu_category_name as menu_type,
+		   ht.hamburger_name AS NAME,
+		   ht.price,
+		   ht.kcal,
+		   '' AS size,
+		   ht.image,
+		   0
+	FROM
+		   hamburger_table ht
+		   LEFT OUTER JOIN menu_category_table mct ON(mct.id = ht.menu_category_code)
+	<if test="menu_type != 'ALL'">
+	where
+		mct.id = #{menu_type}
+	</if>
+	
+	UNION
+	
+	SELECT
+		smt.id,
+	   mct.menu_category_name as menu_type,
+	   smt.side_menu_name AS NAME,
+	   smt.price,
+	   smt.kcal,
+	   if(smt.size like 'none', '', smt.size) AS size,
+	   smt.image,
+	   0
+	FROM
+	   side_menu_table smt
+	   LEFT OUTER JOIN menu_category_table mct ON(mct.id = smt.menu_category_code)
+	<if test="menu_type != 'ALL'">
+	where
+		mct.id = #{menu_type}
+	</if>
+	   
+	UNION
+	
+	SELECT
+		dt.id,
+	   mct.menu_category_name as menu_type,
+	   dt.drink_name AS NAME,
+	   dt.price,
+	   dt.kcal,
+	   if(dt.size like 'none', '', dt.size) AS size,
+	   dt.image,
+	   0
+	FROM
+	   drink_table dt
+	   LEFT OUTER JOIN menu_category_table mct ON(mct.id = dt.menu_category_code)
+	<if test="menu_type != 'ALL'">
+	where
+		mct.id = #{menu_type}
+	</if>
+	   
+	UNION
+	
+	SELECT
+		dt.id,
+	   mct.menu_category_name as menu_type,
+	   dt.dessert_name AS NAME,
+	   dt.price,
+	   dt.kcal,
+	   '' AS size,
+	   dt.image,
+	   0
+	FROM
+	   dessert_table dt
+		LEFT OUTER JOIN menu_category_table mct ON(mct.id = dt.menu_category_code)
+	<if test="menu_type != 'ALL'">
+	where
+		mct.id = #{menu_type}
+	</if>
+	LIMIT #{index}, 10);
+	  	
+    </select>
+    
+    select
+    	*
+    from
+    <choose>
+    	<when test="menu_type == 'burger'">
+    		ham
+    	</when>
+    	<when test="menu_type == 'drink'">
+    		drink_table
+    	</when>
+    	<when test="menu_type == 'side'">
+    		side
+    	</when>
+    	<when test="menu_type == 'dessert'">
+    		dessert
+    	</when>
+    </choose>
+    
+    
     <select id="findMenuListBySelectType" parameterType="kioskmake.projectkiosk.domain.menu.Menu" resultType="kioskmake.projectkiosk.domain.menu.Menu">
         SELECT
             <choose>

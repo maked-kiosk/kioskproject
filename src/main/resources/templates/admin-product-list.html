@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<html lang="ko">
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -8,24 +8,23 @@
     <link rel="stylesheet" href="/static/css/style.css">
     <link rel="stylesheet" href="/static/css/admin-product-list.css">
     <script src="https://kit.fontawesome.com/08c0ae04a4.js" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-latest.min.js"></script>
 </head>
 <body>
     <div id="container">
-        <header th:replace="~{fragment/header :: header}"></header>
         <main>
             <div class="admin">
                 <h1 class="admin-title">ADMIN PRODUCT LIST</h1>
                 <div class="admin-container">
-                    <aside th:replace="~{admin/fragment/aside :: aside}"></aside>
                     <section class="admin-main">
                         <div class="list-header">
                             <div class="category-select">
                                 <select class="product-input">
                                     <option value="ALL" selected>전체 상품</option>
-                                    <option value="burger">햄버거</option>
-                                    <option value="side">사이드</option>
-                                    <option value="drink">음류수</option>
-                                    <option value="dessert">디저트</option>
+                                    <option value="1">햄버거</option>
+                                    <option value="2">사이드</option>
+                                    <option value="3">음류수</option>
+                                    <option value="4">디저트</option>
                                 </select>
                             </div>
                             <!-- <div class="product-search">
@@ -33,9 +32,7 @@
                                 <button type="button" class="search-button black-button">검색</button>
                             </div> -->
                         </div>
-                        <ul class="page-buttons">
-                            
-                        </ul>
+                        
                         <table class="product-list">
                             <thead>
                                 <tr>
@@ -56,7 +53,7 @@
                                     <td><button type="button" class="list-button detail-button"><i class="fa-regular fa-file-lines"></i></button></td>
                                     <td><button type="button" class="list-button delete-button"><i class="fa-regular fa-trash-can"></i></button></td>
                                 </tr>
-                                <tr class="visible">
+                                <tr class="menu-detail visible">
                                     <td colspan="8">
                                         <table class="product-info">
                                             <tr>
@@ -69,7 +66,6 @@
                                                     </select>
                                                 </td>
                                                 <td><input type="text" class="product-input" value="productDtl.name" placeholder="이름"></td>
-                                                
                                                 <td><input type="text" class="product-input" value="productDtl.price" placeholder="가격"></td>
                                                 <td><input type="text" class="product-input" value="productDtl.kcal" placeholder="칼로리"></td>
                                                 <td><input type="text" class="product-input" value="productDtl.size" placeholder="사이즈"></td>
@@ -96,7 +92,6 @@
                                         </table>
                                     </td>
                                 </tr>
-                                
                             </tbody>
                         </table>
                     </section>
@@ -104,8 +99,17 @@
             </div>
         </main>
         <footer>
+            <div class="page-btn-box">
+                <button type="button" class="page-button">&lt;</button>
+                <button type="button" class="page-button">1</button>
+                <button type="button" class="page-button">2</button>
+                <button type="button" class="page-button">3</button>
+                <button type="button" class="page-button">4</button>
+                <button type="button" class="page-button">5</button>
+                <button type="button" class="page-button">&gt;</button>
+            </div>
         </footer>
     </div>
-    <script src="/static/js/product_list.js"></script>
+    <script src="/static/js/product-list.js"></script>
 </body>
 </html>

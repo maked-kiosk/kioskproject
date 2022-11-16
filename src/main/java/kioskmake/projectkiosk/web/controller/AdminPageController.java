@@ -11,4 +11,9 @@ public class AdminPageController {
 		return "admin";
 	}
 	
+	@GetMapping("/admin/menulist")
+	public String adminMenuList() {
+		return "admin-product-list";
+	}
+	
 }
