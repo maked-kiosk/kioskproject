@@ -2,7 +2,7 @@ let nowPage = 1;
 const productSelect = document.querySelector(".product-input");
 let fileInput = document.querySelectorAll(".file-input");
 
-let productImageFiles = new Array();
+
 
 getMenuList(nowPage);
 setProductSelectChangeEvent();
@@ -78,7 +78,7 @@ function getList(list) {
                                 <div class="product-img-inputs">
                                     <label>상품 이미지</label>
                                     <button type="button" class="add-button">추가</button>
-                                    <input type="file" class="file-input product-invisible" name="file">
+                                    <input type="file" class="file-input product-invisible" name="file" >
                                 </div>
                             </form>
                             <div class="product-images">
@@ -95,9 +95,10 @@ function getList(list) {
             </td>
         </tr>
         `;
+        
     })
-
-    console.log(list[1]);
+    const menuCode = document.querySelectorAll(".menu-code");
+    menuCode.forEach(code => console.log(code));
 }
 
 function getMenuType() {
@@ -173,108 +174,122 @@ function setMenuDetailButtonClickEvent() {
     for(let i = 0; i < menuDetailButton.length; i++) {
 
         menuDetailButton[i].onclick = () =>  {
-        const menuCode = document.querySelector(".menu-code");
-        let fileInput = document.querySelectorAll(".file-input");
-        const addButton = document.querySelectorAll(".add-button");
-       
+            const menuCode = document.querySelectorAll(".menu-code");
+            let fileInput = document.querySelectorAll(".file-input");
+            
+            $.ajax({
+                async: false,
+                type: "get",
+                url: `/api/v1/menu/details`,
+                data: {
+                    "id" : menuCode[i].value,
+                    "menuType": menuType()
+                },
+                dataType: "json",
+                success: (response) => {
+                    console.log(response.data)
+                    getMenuDetails(response.data[0].img, menuCode[i].value, i);
+                },
+                error: (error) => {
+                    console.log(error);
+                }
+            });
 
-        $.ajax({
-            async: false,
-            type: "get",
-            url: `/api/v1/menu/details`,
-            data: {
-                "id" : menuCode.value,
-                "menuType": menuType()
-            },
-            dataType: "json",
-            success: (response) => {
-                console.log(response.data[0].img)
-                getMenuDetails(response.data[0].img, i);
-            },
-            error: (error) => {
-                console.log(error);
-            }
-        });
+            const menuDetails = document.querySelectorAll(".menu-detail");
 
-        const menuDetails = document.querySelectorAll(".menu-detail");
 
-        // for(let i = 0; i < menuDetails.length; i++) {
             if(menuDetails[i].classList.contains("visible")){
+                menuDetails.forEach(menuDetail => menuDetail.classList.add("visible"));
                 menuDetails[i].classList.remove("visible");
             }else {
                 confirm("수정을 취소하시겠습니까?")
                 menuDetails[i].classList.add("visible");
             }
-        // }
-
-        // for(let i = 0; i < addButton.length; i++) {
-            addButton[i].onclick = () => {
-                fileInput[i].click();
-            }
-        // }
-        
-
-	    
-        // setTimeout(() => {reader.readAsDataURL(file)}, i * 100);
-	}
-}
+	    }
+    }
 
 }
 
-
-
-
-        
-// fileInput.onchange = () => {
-//     const formData = new FormData(document.querySelector("form"));
-//     let changeFlge = false;
-
-//     formData.forEach((value) => {
-//         if(value.size != 0) {
-//             productImageFiles.push(value);
-//             changeFlge = true;
-//         }
-//     });
-    
-//     if(changeFlge){
-//         getImagePreview(img);
-//         fileInput.value = null;
-//     }
-// }
-
-
-function getMenuDetails(img, index) {
-    
-    // let menuType = document.querySelector(".menu-type");
+function getMenuDetails(img, code, index) {
     const productImages = document.querySelectorAll(".product-images")[index];
+ 
+    if(img != null) {
+        menuImg(img, productImages);
+    }
     
+    let fileInput = document.querySelectorAll(".file-input");
+    const addButton = document.querySelectorAll(".add-button");
+
+    if(productImages.hasChildNodes()) {
+        addButton[index].setAttribute("disabled", true);
+    }
+    addButton[index].onclick = () => {
+        addButton[index].removeAttribute("disabled");
+        fileInput[index].click();
+
+        fileInput[index].onchange = () => {
+            const formData = new FormData(document.querySelectorAll("form")[index]);
+            let changeFlge = false;
+            let imgVlaue = null;
+        
+            formData.forEach((value) => {
+                if(value.size != 0) {
+                    imgVlaue = value;
+                    changeFlge = true;
+                }
+            });
+            
+            if(changeFlge){
+                getImagePreview(imgVlaue, productImages, addButton[index]);
+            }
+        }
+    }
+
+   setImageDeleteButtonClickEvent(addButton[index]);
+
+}
+
+function getImagePreview(imgVlaue, productImages, addButton) {
+    const reader = new FileReader();
+    
+    reader.onload = (e) => {
+        productImages.innerHTML += `
+            <div class="img-box">
+                <span class="fa-solid fa-xmark"></span>
+                <img class="product-img" src="${e.target.result}">
+            </div>
+        `;
+
+        addButton.setAttribute("disabled", true);
+        setImageDeleteButtonClickEvent(addButton);
+        
+    }
+    setTimeout(() => { reader.readAsDataURL(imgVlaue)}, 100);
+   
+}
+
+function menuImg(img, productImages) {
     productImages.innerHTML = "";
 
     productImages.innerHTML += `
-        <div class="img-box">
-            <span class="fa-solid fa-xmark"></span>
-            <img class="product-img" src="/static/images/${menuType()}/${img}">
-        </div>
-    `;
-
-    const deleteButton = document.querySelector(".fa-xmark");
-    deleteButton.onclick = () => {
-        if(confirm("상품 이미지를 지우시겠습니까?")) {
-                productImageFiles.splice(index, 1);
-                console.log(productImageFiles);
-            }
-     }
-    // deleteButton.forEach((xbutton, index) => {
-    //     xbutton.onclick = () => {
-    //         if(confirm("상품 이미지를 지우시겠습니까?")) {
-    //             productImageFiles.splice(index, 1);
-    //             console.log(productImageFiles);
-    //         }
-    //     };
-    // })
+    <div class="img-box">
+        <span class="fa-solid fa-xmark"></span>
+        <img class="product-img" src="/static/images/${menuType()}/${img}">
+    </div>
+`;
 }
 
-
+function setImageDeleteButtonClickEvent(addButton) {
+    const deleteButton = document.querySelectorAll(".fa-xmark");
+    for(let i = 0; i < deleteButton.length; i++) {
+        deleteButton[i].onclick = (e) => {
+            if(confirm("상품 이미지를 지우시겠습니까?")) {
+                e.target.parentNode.parentNode.innerHTML = "";
+                addButton.removeAttribute("disabled");
+            }
+        }
+    }
+}
 
 
     

@@ -15,6 +15,7 @@ function burgerTypeInput() {
     const sizeType = document.querySelector(".size-type");
     const drinkType = document.querySelector(".drink-type");
     const mcMorningCheck = document.querySelector(".mc-morning-check");
+    const onlyMcMorningCheck = document.querySelector(".only-mc-morning-check");
 
 
     setCheckBoxChangeEvent(burgerType, checkBoxItems);
@@ -24,21 +25,25 @@ function burgerTypeInput() {
             mcMorningCheck.classList.remove("mc-morning-visible");
             drinkType.classList.add("drink-visible");
             sizeType.classList.add("size-visible");
+            onlyMcMorningCheck.classList.add("only-mc-morning-visible")
         } else if(productType.value == "side") {
             burgerType.classList.add("burger-visible");
             sizeType.classList.remove("size-visible");
             drinkType.classList.add("drink-visible");
             mcMorningCheck.classList.add("mc-morning-visible");
+            onlyMcMorningCheck.classList.remove("only-mc-morning-visible")
         } else if(productType.value == "drink") {
             burgerType.classList.add("burger-visible");
             sizeType.classList.remove("size-visible");
             drinkType.classList.remove("drink-visible");
             mcMorningCheck.classList.add("mc-morning-visible");
+            onlyMcMorningCheck.classList.remove("only-mc-morning-visible")
         }else {
             burgerType.classList.add("burger-visible");
             sizeType.classList.add("size-visible");
             drinkType.classList.add("drink-visible");
             mcMorningCheck.classList.add("mc-morning-visible");
+            onlyMcMorningCheck.classList.remove("only-mc-morning-visible")
         }
 
         if(productType != "burger") {
@@ -141,9 +146,10 @@ submitButton.onclick = () => {
     if(productInput[0].value == "drink") {
         formData.append("drinkType", productInput[5].value);
     }
-    formData.append("name", productInput[6].value);
-    formData.append("price", productInput[7].value);
-    formData.append("kcal", productInput[8].value);
+    formData.append("name", productInput[7].value);
+    formData.append("price", productInput[8].value);
+    formData.append("kcal", productInput[9].value);
+    formData.append("onlyMcMorningFlag", productInput[6].checked)
         
 
     productImageFiles.forEach((file) => {

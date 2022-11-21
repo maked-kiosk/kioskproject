@@ -16,6 +16,7 @@ public class InsertMenuReqDto {
 	private int sales;
 	private int price;
 	private int kcal;
+	private boolean onlyMcMorningFlag;
 	
 	private MultipartFile img;
 	
@@ -31,6 +32,7 @@ public class InsertMenuReqDto {
 				.price(price)
 				.kcal(kcal)
 				.image(img)
+				.only_mc_morning_flag(onlyMcMorningFlag ? 1 : 0)
 				.build();
 				
 	}

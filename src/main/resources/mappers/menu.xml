@@ -27,7 +27,7 @@
     			#{price},
     			#{sales},
     			#{kcal},
-    			#{img},
+    			#{image},
     			<choose>
 	   				<when test="menu_type == 'burger'">
 	    				<choose>
@@ -45,15 +45,17 @@
 	    				#{size},
 	    				0,
 	    				2,
-	    				0
+	    				#{only_mc_morning_flag}
 	    			</when>
 	    			<when test="menu_type == 'drink'">
 	    				#{size},
 	    				#{drink_type},
-	    				3
+	    				3,
+	    				#{only_mc_morning_flag}
 	    			</when>
 	    			<when test="menu_type == 'dessert'">
-	    				4
+	    				4,
+	    				#{only_mc_morning_flag}
 	    			</when>
     			</choose>
     		)

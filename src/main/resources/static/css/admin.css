@@ -41,6 +41,10 @@ main {
     display: none;
 }
 
+.only-mc-morning-visible {
+    display: none;
+}
+
 .product-img-inputs {
     display: flex;
     justify-content: space-between;
