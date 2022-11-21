@@ -47,4 +47,49 @@ public class MenuRestController {
 
         return ResponseEntity.ok(new CustomResponseDto(1, "Successfully loaded hamburger by code", readMenuRequestDtoList));
     }
+
+    @Log
+    @GetMapping("/{menuType}/list")
+    public ResponseEntity<?> getMenuListByMenuType(ReadMenuRequestDto readMenuRequestDto) {
+        List<ReadMenuResponseDto> readMenuRequestDtoList = null;
+
+        try {
+            readMenuRequestDtoList = menuService.getMenuListByMenuType(readMenuRequestDto);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.internalServerError().body(new CustomResponseDto(-1, "Failed to load menu list", readMenuRequestDtoList));
+        }
+
+        return ResponseEntity.ok(new CustomResponseDto(1, "Load menu list successful", readMenuRequestDtoList));
+    }
+
+    @Log
+    @GetMapping("/mc-morning/{id}")
+    public ResponseEntity<?> getBurgerByBurgerCode(@PathVariable int id) {
+        ReadMenuResponseDto readMenuRequestDto = null;
+
+        try {
+            readMenuRequestDto = menuService.getMcMorningBurgerByBurgerCode(id);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.internalServerError().body(new CustomResponseDto(-1, "Failed to load mc morning burger", readMenuRequestDto));
+        }
+
+        return ResponseEntity.ok(new CustomResponseDto(1, "Load mc morning burger successful", readMenuRequestDto));
+    }
+
+    @Log
+    @GetMapping("/mc-morning/list")
+    public ResponseEntity<?> getBurgerByBurgerCode() {
+        List<ReadMenuResponseDto> readMenuRequestDtoList = null;
+
+        try {
+            readMenuRequestDtoList = menuService.getMcMorningBurgerList();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.internalServerError().body(new CustomResponseDto(-1, "Failed to load mc morning burger list", readMenuRequestDtoList));
+        }
+
+        return ResponseEntity.ok(new CustomResponseDto(1, "Load mc morning burger list successful", readMenuRequestDtoList));
+    }
 }

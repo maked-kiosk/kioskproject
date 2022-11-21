@@ -21,7 +21,9 @@ public class Menu {
     private int price;
     private int kcal;
     private String image;
+    private String type;
     private int mc_lunch_flag;
+    private int mc_morning_flag;
 
     public ReadMenuResponseDto toReadMenuResponseDto() {
         return ReadMenuResponseDto.builder()

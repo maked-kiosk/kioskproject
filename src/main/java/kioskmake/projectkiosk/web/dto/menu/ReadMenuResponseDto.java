@@ -11,5 +11,7 @@ public class ReadMenuResponseDto {
     private int price;
     private int kcal;
     private String image;
+    private String type;
+    private boolean mcMorningFlag;
     private boolean mcLunchFlag;
 }
