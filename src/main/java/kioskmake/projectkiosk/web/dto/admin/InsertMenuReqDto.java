@@ -30,7 +30,7 @@ public class InsertMenuReqDto {
 				.sales(sales)
 				.price(price)
 				.kcal(kcal)
-				.img(img)
+				.image(img)
 				.build();
 				
 	}

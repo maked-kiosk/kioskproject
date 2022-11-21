@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import kioskmake.projectkiosk.service.menu.MenuService;
 import kioskmake.projectkiosk.web.dto.CustomResponseDto;
+import kioskmake.projectkiosk.web.dto.admin.GetMenuDetailRespDto;
 import kioskmake.projectkiosk.web.dto.admin.GetMenuListRespDto;
 import kioskmake.projectkiosk.web.dto.admin.InsertMenuReqDto;
 import lombok.RequiredArgsConstructor;
@@ -54,5 +55,20 @@ public class AdminMenuController {
 		}
 		
 		return ResponseEntity.ok(new CustomResponseDto<>(1, "menu list load success", menuList));
+	}
+	
+	@GetMapping("/details")
+	public ResponseEntity<?> getMenuDetails(String id, String menuType){
+		
+		List<GetMenuDetailRespDto> detailList = null;
+		
+		try {
+			detailList = menuService.getMenuDetails(id, menuType);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return ResponseEntity.internalServerError().body(new CustomResponseDto<>(1, "menu details load fail", detailList));
+		}
+		
+		return ResponseEntity.ok(new CustomResponseDto<>(1, "menu details load success", detailList));
 	}
 }

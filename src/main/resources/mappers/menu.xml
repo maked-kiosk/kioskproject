@@ -198,23 +198,40 @@
 	  	
     </select>
     
-    select
-    	*
-    from
-    <choose>
-    	<when test="menu_type == 'burger'">
-    		ham
-    	</when>
-    	<when test="menu_type == 'drink'">
-    		drink_table
-    	</when>
-    	<when test="menu_type == 'side'">
-    		side
-    	</when>
-    	<when test="menu_type == 'dessert'">
-    		dessert
-    	</when>
-    </choose>
+    
+    <select id="getDetails" parameterType="String" resultType="kioskmake.projectkiosk.domain.menu.Menu">
+    	select
+    		id,
+    		sales,
+    		image,
+    		<choose>
+	    	<when test="menu_type == 'burger'">
+	    		mc_lunch_flag
+	    	</when>
+	    	<when test="menu_type == 'side'">
+	    		set_menu_flag,
+	    		only_mc_morning_flag
+	    	</when>
+		</choose>
+	    from
+	    <choose>
+	    	<when test="menu_type == 'burger'">
+	    		hamburger_table
+	    	</when>
+	    	<when test="menu_type == 'side'">
+	    		side_menu_table
+	    	</when>
+	    	<when test="menu_type == 'drink'">
+	    		drink_table
+	    	</when>
+	    	<when test="menu_type == 'dessert'">
+	    		dessert_table
+	    	</when>
+	    </choose>
+		where
+			id = #{id}
+	    </select>
+    
     
     
     <select id="findMenuListBySelectType" parameterType="kioskmake.projectkiosk.domain.menu.Menu" resultType="kioskmake.projectkiosk.domain.menu.Menu">

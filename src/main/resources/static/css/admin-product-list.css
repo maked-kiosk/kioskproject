@@ -3,8 +3,12 @@
     background-color: #dbdbdb;
 }
 .admin-title {
-    text-align: center;
+    display: flex;
+    justify-content: center;
+
     margin-bottom: 30px;
+
+    font-size: 30px;
 }
 
 .admin-container {
@@ -115,7 +119,10 @@ textarea {
     display: flex;
     justify-content: space-between;
     align-items: center;
-        background-color: #dbdbdb;
+    
+    margin-bottom: 20px;
+    
+    background-color: #dbdbdb;
 
 }
 

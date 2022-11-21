@@ -1,5 +1,6 @@
 package kioskmake.projectkiosk.domain.menu;
 
+import kioskmake.projectkiosk.web.dto.admin.GetMenuDetailRespDto;
 import kioskmake.projectkiosk.web.dto.admin.GetMenuListRespDto;
 import kioskmake.projectkiosk.web.dto.menu.ReadMenuResponseDto;
 import lombok.AllArgsConstructor;
@@ -23,9 +24,12 @@ public class Menu {
 	private int sales;
 	private int price;
 	private int kcal;
+	private int mc_lunch_flag;
+	private int set_menu_flag;
+	private int only_mc_morning_flag;
 	private int total_count;
 	
-	private String img;
+	private String image;
 
     public ReadMenuResponseDto toReadMenuResponseDto() {
         return ReadMenuResponseDto.builder()
@@ -43,8 +47,23 @@ public class Menu {
     			.price(price)
     			.kcal(kcal)
     			.size(size)
-    			.img(img)
+    			.img(image)
     			.totalCount(total_count)
+    			.build();
+    }
+    
+    public GetMenuDetailRespDto toDetailDto() {
+    	return GetMenuDetailRespDto.builder()
+    			.id(id)
+    			.name(name)
+    			.price(price)
+    			.sales(sales)
+    			.kcal(kcal)
+    			.img(image)
+    			.mc_lunch_flag(mc_lunch_flag == 1)
+    			.size(size)
+    			.set_menu_flag(set_menu_flag == 1)
+    			.only_mc_morning_flag(only_mc_morning_flag == 1)
     			.build();
     }
 }

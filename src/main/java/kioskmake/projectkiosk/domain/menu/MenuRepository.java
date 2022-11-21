@@ -10,4 +10,5 @@ public interface MenuRepository {
     public List<Menu> findMenuListBySelectType(Menu menu) throws Exception;
     public boolean insertMenu(Menu menu) throws Exception;
     public List<Menu> getAdminMenuList(Map<String, Object> map) throws Exception;
+    public List<Menu> getDetails(String id, String menu_type) throws Exception;
 }

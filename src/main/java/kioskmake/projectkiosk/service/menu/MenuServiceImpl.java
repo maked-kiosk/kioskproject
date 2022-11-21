@@ -18,6 +18,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import kioskmake.projectkiosk.domain.menu.Menu;
 import kioskmake.projectkiosk.domain.menu.MenuRepository;
+import kioskmake.projectkiosk.web.dto.admin.GetMenuDetailRespDto;
 import kioskmake.projectkiosk.web.dto.admin.GetMenuListRespDto;
 import kioskmake.projectkiosk.web.dto.admin.InsertMenuReqDto;
 import kioskmake.projectkiosk.web.dto.menu.ReadMenuRequestDto;
@@ -109,5 +110,18 @@ public class MenuServiceImpl implements MenuService {
 	private boolean isNotData(List<GetMenuListRespDto> menuList) {
 		 return menuList.size() == 1;
 	}
+
+	@Override
+	public List<GetMenuDetailRespDto> getMenuDetails(String id, String menuType) throws Exception {
+		List<GetMenuDetailRespDto> detailList = new ArrayList<GetMenuDetailRespDto>();
+		
+		menuRepository.getDetails(id, menuType).forEach(menu -> {
+			detailList.add(menu.toDetailDto());
+		});
+			
+		return detailList;
+	}
+
+	
     
 }
