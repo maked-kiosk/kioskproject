@@ -48,9 +48,16 @@ public class MenuServiceImpl implements MenuService {
 
     @Override
     public List<ReadMenuResponseDto> getMenuListByMenuType(ReadMenuRequestDto readMenuRequestDto) throws Exception {
+        log.info("Check: {}", readMenuRequestDto);
         return readMenuRequestDto.isMcMorning()
         ? changeToReadMenuResponseDtoList(menuRepository.findMcMorningSideMenuList(readMenuRequestDto.toMenu()))
         : changeToReadMenuResponseDtoList(menuRepository.findMenuListByMenuType(readMenuRequestDto.toMenu()));
+    }
+
+
+    @Override
+    public List<ReadMenuResponseDto> getChangeMenuInSet(ReadMenuRequestDto readMenuRequestDto) throws Exception {
+        return changeToReadMenuResponseDtoList(menuRepository.findChangeMenuInSet(readMenuRequestDto.toMenu()));
     }
 
     private List<ReadMenuResponseDto> changeToReadMenuResponseDtoList(List<Menu> menuEntityList) {

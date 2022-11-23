@@ -208,4 +208,111 @@
             </if>
         ;
     </select>
+
+<!--  Menu Change In Set Menu   -->
+    <select id="findChangeMenuInSet" parameterType="kioskmake.projectkiosk.domain.menu.Menu" resultType="kioskmake.projectkiosk.domain.menu.Menu">
+        <choose>
+            <when test="menu_type == 'side' and mc_morning_flag == true">
+                SELECT
+                    smt.id,
+                    if(size LIKE 'none', smt.side_menu_name, concat(smt.side_menu_name, ' - ', if(smt.size LIKE 'M', '미디엄', '라지'))) AS menu_name,
+                    if(smt.price - smt2.price &lt; 0, 0, smt.price - smt2.price) AS price,
+                    smt.kcal,
+                    smt.image
+                FROM
+                    side_menu_table smt
+                    LEFT OUTER JOIN mc_morning_table mmt ON(mmt.menu_code = smt.id)
+                    LEFT OUTER JOIN(select
+                                        price
+                                    from
+                                        side_menu_table
+                                    where
+                                        side_menu_name LIKE '해시브라운') smt2 ON(1 = 1)
+                WHERE
+                    mmt.menu_category_code = 2
+                        and
+                    smt.set_menu_flag = 1
+                        and
+                    (smt.size = #{size}
+                        or
+                    side_menu_name LIKE '해시브라운')
+                    <choose>
+                        <when test="mc_morning_flag == true">
+                            and
+                            smt.only_mc_morning_flag = 1
+                        </when>
+                        <otherwise>
+                            and
+                            smt.only_mc_morning_flag = 0
+                        </otherwise>
+                    </choose>
+                ;
+            </when>
+            <when test="menu_type == 'side'">
+                SELECT
+                    smt.id,
+                    if(size LIKE 'none', smt.side_menu_name, concat(smt.side_menu_name, ' - ', if(smt.size LIKE 'M', '미디엄', '라지'))) AS menu_name,
+                    if(smt.price - smt2.price &lt; 0, 0, smt.price - smt2.price) AS price,
+                    smt.kcal,
+                    smt.image
+                FROM
+                    side_menu_table smt
+                    LEFT OUTER JOIN(select
+                                        price
+                                    from
+                                        side_menu_table
+                                    where
+                                        side_menu_name LIKE '감자튀김'
+                                            and
+                                        size LIKE #{size}) smt2 ON(1 = 1)
+                WHERE
+                    set_menu_flag = 1
+                        and
+                    size LIKE #{size}
+                    <choose>
+                        <when test="mc_morning_flag == true">
+                            and
+                            smt.only_mc_morning_flag = 1
+                        </when>
+                        <otherwise>
+                            and
+                            smt.only_mc_morning_flag = 0
+                        </otherwise>
+                    </choose>
+                ;
+            </when>
+            <otherwise>
+                SELECT
+                    dt.id,
+                    if(dt.size LIKE 'none', dt.drink_name, concat(dt.drink_name, ' - ', if(dt.size LIKE 'M', '미디엄', '라지'))) AS menu_name,
+                    if(dt.price - dt2.price &lt; 0, 0, dt.price - dt2.price) AS price,
+                    dt.kcal,
+                    dt.image
+                FROM
+                    drink_table dt
+                    LEFT OUTER JOIN(select
+                                        price
+                                    from
+                                        drink_table
+                                    where
+                                        drink_name LIKE '코카콜라 제로'
+                                            and
+                                        size LIKE #{size}) dt2 ON(1 = 1)
+                WHERE
+                    size LIKE #{size}
+                <choose>
+                    <when test="mc_morning_flag == true">
+                        and
+                        dt.only_mc_morning_flag = 1
+                    </when>
+                    <otherwise>
+                        and
+                        dt.only_mc_morning_flag = 0
+                    </otherwise>
+                </choose>
+                ;
+            </otherwise>
+        </choose>
+    </select>
+
 </mapper>

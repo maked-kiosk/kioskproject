@@ -11,4 +11,7 @@ public interface MenuService {
     public List<ReadMenuResponseDto> getMenuListByMenuType(ReadMenuRequestDto readMenuRequestDto) throws Exception;
     public ReadMenuResponseDto getMcMorningBurgerByBurgerCode(int id) throws Exception;
     public List<ReadMenuResponseDto> getMcMorningBurgerList() throws Exception;
+
+    public List<ReadMenuResponseDto> getChangeMenuInSet(ReadMenuRequestDto readMenuRequestDto) throws Exception;
+
 }

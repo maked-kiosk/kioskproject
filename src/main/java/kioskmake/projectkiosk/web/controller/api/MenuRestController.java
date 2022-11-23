@@ -92,4 +92,22 @@ public class MenuRestController {
 
         return ResponseEntity.ok(new CustomResponseDto(1, "Load mc morning burger list successful", readMenuRequestDtoList));
     }
+
+
+    @Log
+    @GetMapping("/{menuType}/change/list")
+    public ResponseEntity<?> getChangeMenuInSet(ReadMenuRequestDto readMenuRequestDto) {
+        List<ReadMenuResponseDto> readMenuRequestDtoList = null;
+
+        try {
+            readMenuRequestDtoList = menuService.getChangeMenuInSet(readMenuRequestDto);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.internalServerError().body(new CustomResponseDto(-1, "Failed to load change menu in set list", readMenuRequestDtoList));
+        }
+
+        return ResponseEntity.ok(new CustomResponseDto(1, "Load change menu in set list successful", readMenuRequestDtoList));
+    }
+
+
 }
