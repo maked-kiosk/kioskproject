@@ -73,6 +73,17 @@ function getList(list) {
                         <td><input type="text" class="product-input" value="${menu.size}" placeholder="사이즈"></td>
                     </tr>
                     <tr>
+                    <span class="mc-lunch-flag-check mc-lunch-flag-visible">
+                        <input type="checkbox" name="radio-check" class="product-input mc-lunch-flag">맥런치
+                    </span>
+                    <span class="set-menu-flag-check set-menu-flag-visible">
+                        <input type="checkbox" name="radio-check" class="product-inputset-menu-flag">세트메뉴
+                    </span>
+                    <span class="only-mc-morning-check only-mc-morning-visible">
+                        <input type="checkbox" name="radio-check" class="product-input only-mc-morning">맥모닝
+                    </span>
+                    </tr>
+                    <tr>
                         <td colspan="5">
                             <form enctype="multipart/form-data">
                                 <div class="product-img-inputs">
@@ -88,7 +99,7 @@ function getList(list) {
                     </tr>
                     <tr>
                         <td colspan="5">
-                            <button type="button" class="black-button update-button">수정하기</button>
+                            <button type="button" class="update-button">수정하기</button>
                         </td>
                     </tr>
                 </table>
