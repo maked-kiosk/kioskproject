@@ -232,10 +232,6 @@
                     mmt.menu_category_code = 2
                         and
                     smt.set_menu_flag = 1
-                        and
-                    (smt.size = #{size}
-                        or
-                    side_menu_name LIKE '해시브라운')
                     <choose>
                         <when test="mc_morning_flag == true">
                             and
