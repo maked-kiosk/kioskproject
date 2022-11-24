@@ -93,11 +93,12 @@ public class MenuServiceImpl implements MenuService {
 	public List<GetMenuListRespDto> getMenuList(int page, String menuType) throws Exception {
 		List<GetMenuListRespDto> menuList = new ArrayList<GetMenuListRespDto>();
 		Map<String, Object> map = new HashMap<String, Object>();
+		menuType = menuType.toLowerCase();
 		
 		int index = (page - 1)  * 10;
 		
 		map.put("index", index);
-		map.put("menu_type", menuType);
+		map.put("menu_type", menuType.equals("all") ? "ALL" : menuType.equals("burger") ? "1" : menuType.equals("side") ? "2" : menuType.equals("drink") ? "3" : "4");
 		
 		menuRepository.getAdminMenuList(map).forEach(menu -> {
 			menuList.add(menu.toMenuList());

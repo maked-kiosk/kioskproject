@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -42,7 +43,7 @@ public class AdminMenuController {
 		return ResponseEntity.ok(new CustomResponseDto<>(1, "menu insert success", status));
 	}
 	
-	@GetMapping("/menuList")
+	@GetMapping("/menu/list")
 	public ResponseEntity<?> getMenuList(int page, String menuType) {
 		
 		List<GetMenuListRespDto> menuList = null;
@@ -70,5 +71,12 @@ public class AdminMenuController {
 		}
 		
 		return ResponseEntity.ok(new CustomResponseDto<>(1, "menu details load success", detailList));
+	}
+	
+	@PutMapping("/updateMenu")
+	public ResponseEntity<?> updateMenu(String id, String menuType) {
+		
+		
+		return ResponseEntity.ok(new CustomResponseDto<>(1, "update success", null));
 	}
 }

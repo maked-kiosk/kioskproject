@@ -13,7 +13,7 @@ function getMenuList(nowPage) {
     $.ajax({
         async: false,
         type: "get",
-        url: `/api/v1/menu/menuList`,
+        url: `/api/v1/menu/menu/list`,
         data: {
             "page" : nowPage,
             "menuType": getMenuType()
@@ -60,7 +60,7 @@ function getList(list) {
                 <table class="product-info">
                     <tr>
                         <td>
-                            <select>
+                            <select class="product-input product-type">
                                 <option value="burger">햄버거</option>
                                 <option value="side">사이드</option>
                                 <option value="drink">음류수</option>
@@ -73,15 +73,36 @@ function getList(list) {
                         <td><input type="text" class="product-input" value="${menu.size}" placeholder="사이즈"></td>
                     </tr>
                     <tr>
-                    <span class="mc-lunch-flag-check mc-lunch-flag-visible">
-                        <input type="checkbox" name="radio-check" class="product-input mc-lunch-flag">맥런치
-                    </span>
-                    <span class="set-menu-flag-check set-menu-flag-visible">
-                        <input type="checkbox" name="radio-check" class="product-inputset-menu-flag">세트메뉴
-                    </span>
-                    <span class="only-mc-morning-check only-mc-morning-visible">
-                        <input type="checkbox" name="radio-check" class="product-input only-mc-morning">맥모닝
-                    </span>
+                        <td>
+                            ${menu.menuCategoryName == `burger` ? 
+                            `<span class="mc-lunch-flag-check mc-lunch-flag-visible">
+                                <input type="checkbox" name="radio-check" class="product-input mc-lunch-flag" ${menu.mc_lunch_flag ? `checked`:``}>맥런치
+                            </span>
+                            <span class="only-mc-morning-check only-mc-morning-visible">
+                                <input type="checkbox" name="radio-check" class="product-input only-mc-morning" ${menu.hamburger_mc_morning_flag ? `checked`:``}>맥모닝
+                            </span>` : ``}
+
+                            ${menu.menuCategoryName == `side` ? 
+                            `<span class="only-mc-morning-check only-mc-morning-visible">
+                                <input type="checkbox" name="radio-check" class="product-input only-mc-morning" ${menu.only_mc_morning_flag ? `checked`:``}>맥모닝
+                            </span>
+                            <span class="set-menu-flag-check set-menu-flag-visible">
+                                <input type="checkbox" name="radio-check" class="product-input set-menu-flag" ${menu.set_menu_flag ? `checked`:``}>세트메뉴
+                            </span>` : ``}
+
+                            ${menu.menuCategoryName == `drink` ? 
+                            `<span class="only-mc-morning-check only-mc-morning-visible">
+                                <input type="checkbox" name="radio-check" class="product-input only-mc-morning" ${menu.only_mc_morning_flag ? `checked`:``}>맥모닝
+                            </span>
+                            <span class="set-menu-flag-check set-menu-flag-visible">
+                                <input type="checkbox" name="radio-check" class="product-inputset-menu-flag" ${menu.set_menu_flag ? `checked`:``}>세트메뉴
+                            </span>` : ``}
+
+                            ${menu.menuCategoryName == `dessert` ? 
+                            `<span class="only-mc-morning-check only-mc-morning-visible">
+                                <input type="checkbox" name="radio-check" class="product-input only-mc-morning" ${menu.only_mc_morning_flag ? `checked`:``}>맥모닝
+                            </span>` : ``}
+                        </td>
                     </tr>
                     <tr>
                         <td colspan="5">
@@ -106,10 +127,10 @@ function getList(list) {
             </td>
         </tr>
         `;
+        console.log(menu)
         
     })
-    const menuCode = document.querySelectorAll(".menu-code");
-    menuCode.forEach(code => console.log(code));
+    
 }
 
 function getMenuType() {
@@ -257,6 +278,46 @@ function getMenuDetails(img, code, index) {
     }
 
    setImageDeleteButtonClickEvent(addButton[index]);
+    const productInput = document.querySelectorAll(".product_input");
+
+    let formData = new FormData();
+    
+    formData.append("menuType", productInput[0].value);
+    formData.append("name", productInput[1].value);
+    formData.append("price", productInput[2].value);
+    formData.append("kcal", productInput[3].value);
+    formData.append("size", productInput[4].value);
+    if(menuType() == 'burger') {
+        formData.append("mcLunchFlag", productInput[6].checked)
+        formData.append("hamburgerMcMorningFlag", productInput[7].checked)
+    }else if (menuType() == 'side' || menuType() == 'drink') {
+        formData.append("setMenuFlag", productInput[6].checked)
+        formData.append("onlyMcMorningFlag", productInput[7].checked)
+    }else {
+        formData.append("onlyMcMorningFlag", productInput[6].checked)
+    }
+
+
+    const updateButton = document.querySelector(".update-button");
+
+    updateButton.onclick = () => {
+       $.ajax({
+            async: false,
+            type: "put",
+            url: `/api/v1/menu/updateMenu`,
+            enctype: "multipart/form-data",
+            contentType: false,
+            processData: false,
+            data: formData,
+            dataType: "json",
+            success: (response) => {
+                console.log(response.data)
+            },
+            error: (error) => {
+                console.log(error);
+            }
+       })
+    }
 
 }
 
@@ -301,6 +362,8 @@ function setImageDeleteButtonClickEvent(addButton) {
         }
     }
 }
+
+
 
 
     

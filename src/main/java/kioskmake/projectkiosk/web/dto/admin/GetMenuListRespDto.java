@@ -14,5 +14,9 @@ public class GetMenuListRespDto {
 	private int kcal;
 	private String size;
 	private String img;
+	private boolean mcLunchFlag;
+	private boolean setMenuFlag;
+	private boolean onlyMcMorningFlag;
+	private boolean hamburgerMcMorningFlag;
 	private int totalCount;
 }

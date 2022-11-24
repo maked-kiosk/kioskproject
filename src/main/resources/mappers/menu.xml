@@ -70,7 +70,10 @@
 		   0 as kcal,
 		   '' AS size,
 		   '' as image,
-		   
+		   0 as hamburger_category_code,
+		   0 as mc_lunch_flag,
+		   0 as set_menu_flag,
+		   0 as only_mc_morning_flag,
 			(select
 				COUNT(*)
 			from
@@ -131,6 +134,10 @@
 		   ht.kcal,
 		   '' AS size,
 		   ht.image,
+		   ht.hamburger_category_code,
+		   ht.mc_lunch_flag,
+		 	0 as set_menu_flag,
+		   0 as only_mc_morning_flag,
 		   0
 	FROM
 		   hamburger_table ht
@@ -150,6 +157,10 @@
 	   smt.kcal,
 	   if(smt.size like 'none', '', smt.size) AS size,
 	   smt.image,
+	   0 as hamburger_category_code,
+	   0 as mc_lunch_flag,
+	   smt.set_menu_flag,
+	   smt.only_mc_morning_flag,
 	   0
 	FROM
 	   side_menu_table smt
@@ -169,6 +180,10 @@
 	   dt.kcal,
 	   if(dt.size like 'none', '', dt.size) AS size,
 	   dt.image,
+	   0 as hamburger_category_code,
+	   0 as mc_lunch_flag,
+	   dt.set_menu_flag,
+	   dt.only_mc_morning_flag,
 	   0
 	FROM
 	   drink_table dt
@@ -188,6 +203,10 @@
 	   dt.kcal,
 	   '' AS size,
 	   dt.image,
+	   0 as hamburger_category_code,
+	   0 as mc_lunch_flag,
+	   0 as set_menu_flag,
+	   dt.only_mc_morning_flag,
 	   0
 	FROM
 	   dessert_table dt

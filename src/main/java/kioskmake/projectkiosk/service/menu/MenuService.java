@@ -13,4 +13,5 @@ public interface MenuService {
     public boolean insertMenu(InsertMenuReqDto insertMenuReqDto) throws Exception;
     public List<GetMenuListRespDto> getMenuList(int page, String menuType) throws Exception;
     public List<GetMenuDetailRespDto> getMenuDetails(String id, String menuType) throws Exception;
+    
 }

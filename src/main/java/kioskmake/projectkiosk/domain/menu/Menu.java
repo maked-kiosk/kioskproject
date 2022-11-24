@@ -27,6 +27,7 @@ public class Menu {
 	private int mc_lunch_flag;
 	private int set_menu_flag;
 	private int only_mc_morning_flag;
+	private int hamburger_category_code;
 	private int total_count;
 	
 	private String image;
@@ -48,6 +49,10 @@ public class Menu {
     			.kcal(kcal)
     			.size(size)
     			.img(image)
+    			.mcLunchFlag(mc_lunch_flag == 1)
+    			.setMenuFlag(set_menu_flag == 1)
+    			.onlyMcMorningFlag(only_mc_morning_flag == 1)
+    			.hamburgerMcMorningFlag(hamburger_category_code == -1)
     			.totalCount(total_count)
     			.build();
     }
@@ -60,10 +65,7 @@ public class Menu {
     			.sales(sales)
     			.kcal(kcal)
     			.img(image)
-    			.mc_lunch_flag(mc_lunch_flag == 1)
     			.size(size)
-    			.set_menu_flag(set_menu_flag == 1)
-    			.only_mc_morning_flag(only_mc_morning_flag == 1)
     			.build();
     }
 }
