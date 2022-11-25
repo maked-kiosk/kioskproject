@@ -17,6 +17,8 @@ spring:
     driver-class-name: org.mariadb.jdbc.Driver
 #    driver-class-name: net.sf.log4jdbc.sql.jdbcapi.DriverSpy
     url: jdbc:mariadb://web-study.ctumsyopmesy.ap-northeast-2.rds.amazonaws.com:3306/mc_kiosk?useUnicode=true&characterEncoding=UTF-8&allowMultiQueries=true
+#    url: jdbc:log4jdbc:mariadb://web-study.ctumsyopmesy.ap-northeast-2.rds.amazonaws.com:3306/mc_kiosk?useUnicode=true&characterEncoding=UTF-8&allowMultiQueries=true
+
     username: admin
     password: 1q2w3e4r
   servlet:
@@ -29,7 +31,7 @@ mybatis:
   - /mappers/*.xml
   
 file:
-  path: C:/project/workspace/git/project-kiosk/upload/
+  path: C:/project/workspace/git/kioskproject/src/main/resources/static/images/
 
 # log4jdbc, Mybatis Console Log
 logging:

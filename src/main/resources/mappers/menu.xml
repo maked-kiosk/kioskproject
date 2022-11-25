@@ -3,35 +3,312 @@
         PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="kioskmake.projectkiosk.domain.menu.MenuRepository">
-    <select id="findMenuListBySelectType" parameterType="kioskmake.projectkiosk.domain.menu.Menu" resultType="kioskmake.projectkiosk.domain.menu.Menu">
+
+    <!-- Burger   -->
+    <select id="findBurgerList" resultType="kioskmake.projectkiosk.domain.menu.Menu">
         SELECT
+            id,
+            hamburger_name as menu_name,
+            price,
+            kcal,
+            image,
+            mc_lunch_flag
+        FROM
+            hamburger_table
+        WHERE
+            hamburger_category_code != -1;
+    </select>
+
+    <select id="findBurgerByBurgerCode" parameterType="HashMap" resultType="kioskmake.projectkiosk.domain.menu.Menu">
+        SELECT
+            id,
+            'single' AS set_size,
+            hamburger_name,
+            kcal,
+            image,
+            price
+        FROM
+            hamburger_table
+        WHERE
+            id = #{id}
+
+        union
+
+        SELECT
+            id,
+            'M' AS set_size,
+            ht.hamburger_name,
+            ht.kcal + dt.kcal + smt.kcal AS set_kcal,
+            image,
             <choose>
-                <when test="menu_type == 'sideMenu'">
-                    concat(side_menu_name, ' - ', if(size LIKE 'M', '미디엄', '라지')) AS menu_name,
+                <when test="mc_lunch_flag == false">
+                    ht.price + dt.price + smt.price AS price
                 </when>
                 <otherwise>
-                    concat(drink_name, ' - ', if(size LIKE 'M', '미디엄', '라지')) AS menu_name,
+                    ht.price + dt.price + smt.price - 500 AS price
+                </otherwise>
+            </choose>
+        FROM
+            hamburger_table ht
+        LEFT OUTER JOIN (select
+                            price,
+                            kcal
+                        from
+                            drink_table
+                         where
+                            drink_name LIKE '코카콜라 제로'
+                                AND
+                            size LIKE 'M') dt ON(1 = 1)
+        LEFT OUTER JOIN (select
+                            price,
+                            kcal
+                        from
+                            side_menu_table
+                        where
+                            side_menu_name LIKE '감자튀김'
+                                AND
+                            size LIKE 'M') smt ON(1 = 1)
+        WHERE
+            ht.id = #{id}
+
+        UNION
+
+        SELECT
+            id,
+            'L' AS set_size,
+            ht.hamburger_name,
+            ht.kcal + dt.kcal + smt.kcal AS set_kcal,
+            image,
+            <choose>
+                <when test="mc_lunch_flag == false">
+                    ht.price + dt.price + smt.price AS price
+                </when>
+                <otherwise>
+                    ht.price + dt.price + smt.price - 500 AS price
+                </otherwise>
+            </choose>
+        FROM
+            hamburger_table ht
+        LEFT OUTER JOIN (select
+                            price,
+                            kcal
+                        from
+                            drink_table
+                        where
+                            drink_name LIKE '코카콜라 제로'
+                                AND
+                            size LIKE 'L') dt ON(1 = 1)
+        LEFT OUTER JOIN (select
+                            price,
+                            kcal
+                        from
+                            side_menu_table
+                        where
+                            side_menu_name LIKE '감자튀김'
+                                AND
+                            size LIKE 'L') smt ON(1 = 1)
+        WHERE
+            ht.id = #{id};
+    </select>
+
+    <!-- Side & Drink & Dessert  -->
+    <select id="findMenuListByMenuType" parameterType="kioskmake.projectkiosk.domain.menu.Menu" resultType="kioskmake.projectkiosk.domain.menu.Menu">
+        SELECT
+            id,
+            <choose>
+                <when test="menu_type == 'side'">
+                    if(size LIKE 'none', side_menu_name, concat(side_menu_name, ' - ', if(size LIKE 'M', '미디엄', '라지'))) AS menu_name,
+                </when>
+                <when test="menu_type == 'dessert'">
+                    dessert_name AS menu_name,
+                </when>
+                <otherwise>
+                    if(size LIKE 'none', drink_name, concat(drink_name, ' - ', if(size LIKE 'M', '미디엄', '라지'))) AS menu_name,
                 </otherwise>
             </choose>
             price,
-            kcal
+            kcal,
+            image
         FROM
-            <choose>
-                <when test="menu_type == 'sideMenu'">
-                    side_menu_table
-                </when>
-                <otherwise>
-                    drink_table
-                </otherwise>
-            </choose>
+        <choose>
+            <when test="menu_type == 'side'">
+                side_menu_table
+            </when>
+            <when test="menu_type == 'dessert'">
+                dessert_table
+            </when>
+            <otherwise>
+                drink_table
+            </otherwise>
+        </choose>
+        WHERE
+            only_mc_morning_flag = #{mc_morning_flag}
         <if test="set_flag == true">
-            WHERE
-                size LIKE #{size}
-                <if test="menu_type == 'sideMenu'">
+                and
+            size LIKE #{size}
+            <if test="menu_type == 'side'">
                     and
-                    set_menu_flag = 1
-                </if>
+                set_menu_flag = 1
+            </if>
         </if>
         ;
     </select>
+
+    <!-- McMorningBurger   -->
+    <select id="findMcMorningBurgerByBurgerCode" parameterType="Integer" resultType="kioskmake.projectkiosk.domain.menu.Menu">
+        SELECT
+            ht.id,
+            ht.hamburger_name as menu_name,
+            ht.price,
+            ht.kcal,
+            ht.image
+        FROM
+            hamburger_table ht
+            inner join mc_morning_table mmt ON(mmt.menu_code = ht.id)
+        WHERE
+            mmt.menu_category_code = 1
+                and
+            ht.id = #{id};
+    </select>
+
+    <select id="findMcMorningBurgerList" resultType="kioskmake.projectkiosk.domain.menu.Menu">
+        SELECT
+            ht.id,
+            ht.hamburger_name as menu_name,
+            ht.price,
+            ht.kcal,
+            ht.image
+        FROM
+            hamburger_table ht
+            inner join mc_morning_table mmt ON(mmt.menu_code = ht.id)
+        WHERE
+            mmt.menu_category_code = 1;
+    </select>
+
+<!-- McMorningSideMenu   -->
+    <select id="findMcMorningSideMenuList" parameterType="kioskmake.projectkiosk.domain.menu.Menu" resultType="kioskmake.projectkiosk.domain.menu.Menu">
+        SELECT
+            smt.id,
+            if(size LIKE 'none', smt.side_menu_name, concat(smt.side_menu_name, ' - ', if(size LIKE 'M', '미디엄', '라지'))) AS menu_name,
+            smt.price,
+            smt.kcal,
+            smt.image
+        FROM
+            side_menu_table smt
+            LEFT OUTER JOIN mc_morning_table mmt ON(mmt.menu_code = smt.id)
+        WHERE
+            mmt.menu_category_code = 2
+            <if test="set_flag == true">
+                    AND
+                smt.set_menu_flag = 1
+                    AND
+                (smt.size LIKE #{size}
+                    OR
+                smt.size LIKE 'none')
+            </if>
+        ;
+    </select>
+
+<!--  Menu Change In Set Menu   -->
+    <select id="findChangeMenuInSet" parameterType="kioskmake.projectkiosk.domain.menu.Menu" resultType="kioskmake.projectkiosk.domain.menu.Menu">
+        <choose>
+            <when test="menu_type == 'side' and mc_morning_flag == true">
+                SELECT
+                    smt.id,
+                    if(size LIKE 'none', smt.side_menu_name, concat(smt.side_menu_name, ' - ', if(smt.size LIKE 'M', '미디엄', '라지'))) AS menu_name,
+                    if(smt.price - smt2.price &lt; 0, 0, smt.price - smt2.price) AS price,
+                    smt.kcal,
+                    smt.image
+                FROM
+                    side_menu_table smt
+                    LEFT OUTER JOIN mc_morning_table mmt ON(mmt.menu_code = smt.id)
+                    LEFT OUTER JOIN(select
+                                        price
+                                    from
+                                        side_menu_table
+                                    where
+                                        side_menu_name LIKE '해시브라운') smt2 ON(1 = 1)
+                WHERE
+                    mmt.menu_category_code = 2
+                        and
+                    smt.set_menu_flag = 1
+                    <choose>
+                        <when test="mc_morning_flag == true">
+                            and
+                            smt.only_mc_morning_flag = 1
+                        </when>
+                        <otherwise>
+                            and
+                            smt.only_mc_morning_flag = 0
+                        </otherwise>
+                    </choose>
+                ;
+            </when>
+            <when test="menu_type == 'side'">
+                SELECT
+                    smt.id,
+                    if(size LIKE 'none', smt.side_menu_name, concat(smt.side_menu_name, ' - ', if(smt.size LIKE 'M', '미디엄', '라지'))) AS menu_name,
+                    if(smt.price - smt2.price &lt; 0, 0, smt.price - smt2.price) AS price,
+                    smt.kcal,
+                    smt.image
+                FROM
+                    side_menu_table smt
+                    LEFT OUTER JOIN(select
+                                        price
+                                    from
+                                        side_menu_table
+                                    where
+                                        side_menu_name LIKE '감자튀김'
+                                            and
+                                        size LIKE #{size}) smt2 ON(1 = 1)
+                WHERE
+                    set_menu_flag = 1
+                        and
+                    size LIKE #{size}
+                    <choose>
+                        <when test="mc_morning_flag == true">
+                            and
+                            smt.only_mc_morning_flag = 1
+                        </when>
+                        <otherwise>
+                            and
+                            smt.only_mc_morning_flag = 0
+                        </otherwise>
+                    </choose>
+                ;
+            </when>
+            <otherwise>
+                SELECT
+                    dt.id,
+                    if(dt.size LIKE 'none', dt.drink_name, concat(dt.drink_name, ' - ', if(dt.size LIKE 'M', '미디엄', '라지'))) AS menu_name,
+                    if(dt.price - dt2.price &lt; 0, 0, dt.price - dt2.price) AS price,
+                    dt.kcal,
+                    dt.image
+                FROM
+                    drink_table dt
+                    LEFT OUTER JOIN(select
+                                        price
+                                    from
+                                        drink_table
+                                    where
+                                        drink_name LIKE '코카콜라 제로'
+                                            and
+                                        size LIKE #{size}) dt2 ON(1 = 1)
+                WHERE
+                    size LIKE #{size}
+                <choose>
+                    <when test="mc_morning_flag == true">
+                        and
+                        dt.only_mc_morning_flag = 1
+                    </when>
+                    <otherwise>
+                        and
+                        dt.only_mc_morning_flag = 0
+                    </otherwise>
+                </choose>
+                ;
+            </otherwise>
+        </choose>
+    </select>
+
 </mapper>
