@@ -8,6 +8,11 @@ import java.util.Optional;
 
 @Mapper
 public interface MenuRepository {
+
+    
+	// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Not ADMIN <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
     public List<Menu> findBurgerList() throws Exception;
     public List<Menu> findBurgerByBurgerCode(Map<String, Object> config_map) throws Exception;
 
@@ -19,4 +24,15 @@ public interface MenuRepository {
     public List<Menu> findMcMorningSideMenuList(Menu menu) throws Exception;
 
     public List<Menu> findChangeMenuInSet(Menu menu) throws Exception;
+    
+
+
+	// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> ADMIN <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+    public boolean insertMenu(Menu menu) throws Exception;
+
+    public List<Menu> findMenuListBySelectType(Menu menu) throws Exception;
+    public List<Menu> getAdminMenuList(Map<String, Object> map) throws Exception;
+    public List<Menu> getDetails(String id, String menu_type) throws Exception;
+
 }

@@ -7,6 +7,7 @@
     <title>Document</title>
     <link rel="stylesheet" href="/static/css/style.css">
     <link rel="stylesheet" href="/static/css/admin.css">
+    <script src="https://code.jquery.com/jquery-latest.min.js"></script>
 </head>
 <body>
     <!-- <div id="container"> -->
@@ -14,21 +15,20 @@
             <div class="admin-main">
                 <div class="product">
                     <select class="product-input product-type">
-                        <option value="none" selected>종류</option>
+                        <!-- <option value="none" selected>종류</option> -->
                         <option value="burger">burger</option>
                         <option value="side">side</option>
                         <option value="drink">drink</option>
                         <option value="dessert">dessert</option>
                     </select>
                     <span class="mc-morning-check mc-morning-visible">
-                        <input type="checkbox" name="radio-check" class="mc-morning">맥모닝
-                        <input type="checkbox" name="radio-check" class="burger">버거
+                        <input type="checkbox" name="radio-check" class="product-input mc-morning">맥모닝
+                        <input type="checkbox" name="radio-check" class="product-input burger">버거
                     </span>
                     <select class="product-input burger-type burger-visible">
-                        <option value="none" selected>햄버거</option>
-                        <option value="beef">beef</option>
-                        <option value="seafood">seafood</option>
-                        <option value="chicken">chicken</option>
+                        <option value="1">beef</option>
+                        <option value="2">seafood</option>
+                        <option value="3">chicken</option>
                     </select>
                     <select class="product-input size-type size-visible">
                         <option value="none" selected>사이즈</option>
@@ -37,10 +37,12 @@
                         <option value="L">L</option>
                     </select>
                     <select class="product-input drink-type drink-visible">
-                        <option value="none" selected>종류</option>
-                        <option value="beverage">음료</option>
-                        <option value="coffee">커피</option>
+                        <option value="1">음료</option>
+                        <option value="2">커피</option>
                     </select>
+                    <span class="only-mc-morning-check only-mc-morning-visible">
+                        <input type="checkbox" name="radio-check" class="product-input only-mc-morning">맥모닝
+                    </span>
                     
                 </div>
                 <input type="text" class="product-input" placeholder="name">

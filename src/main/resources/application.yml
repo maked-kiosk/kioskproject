@@ -57,7 +57,7 @@ logging:
             sql:
               BasicBinder: TRACE
       springframework:
-        web: DEBUG
+#        web: DEBUG
       com:
         zaxxer:
           hikari:
