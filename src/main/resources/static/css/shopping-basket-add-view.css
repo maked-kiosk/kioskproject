@@ -211,8 +211,6 @@ header {
 }
 
 
-/* >>>>>>>>>>>>>>>>>>>>>>>>>> footer menu <<<<<<<<<<<<<<<<<<<<<<<<<<<<<< */
-
 .footer-menu {
     width: 600px;
 
@@ -227,6 +225,7 @@ header {
 
 .load-main-page-button {
     border: 1px solid black;
+    border-radius: 5px;
 
     width: 298px;
     height: 50px;
@@ -236,12 +235,10 @@ header {
 
 .help-menu-button {
     border: 1px solid black;
+    border-radius: 5px;
 
     width: 298px;
     height: 50px;
 
     background-color: white;
 }
-
-
-/* >>>>>>>>>>>>>>>>>>>>>>>>>> footer menu <<<<<<<<<<<<<<<<<<<<<<<<<<<<<< */

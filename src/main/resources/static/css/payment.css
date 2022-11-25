@@ -1,6 +1,7 @@
 #container{
     padding: 50px;
     
+    position: relative;
 }
 
 #logo img{
@@ -46,4 +47,40 @@ h2{
     margin-top: 100px;
     width: 250px;
     height: 30px;
+}
+
+.footer-menu {
+    width: 500px;
+
+    position: absolute;
+    right: 50px;
+    bottom: 40px;
+}
+
+.footer-menu > div {
+    margin-bottom: 30px;
+}
+
+.load-main-page-button {
+    border: 1px solid black;
+    border-radius: 5px;
+
+    width: 248px;;
+    height: 40px;
+
+    background-color: white;
+}
+
+.help-menu-button {
+    border: 1px solid black;
+    border-radius: 5px;
+
+    width: 248px;;
+    height: 40px;
+
+    background-color: white;
+}
+
+.notice-span {
+    font-size: 12px;
 }

@@ -3,6 +3,8 @@
     flex-direction: column;
     
     padding: 70px 80px 0px;
+
+    position: relative;
 }
 
 .order-title-img {
@@ -181,7 +183,7 @@ main {
     display: flex;
     justify-content: space-between;
 
-    margin-bottom: 30px;
+    margin-bottom: 50px;
 }
 
 .add-orders-button {
@@ -200,7 +202,7 @@ main {
     border: 1px solid #fcb828;
     border-radius: 5px;
 
-    width: 480px;
+    width: 500px;
     height: 60px;
 
     font-size: 35px;
@@ -243,33 +245,38 @@ main {
     font-size: 25px;
 }
 
-.sub-button-notice {
-    display: flex;
-    flex-direction: column;
+.footer-menu {
+    width: 500px;
 
-    width: 480px;
+    position: absolute;
+    right: 80px;
+    bottom: 40px;
 }
 
-.sub-button {
-    display: flex;
-    justify-content: space-between;
-
-    margin-bottom: 20px;
+.footer-menu > div {
+    margin-bottom: 30px;
 }
 
-.sub-button button {
+.load-main-page-button {
     border: 1px solid black;
     border-radius: 5px;
 
-    width: 220px;
-    height: 35px;
+    width: 248px;;
+    height: 40px;
 
     background-color: white;
-
-    font-size: 20px;
 }
 
-.fa-wheelchair {
-    margin-right: 8px;
-    font-size: 20px;
+.help-menu-button {
+    border: 1px solid black;
+    border-radius: 5px;
+
+    width: 248px;;
+    height: 40px;
+
+    background-color: white;
+}
+
+.notice-span {
+    font-size: 12px;
 }

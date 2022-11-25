@@ -1,3 +1,7 @@
+#container {
+    position: relative;
+}
+
 main {
     display: flex;
 }
@@ -27,11 +31,7 @@ article:first-child {
 
 .nav-menu {
     border-right: 2px solid #dbdbdb;
-    height: 820px;
-
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-end;
+    height: 1350px;
 }
 
 .nav-logo {
@@ -56,19 +56,6 @@ nav > ul > li {
     align-items: center;
 
     padding: 10px;
-}
-
-nav > ul > li:hover {
-    border-right: 3px solid #dbdbdb;
-    border-bottom: 3px solid #dbdbdb;
-    box-shadow: 10px 10px 10px -10px #dbdbdb;
-}
-
-
-.hovers li:hover {
-    transform: scale(1.03);
-    transition: 0.2s;
-    cursor: pointer; 
 }
 
 .food-menu-hovers li:hover {
@@ -312,7 +299,7 @@ footer {
 .cart-info {
     width: 550px;
 
-    padding: 30px;
+    padding-top: 30px;
 }
 
 .order-menu {
@@ -384,39 +371,38 @@ footer {
 }
 
 
-.user-choose-info ul {
-    display: flex;
-    margin-bottom: 20px;
+.footer-menu {
+    width: 500px;
+
+    position: absolute;
+    right: 50px;
+    bottom: 40px;
 }
 
-.user-choose-info ul li {
-    border: 1px solid #dbdbdb;
+.footer-menu > div {
+    margin-bottom: 30px;
+}
+
+.load-main-page-button {
+    border: 1px solid black;
     border-radius: 5px;
+
+    width: 248px;;
+    height: 40px;
+
     background-color: white;
-    box-shadow: 5px 5px 8px -5px #dbdbdb;
-
-    width: 250px;
-    height: 30px;
-
-    display: flex;
-    justify-content: center;
-    align-items: center;
-
-    margin-right: 10px;
 }
 
-.user-choose-info ul li:hover {
-    cursor: pointer;
+.help-menu-button {
+    border: 1px solid black;
+    border-radius: 5px;
+
+    width: 248px;;
+    height: 40px;
+
+    background-color: white;
 }
 
-.fa-wheelchair {
-    margin-right: 10px;
-}
-
-.user-choose-info ul li p {
-    font-size: 16px;
-}
-
-.user-choose-info p {
+.notice-span {
     font-size: 12px;
 }
