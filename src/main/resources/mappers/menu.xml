@@ -228,12 +228,14 @@
     	select
     		id,
     		sales,
-    		image,
+    		image
     		<choose>
 	    	<when test="menu_type == 'burger'">
+                ,
 	    		mc_lunch_flag
 	    	</when>
 	    	<when test="menu_type == 'side'">
+                ,
 	    		set_menu_flag,
 	    		only_mc_morning_flag
 	    	</when>

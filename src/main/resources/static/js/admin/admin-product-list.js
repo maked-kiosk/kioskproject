@@ -76,31 +76,31 @@ function getList(list) {
                         <td>
                             ${menu.menuCategoryName == `burger` ? 
                             `<span class="mc-lunch-flag-check mc-lunch-flag-visible">
-                                <input type="checkbox" name="radio-check" class="product-input mc-lunch-flag" ${menu.mc_lunch_flag ? `checked`:``}>맥런치
+                                <input type="checkbox" name="radio-check" class="product-input mc-lunch-flag" ${menu.mcLunchFlag ? `checked`:``}>맥런치
                             </span>
                             <span class="only-mc-morning-check only-mc-morning-visible">
-                                <input type="checkbox" name="radio-check" class="product-input only-mc-morning" ${menu.hamburger_mc_morning_flag ? `checked`:``}>맥모닝
+                                <input type="checkbox" name="radio-check" class="product-input only-mc-morning" ${menu.hamburgerMcMorningFlag ? `checked`:``}>맥모닝
                             </span>` : ``}
 
                             ${menu.menuCategoryName == `side` ? 
                             `<span class="only-mc-morning-check only-mc-morning-visible">
-                                <input type="checkbox" name="radio-check" class="product-input only-mc-morning" ${menu.only_mc_morning_flag ? `checked`:``}>맥모닝
+                                <input type="checkbox" name="radio-check" class="product-input only-mc-morning" ${menu.onlyMcMorningFlag ? `checked`:``}>맥모닝
                             </span>
                             <span class="set-menu-flag-check set-menu-flag-visible">
-                                <input type="checkbox" name="radio-check" class="product-input set-menu-flag" ${menu.set_menu_flag ? `checked`:``}>세트메뉴
+                                <input type="checkbox" name="radio-check" class="product-input set-menu-flag" ${menu.setMenuFlag ? `checked`:``}>세트메뉴
                             </span>` : ``}
 
                             ${menu.menuCategoryName == `drink` ? 
                             `<span class="only-mc-morning-check only-mc-morning-visible">
-                                <input type="checkbox" name="radio-check" class="product-input only-mc-morning" ${menu.only_mc_morning_flag ? `checked`:``}>맥모닝
+                                <input type="checkbox" name="radio-check" class="product-input only-mc-morning" ${menu.onlyMcMorningFlag ? `checked`:``}>맥모닝
                             </span>
                             <span class="set-menu-flag-check set-menu-flag-visible">
-                                <input type="checkbox" name="radio-check" class="product-inputset-menu-flag" ${menu.set_menu_flag ? `checked`:``}>세트메뉴
+                                <input type="checkbox" name="radio-check" class="product-inputset-menu-flag" ${menu.setMenuFlag ? `checked`:``}>세트메뉴
                             </span>` : ``}
 
                             ${menu.menuCategoryName == `dessert` ? 
                             `<span class="only-mc-morning-check only-mc-morning-visible">
-                                <input type="checkbox" name="radio-check" class="product-input only-mc-morning" ${menu.only_mc_morning_flag ? `checked`:``}>맥모닝
+                                <input type="checkbox" name="radio-check" class="product-input only-mc-morning" ${menu.onlyMcMorningFlag ? `checked`:``}>맥모닝
                             </span>` : ``}
                         </td>
                     </tr>
