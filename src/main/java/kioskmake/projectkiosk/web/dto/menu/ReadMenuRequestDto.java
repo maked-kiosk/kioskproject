@@ -14,7 +14,7 @@ public class ReadMenuRequestDto {
                 .menu_type(menuType)
                 .set_flag(setSize != null)
                 .size(setSize)
-                .mc_morning_flag(mcMorning ? 1 : 0)
+                .mc_morning_flag(mcMorning)
                 .build();
     }
 }

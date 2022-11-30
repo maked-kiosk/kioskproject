@@ -1,21 +1,5 @@
 package kioskmake.projectkiosk.service.menu;
 
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
-import java.util.stream.Collectors;
-
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
-
 import kioskmake.projectkiosk.domain.menu.Menu;
 import kioskmake.projectkiosk.domain.menu.MenuRepository;
 import kioskmake.projectkiosk.web.dto.admin.GetMenuDetailRespDto;
@@ -25,12 +9,16 @@ import kioskmake.projectkiosk.web.dto.menu.ReadMenuRequestDto;
 import kioskmake.projectkiosk.web.dto.menu.ReadMenuResponseDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -42,6 +30,7 @@ public class MenuServiceImpl implements MenuService {
 	private String filePath;
 	
     private final MenuRepository menuRepository;
+
 
 
 	// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Not ADMIN <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -151,7 +140,7 @@ public class MenuServiceImpl implements MenuService {
 
 	@Override
 	public List<GetMenuDetailRespDto> getMenuDetails(String id, String menuType) throws Exception {
-		List<GetMenuDetailRespDto> detailList = new ArrayList<GetMenuDetailRespDto>();
+		List<GetMenuDetailRespDto> detailList = new ArrayList<>();
 		
 		menuRepository.getDetails(id, menuType).forEach(menu -> {
 			detailList.add(menu.toDetailDto());

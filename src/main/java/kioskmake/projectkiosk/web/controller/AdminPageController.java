@@ -8,12 +8,12 @@ public class AdminPageController {
 
 	@GetMapping("/admin/product-insert")
 	public String admin() {
-		return "admin";
+		return "admin/admin";
 	}
 	
-	@GetMapping("/admin/menulist")
+	@GetMapping("/admin/menu-list")
 	public String adminMenuList() {
-		return "admin-product-list";
+		return "admin/admin-product-list";
 	}
 	
 }

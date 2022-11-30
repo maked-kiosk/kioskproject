@@ -262,23 +262,23 @@ function getMenuDetails(img, code, index) {
         fileInput[index].onchange = () => {
             const formData = new FormData(document.querySelectorAll("form")[index]);
             let changeFlge = false;
-            let imgVlaue = null;
+            let imageValue = null;
         
             formData.forEach((value) => {
                 if(value.size != 0) {
-                    imgVlaue = value;
+                    imageValue = value;
                     changeFlge = true;
                 }
             });
             
             if(changeFlge){
-                getImagePreview(imgVlaue, productImages, addButton[index]);
+                getImagePreview(imageValue, productImages, addButton[index]);
             }
         }
     }
 
    setImageDeleteButtonClickEvent(addButton[index]);
-    const productInput = document.querySelectorAll(".product_input");
+    const productInput = document.querySelectorAll(".product-input");
 
     let formData = new FormData();
     
@@ -321,7 +321,7 @@ function getMenuDetails(img, code, index) {
 
 }
 
-function getImagePreview(imgVlaue, productImages, addButton) {
+function getImagePreview(imageValue, productImages, addButton) {
     const reader = new FileReader();
     
     reader.onload = (e) => {
@@ -336,7 +336,7 @@ function getImagePreview(imgVlaue, productImages, addButton) {
         setImageDeleteButtonClickEvent(addButton);
         
     }
-    setTimeout(() => { reader.readAsDataURL(imgVlaue)}, 100);
+    setTimeout(() => { reader.readAsDataURL(imageValue)}, 100);
    
 }
 

@@ -63,4 +63,40 @@ for(let i = 0; i < foodType.length; i++) {
 }
 
 
+class MenuLoader {
+    static #instance = null;
 
+    static getInstance() {
+        if(this.#instance == null) {
+            this.#instance = new MenuLoader();
+        }
+
+        return this.#instance;
+    }
+
+    getTopRankingMenuLoad() {
+        $.ajax({
+            async: false,
+            type: "get",
+            url: ``,
+            dataType: "json",
+            success: (response) => {
+                this.setDataList(response.data, true)
+            },
+            error: this.errorMessage
+        })
+    }
+
+    setDataList(dataList, rankingDataFlag) {
+        if(rankingDataFlag) {
+            
+        }
+    }
+
+    errorMessage(request, status, error){
+        alert("에러");
+        console.log(request.status);
+        console.log(request.responseText);
+        console.log(error);
+    }
+}

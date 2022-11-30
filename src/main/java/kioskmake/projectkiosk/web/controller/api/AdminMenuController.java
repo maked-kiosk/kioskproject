@@ -2,6 +2,7 @@ package kioskmake.projectkiosk.web.controller.api;
 
 import java.util.List;
 
+import kioskmake.projectkiosk.handler.aop.annotation.Log;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -42,7 +43,8 @@ public class AdminMenuController {
 		
 		return ResponseEntity.ok(new CustomResponseDto<>(1, "menu insert success", status));
 	}
-	
+
+	@Log
 	@GetMapping("/menu/list")
 	public ResponseEntity<?> getMenuList(int page, String menuType) {
 		
