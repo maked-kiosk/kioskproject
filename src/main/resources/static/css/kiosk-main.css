@@ -132,8 +132,7 @@ section:first-child {
   margin: 0 10px 10px 0;
 }
 
-.food-type li.active,
-.food-type li:hover {
+.food-type li.active {
   cursor: pointer;
   box-shadow: inset 1px 1px 6px 1px #dbdbdb;
 }
