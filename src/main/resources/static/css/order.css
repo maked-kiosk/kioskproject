@@ -7,6 +7,154 @@
     position: relative;
 }
 
+/*///////////////모달//////////////*/
+
+.point-modal {
+    width: 900px;
+    height: 1600px;
+    background-color: rgba(0, 0, 0, 0.4);
+    position: absolute;
+    top: 0;
+    left: 0;
+
+    /* display: none; */
+}
+
+.point-modal-user {
+    width: 900px;
+    height: 1600px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    position: relative;
+}
+
+.point-use-info {
+    width: 700px;
+    height: 1000px;
+    background-color: white;
+
+    padding: 80px;
+}
+
+.user-input p {
+    font-size: 25px;
+    margin-bottom: 5px;
+    
+}
+
+.user-input input {
+    width: 540px;
+    height: 50px;
+    font-size: 30px;
+    padding: 5px;
+    margin-bottom: 20px;
+}
+
+.point-btns {
+    width: 540px;
+
+    display: flex;
+    justify-content: space-between;
+}
+
+.po-btns button {
+    border: 1px solid #dbdbdb;
+    width: 100px;
+    height: 50px;
+}
+
+.hovers button:hover{
+    transition: 0.3s;
+    background-color: #dbdbdb;
+    color: white;
+}
+
+.having-point-info {
+    margin-top: 100px;
+}
+
+.having-point-info p {
+    font-size: 30px;
+    margin-bottom: 10px;
+}
+
+.using-point input{
+    width: 540px;
+    height: 50px;
+    border: 1px solid #dbdbdb;
+
+    margin-bottom: 10px;
+}
+
+.points-input-box {
+    width: 540px;
+    height: 50px;
+    border: 1px solid #dbdbdb;
+    margin-bottom: 10px;
+}
+
+.final-amount-confirm {
+    display: flex;
+    justify-content: space-between;
+}
+
+.final-amount-confirm button {
+    width: 265px;
+    height: 50px;
+    border: 1px solid #dbdbdb;
+}
+
+.insert-modal {
+    width: 900px;
+    height: 1600px;
+
+    position: absolute;
+
+    /* display: none; */
+}
+
+.insert-modal > div {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    width: 900px;
+    height: 1600px;
+    background-color: rgba(0, 0, 0, 0.4);
+}
+
+.user-confirm {
+    width: 400px;
+    height: 200px;
+    background-color: white;
+
+    padding: 40px ;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.user-confirm p {
+    font-size: 20px;
+    margin-bottom: 10px;
+}
+
+.user-confirm-btns {
+    display: flex;
+    justify-content: space-between;
+}
+
+.user-confirm-btns button{
+    width: 155px;
+    height: 30px;
+    border: 1px solid #dbdbdb;
+}
+
+/*//////////////////////////////////////////*/
+
 .order-title-img {
     display: flex;
     justify-content: space-between;
@@ -280,3 +428,4 @@ main {
 .notice-span {
     font-size: 12px;
 }
+
