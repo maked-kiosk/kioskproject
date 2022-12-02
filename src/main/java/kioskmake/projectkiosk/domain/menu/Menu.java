@@ -21,13 +21,17 @@ public class Menu {
 	private String burger_type;
 	private String size;
 	private String drink_type;
-	private String name;
+	private String menu_name;
+	private String menu_category_name;
 	private int sales;
 	private int price;
 	private int kcal;
 	private int mc_lunch_flag;
 	private int set_menu_flag;
 	private int only_mc_morning_flag;
+	private int drink_category_code;
+	private int menu_category_code;
+	private boolean hamburger_mc_morning_flag;
 	private int hamburger_category_code;
 	private int total_count;
 	
@@ -35,7 +39,7 @@ public class Menu {
 
     public ReadMenuResponseDto toReadMenuResponseDto() {
         return ReadMenuResponseDto.builder()
-                .menuName(name)
+                .menuName(menu_name)
                 .price(price)
                 .kcal(kcal)
                 .image(image)
@@ -47,7 +51,7 @@ public class Menu {
     	return GetMenuListRespDto.builder()
     			.id(id)
     			.menuCategoryName(menu_type)
-    			.name(name)
+    			.menuName(menu_name)
     			.price(price)
     			.kcal(kcal)
     			.size(size)
@@ -63,12 +67,19 @@ public class Menu {
     public GetMenuDetailRespDto toDetailDto() {
     	return GetMenuDetailRespDto.builder()
     			.id(id)
-    			.name(name)
+    			.menuName(menu_name)
     			.price(price)
     			.sales(sales)
     			.kcal(kcal)
-    			.img(image)
-    			.size(size)
+    			.image(image)
+				.menuCategoryName(menu_category_name)
+    			.size(size != null ? size : "")
+				.hamburgerCategoryCode(hamburger_category_code)
+				.mcLunchFlag(mc_lunch_flag == 1)
+				.setMenuFlag(set_menu_flag == 1)
+				.onlyMcMorningFlag(only_mc_morning_flag == 1)
+				.drinkCategoryCode(drink_category_code)
+				.menuCategoryCode(menu_category_code)
     			.build();
     }
 }

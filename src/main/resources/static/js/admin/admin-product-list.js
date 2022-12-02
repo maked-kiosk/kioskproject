@@ -1,106 +1,284 @@
-let nowPage = 1;
-const productSelect = document.querySelector(".product-input");
-let fileInput = document.querySelectorAll(".file-input");
-
-
-
-getMenuList(nowPage);
-setProductSelectChangeEvent();
-
-
-
-function getMenuList(nowPage) {
-    $.ajax({
-        async: false,
-        type: "get",
-        url: `/api/v1/menu/menu/list`,
-        data: {
-            "page" : nowPage,
-            "menuType": getMenuType()
-        },
-        dataType: "json",
-        success: (response) => {
-            getList(response.data);
-            if(response.data != null) {
-                menuPageNumber(response.data[0].totalCount)
-                setMenuDetailButtonClickEvent();
-            }else {
-                menuPageNumber(0);
-            }
-        },
-        error: (error) => {
-            console.log(error);
-        }
-    });
+window.onload = () => {
+    MenuListLoader.getInstance().getMenuList(1);
 }
 
-function getList(list) {
-    const tbody = document.querySelector(".list-body");
-    tbody.innerHTML = "";
-    list.forEach((menu, index) => {
-        if(index == 0) {
-            return;
+class MenuListLoader {
+    static #instance = null;
+
+    pageSetter = null;
+    menuDetailLoader = null;
+
+    tbody = null;
+    productSelect = null;
+    menuDetailItems = null;
+
+    static getInstance() {
+        if(this.#instance == null) {
+            this.#instance = new MenuListLoader();
         }
+        return this.#instance;
+    }
+
+    constructor() {
+        this.tbody = document.querySelector(".list-body");
+        this.productSelect = document.querySelector(".product-input");
+        this.setProductSelectChangeEvent();
+
+        this.pageSetter = PageSetter.getInstance();
+        this.menuDetailLoader = MenuDetailLoader.getInstance();
+    }
+
+    getMenuList(nowPage) {
+        $.ajax({
+            async: false,
+            type: "get",
+            url: `/api/v1/menu/menu/list`,
+            data: {
+                "page" : nowPage,
+                "menuType": MenuTypeGetter.getInstance().getSelectMenuType()
+            },
+            dataType: "json",
+            success: (response) => {
+                this.setMenuList(response.data);
+
+                if(response.data != null) {
+                    this.pageSetter.setPageNumber(response.data[0].totalCount)
+                    this.menuDetailLoader.setMenuDetailButtonClickEvent();
+                }else {
+                    this.pageSetter.setPageNumber(0);
+                }
+            },
+            error: (request, status, error) => {
+                console.log(request.status)
+                console.log(request.responseText)
+                console.log(error);
+            }
+        });
+    }
+
+    setMenuList(menuList) {
+        this.tbody.innerHTML = "";
+
+        menuList.forEach((menu, index) => {
+            if(index == 0) {
+                return;
+            }
+            
+            this.tbody.innerHTML += `
+            <tr>
+                <th>
+                    ${menu.menuCategoryName}
+                    <input type="hidden" class="menu-code" value="${menu.id}">
+                    <input type="hidden" class="menu-type" value="${menu.menuCategoryName}">
+                </th>
+                <th>${menu.menuName}</th>
+                <th>${menu.price}</th>
+                <th>${menu.size}</th>
+                <td><button type="button" class="list-button detail-button"><i class="fa-regular fa-file-lines"></i></button></td>
+                <td><button type="button" class="list-button delete-button"><i class="fa-regular fa-trash-can"></i></button></td>
+            </tr>
+            <tr class="menu-detail visible">
+                
+            </tr>
+            `;
+        })
+
+        this.menuDetailItems = document.querySelectorAll(".menu-detail");
+    }
+
+    setProductSelectChangeEvent() {
+        const productSelect = MenuTypeGetter.getInstance().productSelect;
+
+        productSelect.onchange = () => {
+            this.getMenuList(1);
+        }
+    }
+}
+
+class MenuDetailLoader {
+    static #instance = null;
+
+    menuTypeGetter = null;
+
+    formData = null;
+    addButton = null;
+    fileInput = null;
+    productImageBox = null;
+    menuCode = null;
+    imageValue = null;
+    defaultImageName = null;
+    defaultMenuType = null;
+
+    static getInstance() {
+        if(this.#instance == null) {
+            this.#instance = new MenuDetailLoader();
+        }
+        return this.#instance;
+    }
+
+    constructor() {
+        this.menuTypeGetter = MenuTypeGetter.getInstance();
+    }
+
+    setMenuDetailButtonClickEvent() {
+        const menuDetailButton = document.querySelectorAll(".detail-button");
+    
+        for(let i = 0; i < menuDetailButton.length; i++) {
+    
+            menuDetailButton[i].onclick = () =>  {
+                this.getMenuDetail(i);
+            }
+        }
+    
+    }
+
+    getMenuDetail(index) {
+        this.menuCode = document.querySelectorAll(".menu-code")[index].value;
+                
+        $.ajax({
+            async: false,
+            type: "get",
+            url: `/api/v1/menu/detail`,
+            data: {
+                "id" : this.menuCode,
+                "menuType": this.menuTypeGetter.getSelectedDetailMenuType(index)
+            },
+            dataType: "json",
+            success: (response) => {
+                this.setMenuDetail(response.data, index);
+            },
+            error: (request, status, error) => {
+                console.log(request.status);
+                console.log(request.responseText);
+                console.log(error);
+            }
+        });
+
+        this.toggleVisibleClass(index);
+    }
+
+    toggleVisibleClass(index) {
+        const menuDetails = MenuListLoader.getInstance().menuDetailItems;
+    
+        if(menuDetails[index].classList.contains("visible")) {
+            menuDetails.forEach(menuDetail => menuDetail.classList.add("visible"));
+
+            menuDetails[index].classList.remove("visible");
+        }else {
+            confirm("수정을 취소하시겠습니까?")
+            menuDetails[index].classList.add("visible");
+        }
+    }
+
+    getImagePreview() {
+        const reader = new FileReader();
         
-        tbody.innerHTML += `
-        <tr>
-            <th>
-                ${menu.menuCategoryName}
-                <input type="hidden" class="menu-code" value="${menu.id}">
-                <input type="hidden" class="menu-type" value="${menu.menuCategoryName}">
-            </th>
-            <th>${menu.name}</th>
-            <th>${menu.price}</th>
-            <th>${menu.size}</th>
-            <td><button type="button" class="list-button detail-button"><i class="fa-regular fa-file-lines"></i></button></td>
-            <td><button type="button" class="list-button delete-button"><i class="fa-regular fa-trash-can"></i></button></td>
-        </tr>
-        <tr class="menu-detail visible">
+        reader.onload = (e) => {
+            this.productImageBox.innerHTML += `
+                <div class="img-box">
+                    <span class="fa-solid fa-xmark"></span>
+                    <img class="product-img" src="${e.target.result}">
+                </div>
+            `;
+    
+            this.addButton.setAttribute("disabled", true);
+            this.setImageDeleteButtonClickEvent();
+            
+        }
+        setTimeout(() => { reader.readAsDataURL(this.imageValue)}, 100);
+       
+    }
+
+    setImageDeleteButtonClickEvent() {
+        const deleteButton = document.querySelectorAll(".fa-xmark");
+
+        for(let i = 0; i < deleteButton.length; i++) {
+            deleteButton[i].onclick = (e) => {
+                if(confirm("상품 이미지를 지우시겠습니까?")) {
+                    e.target.parentNode.parentNode.innerHTML = "";
+                    this.addButton.removeAttribute("disabled");
+                }
+            }
+        }
+    }
+
+    setFileImage(formData) {
+
+        this.fileInput.value = "";
+
+        this.fileInput.click();
+    
+        this.fileInput.onchange = () => {
+            const fomrData = new FormData(formData);
+            let changeFlge = false;
+            this.imageValue = null;
+        
+            fomrData.forEach((value) => {
+                if(value.size != 0) {
+                    this.imageValue = value;
+                    changeFlge = true;
+                }
+            });
+            
+            if(changeFlge){
+                this.getImagePreview();
+            }
+        }
+    }
+    
+    setMenuDetail(menuDetail, index) {
+        const menuDetailBox = MenuListLoader.getInstance().menuDetailItems[index];
+        this.menuTypeGetter.menuTypeItem = menuDetail.menuCategoryName;
+
+
+        menuDetailBox.innerHTML = `
             <td colspan="8">
                 <table class="product-info">
                     <tr>
                         <td>
-                            <select class="product-input product-type">
-                                <option value="burger">햄버거</option>
-                                <option value="side">사이드</option>
-                                <option value="drink">음류수</option>
-                                <option value="dessert">디저트</option>
-                            </select>
+                            <input class="menu-type-input product-input" value="${menuDetail.menuCategoryName}" disabled>
                         </td>
-                        <td><input type="text" class="product-input" value="${menu.name}" placeholder="이름"></td>
-                        <td><input type="text" class="product-input" value="${menu.price}" placeholder="가격"></td>
-                        <td><input type="text" class="product-input" value="${menu.kcal}" placeholder="칼로리"></td>
-                        <td><input type="text" class="product-input" value="${menu.size}" placeholder="사이즈"></td>
+                        <td><input type="text" class="product-input" value="${menuDetail.menuName}" placeholder="이름"></td>
+                        <td><input type="text" class="product-input" value="${menuDetail.price}" placeholder="가격"></td>
+                        <td><input type="text" class="product-input" value="${menuDetail.kcal}" placeholder="칼로리"></td>
+                        <td><input type="text" class="product-input" value="${menuDetail.size}" placeholder="사이즈"></td>
                     </tr>
                     <tr>
-                        <td>
-                            ${menu.menuCategoryName == `burger` ? 
-                            `<span class="mc-lunch-flag-check mc-lunch-flag-visible">
-                                <input type="checkbox" name="radio-check" class="product-input mc-lunch-flag" ${menu.mc_lunch_flag ? `checked`:``}>맥런치
-                            </span>
-                            <span class="only-mc-morning-check only-mc-morning-visible">
-                                <input type="checkbox" name="radio-check" class="product-input only-mc-morning" ${menu.hamburger_mc_morning_flag ? `checked`:``}>맥모닝
+                        <td colspan="5">
+                            ${menuDetail.menuCategoryName == `burger` ? 
+                            `<select class="burger-type-select">
+                                <option value="-1" ${menuDetail.hamburgerCategoryCode == -1 ? 'selected' : ''}>mcMorning</option>
+                                <option value="2" ${menuDetail.hamburgerCategoryCode == 2 ? 'selected' : ''}>beef</option>
+                                <option value="3" ${menuDetail.hamburgerCategoryCode == 3 ? 'selected' : ''}>seafood</option>
+                                <option value="4" ${menuDetail.hamburgerCategoryCode == 4 ? 'selected' : ''}>chicken</option>
+                            </select>
+                            <span class="mc-lunch-flag-check mc-lunch-flag-visible">
+                                <input type="checkbox" name="radio-check" class="product-input mc-lunch-flag" ${menuDetail.mcLunchFlag ? `checked`:``}>맥런치
                             </span>` : ``}
 
-                            ${menu.menuCategoryName == `side` ? 
+                            ${menuDetail.menuCategoryName == `side` ? 
                             `<span class="only-mc-morning-check only-mc-morning-visible">
-                                <input type="checkbox" name="radio-check" class="product-input only-mc-morning" ${menu.only_mc_morning_flag ? `checked`:``}>맥모닝
-                            </span>
-                            <span class="set-menu-flag-check set-menu-flag-visible">
-                                <input type="checkbox" name="radio-check" class="product-input set-menu-flag" ${menu.set_menu_flag ? `checked`:``}>세트메뉴
-                            </span>` : ``}
-
-                            ${menu.menuCategoryName == `drink` ? 
-                            `<span class="only-mc-morning-check only-mc-morning-visible">
-                                <input type="checkbox" name="radio-check" class="product-input only-mc-morning" ${menu.only_mc_morning_flag ? `checked`:``}>맥모닝
+                                <input type="checkbox" name="radio-check" class="product-input only-mc-morning" ${menuDetail.onlyMcMorningFlag ? `checked`:``}>맥모닝
                             </span>
                             <span class="set-menu-flag-check set-menu-flag-visible">
-                                <input type="checkbox" name="radio-check" class="product-inputset-menu-flag" ${menu.set_menu_flag ? `checked`:``}>세트메뉴
+                                <input type="checkbox" name="radio-check" class="product-input set-menu-flag" ${menuDetail.setMenuFlag ? `checked`:``}>세트메뉴
                             </span>` : ``}
 
-                            ${menu.menuCategoryName == `dessert` ? 
+                            ${menuDetail.menuCategoryName == `drink` ? 
                             `<span class="only-mc-morning-check only-mc-morning-visible">
-                                <input type="checkbox" name="radio-check" class="product-input only-mc-morning" ${menu.only_mc_morning_flag ? `checked`:``}>맥모닝
+                                <input type="checkbox" name="radio-check" class="product-input only-mc-morning" ${menuDetail.onlyMcMorningFlag ? `checked`:``}>맥모닝
+                            </span>
+                            <span class="set-menu-flag-check set-menu-flag-visible">
+                                <input type="checkbox" name="radio-check" class="product-input set-menu-flag" ${menuDetail.setMenuFlag ? `checked`:``}>세트메뉴
+                            </span>
+                            <select class="product-input">
+                                <option value="1">음료</option>
+                                <option value="2">커피</option>
+                            </select>` : ``}
+
+                            ${menuDetail.menuCategoryName == `dessert` ? 
+                            `<span class="only-mc-morning-check only-mc-morning-visible">
+                                <input type="checkbox" name="radio-check" class="product-input only-mc-morning" ${menuDetail.onlyMcMorningFlag ? `checked`:``}>맥모닝
                             </span>` : ``}
                         </td>
                     </tr>
@@ -114,7 +292,11 @@ function getList(list) {
                                 </div>
                             </form>
                             <div class="product-images">
-
+                                ${menuDetail.image != null ? `
+                                <div class="img-box">
+                                    <span class="fa-solid fa-xmark"></span>
+                                    <img class="product-img" src="/static/images/${MenuTypeGetter.getInstance().getSelectedDetailMenuType(index)}/${menuDetail.image}">
+                                </div>` : ``}
                             </div>
                         </td>
                     </tr>
@@ -125,247 +307,201 @@ function getList(list) {
                     </tr>
                 </table>
             </td>
-        </tr>
         `;
-        console.log(menu)
+
         
-    })
-    
-}
 
-function getMenuType() {
-    return productSelect.value;
-}
+        this.addButton = menuDetailBox.querySelector(".add-button");
+        this.fileInput = menuDetailBox.querySelector(".file-input");
+        this.productImageBox = menuDetailBox.querySelector(".product-images");
+        
+        this.defaultImageName = menuDetail.image;
 
+        if(menuDetail.image != null) {
+            this.addButton.setAttribute("disabled", true);
+        }
 
-function menuPageNumber(totalMenuCount) {
-	const pageBtn = document.querySelector(".page-btn-box");
-	const totalPageCount = totalMenuCount % 10 == 0 ? totalMenuCount / 10 : (totalMenuCount / 10) + 1;
-	const startIndex = nowPage % 5 == 0 ? nowPage - 4 : nowPage - (nowPage % 5) + 1;
-	const endIndex = startIndex + 4 <= totalPageCount ? startIndex + 4 : totalPageCount;
-	
-	pageBtn.innerHTML = ``;
-	
-	if(startIndex != 0) {
-		pageBtn.innerHTML += `
-			<button type="button" class="page-button pre">&lt;</button>
-		`;
-	}
-	
-	for(let i = startIndex; i <= endIndex; i++) {
-		pageBtn.innerHTML += `
-			<button type="button" class="page-button">${i}</button>
-		`
-	}
-	
-	if(endIndex != totalMenuCount) {
-		pageBtn.innerHTML += `
-			<button type="button" class="page-button next">&gt;</button>
-		`;
-	}
-	
-	if(startIndex != 1) {
-		const prePageButton = document.querySelector(".pre");
-		prePageButton.onclick = () => {
-			nowPage = startIndex - 1;
-			getMenuList(nowPage);
-		}
-	}
-	
-	if(endIndex != totalMenuCount) {
-		const nextPageButton = document.querySelector(".next");
-		nextPageButton.onclick = () => {
-			nowPage = endIndex + 1;
-			getMenuList(nowPage);
-		}
-	}
-	
-	const pageNumberButtons = document.querySelectorAll(".page-button");
-	pageNumberButtons.forEach(button => {
-		if(button.textContent != "<" && button.textContent != ">"){
-			button.onclick = () => {
-				nowPage = button.textContent;
-				getMenuList(nowPage);
-			}
-		}
-	})
-}
-
-function setProductSelectChangeEvent() {
-    productSelect.onchange = () => getMenuList(1);
-}
-
-function menuType() {
-    const menuType = document.querySelector(".menu-type");
-    return menuType.value;
-} 
-
-function setMenuDetailButtonClickEvent() {
-    const menuDetailButton = document.querySelectorAll(".detail-button");
-
-    for(let i = 0; i < menuDetailButton.length; i++) {
-
-        menuDetailButton[i].onclick = () =>  {
-            const menuCode = document.querySelectorAll(".menu-code");
-            let fileInput = document.querySelectorAll(".file-input");
+        this.addButton.onclick = () => {
+            this.addButton.removeAttribute("disabled");
+            this.setFileImage(menuDetailBox.querySelector("form"));
             
+        }
+
+        
+
+       this.setImageDeleteButtonClickEvent();
+        
+       this.setUpdateButtonClickEvent(menuDetailBox.querySelector(".update-button"), index);
+    
+    }
+
+    setUpdateButtonClickEvent(updateButton, index) {
+        updateButton.onclick = () => {
+        
+            this.setUpdateData(index);
+    
             $.ajax({
                 async: false,
-                type: "get",
-                url: `/api/v1/menu/details`,
-                data: {
-                    "id" : menuCode[i].value,
-                    "menuType": menuType()
-                },
+                type: "put",
+                url: `/api/v1/menu/detail/${this.menuCode}`,
+                enctype: "multipart/form-data",
+                contentType: false,
+                processData: false,
+                data: this.formData,
                 dataType: "json",
                 success: (response) => {
-                    console.log(response.data)
-                    getMenuDetails(response.data[0].img, menuCode[i].value, i);
+                    if(response.data) {
+                        location.replace("/admin/menu-list");
+                    }
                 },
                 error: (error) => {
                     console.log(error);
                 }
             });
-
-            const menuDetails = document.querySelectorAll(".menu-detail");
-
-
-            if(menuDetails[i].classList.contains("visible")){
-                menuDetails.forEach(menuDetail => menuDetail.classList.add("visible"));
-                menuDetails[i].classList.remove("visible");
-            }else {
-                confirm("수정을 취소하시겠습니까?")
-                menuDetails[i].classList.add("visible");
-            }
-	    }
+        }
     }
 
-}
+    setUpdateData(index) {
+        const productInput = document.querySelectorAll(".product-input");
+    
+        let selectedDetailMenuType = MenuTypeGetter.getInstance().getSelectedDetailMenuType(index);
 
-function getMenuDetails(img, code, index) {
-    const productImages = document.querySelectorAll(".product-images")[index];
- 
-    if(img != null) {
-        menuImg(img, productImages);
+        this.formData = new FormData();
+        
+        this.formData.append("menuType", productInput[1].value);
+        this.formData.append("menuName", productInput[2].value);
+        this.formData.append("price", productInput[3].value);
+        this.formData.append("kcal", productInput[4].value);
+        this.formData.append("size", productInput[5].value);
+
+        if(this.imageValue != null) {
+            this.formData.append("deleteFileName", this.defaultImageName);
+            this.formData.append("newFile", this.imageValue);
+        }
+
+        if(selectedDetailMenuType == 'burger') {
+            this.formData.append("mcLunchFlag", productInput[6].checked);
+            this.formData.append("hamburgerCategoryCode", document.querySelector(".burger-type-select").value);
+
+        }else if (selectedDetailMenuType == 'side' || selectedDetailMenuType == 'drink') {
+            this.formData.append("onlyMcMorningFlag", productInput[6].checked);
+            this.formData.append("setMenuFlag", productInput[7].checked);
+            if(selectedDetailMenuType == 'drink') {
+                this.formData.append("drinkCategoryCode", productInput[8].value);
+            }
+        }else {
+            this.formData.append("onlyMcMorningFlag", productInput[6].checked);
+        }
     }
     
-    let fileInput = document.querySelectorAll(".file-input");
-    const addButton = document.querySelectorAll(".add-button");
+}
 
-    if(productImages.hasChildNodes()) {
-        addButton[index].setAttribute("disabled", true);
+class MenuTypeGetter {
+    static #instance = null;
+
+    productSelect = null;
+
+    static getInstance() {
+        if(this.#instance == null) {
+            this.#instance = new MenuTypeGetter();
+        }
+        return this.#instance;
     }
-    addButton[index].onclick = () => {
-        addButton[index].removeAttribute("disabled");
-        fileInput[index].click();
 
-        fileInput[index].onchange = () => {
-            const formData = new FormData(document.querySelectorAll("form")[index]);
-            let changeFlge = false;
-            let imageValue = null;
+    constructor() {
+        this.productSelect = document.querySelector(".product-input");
+    }
+
+    getSelectMenuType() {
+        return this.productSelect.value;
+    }
+
+    getSelectedDetailMenuType(index) {
+        const menuTypeItems = document.querySelectorAll(".menu-type");
+        return menuTypeItems[index].value;
+    }
+}
+
+class PageSetter {
+    static #instance = null;
+
+    nowPage = 1;
+    pageButton = null;
+
+    totalPageCount = null;
+    startIndex = null;
+    endIndex = null;
+
+    static getInstance() {
+        if(this.#instance == null) {
+            this.#instance = new PageSetter();
+        }
+        return this.#instance;
+    }
+
+    constructor() {
+        this.pageButton = document.querySelector(".page-btn-box");
+    }
+
+    setPageNumber(totalMenuCount) {
+        this.totalPageCount = totalMenuCount % 10 == 0 ? Math.floor(totalMenuCount / 10) : Math.floor(totalMenuCount / 10) + 1;
+        this.startIndex = this.nowPage % 5 == 0 ? this.nowPage - 4 : this.nowPage - (this.nowPage % 5) + 1;
+        this.endIndex = this.startIndex + 4 <= this.totalPageCount ? this.startIndex + 4 : this.totalPageCount;
         
-            formData.forEach((value) => {
-                if(value.size != 0) {
-                    imageValue = value;
-                    changeFlge = true;
+        this.pageButton.innerHTML = ``;
+        
+        if(this.startIndex > 5) {
+            this.pageButton.innerHTML += `
+                <button type="button" class="page-button pre">&lt;</button>
+            `;
+        }
+        
+        for(let i = this.startIndex; i <= this.endIndex; i++) {
+            this.pageButton.innerHTML += `
+                <button type="button" class="page-button">${i}</button>
+            `
+        }
+        
+        if(this.endIndex != this.totalPageCount) {
+            this.pageButton.innerHTML += `
+                <button type="button" class="page-button next">&gt;</button>
+            `;
+        }
+
+        this.setPageButtonClickEvent(this.totalPageCount);
+        
+    }
+
+    setPageButtonClickEvent(totalMenuCount) {
+        const menuLoader = MenuListLoader.getInstance();
+
+        const pageNumberButtons = document.querySelectorAll(".page-button");
+
+        if(this.startIndex != 1) {
+            const prePageButton = document.querySelector(".pre");
+
+            prePageButton.onclick = () => {
+                this.nowPage = this.startIndex - 1;
+                menuLoader.getMenuList(this.nowPage);
+            }
+        }
+        
+        if(this.endIndex != totalMenuCount) {
+            const nextPageButton = document.querySelector(".next");
+
+            nextPageButton.onclick = () => {
+                this.nowPage = this.endIndex + 1;
+                menuLoader.getMenuList(this.nowPage);
+            }
+        }
+        
+        pageNumberButtons.forEach(button => {
+            if(button.textContent != "<" && button.textContent != ">"){
+                button.onclick = () => {
+                    this.nowPage = button.textContent;
+                    menuLoader.getMenuList(this.nowPage);
                 }
-            });
-            
-            if(changeFlge){
-                getImagePreview(imageValue, productImages, addButton[index]);
             }
-        }
-    }
-
-   setImageDeleteButtonClickEvent(addButton[index]);
-    const productInput = document.querySelectorAll(".product-input");
-
-    let formData = new FormData();
-    
-    formData.append("menuType", productInput[0].value);
-    formData.append("name", productInput[1].value);
-    formData.append("price", productInput[2].value);
-    formData.append("kcal", productInput[3].value);
-    formData.append("size", productInput[4].value);
-    if(menuType() == 'burger') {
-        formData.append("mcLunchFlag", productInput[6].checked)
-        formData.append("hamburgerMcMorningFlag", productInput[7].checked)
-    }else if (menuType() == 'side' || menuType() == 'drink') {
-        formData.append("setMenuFlag", productInput[6].checked)
-        formData.append("onlyMcMorningFlag", productInput[7].checked)
-    }else {
-        formData.append("onlyMcMorningFlag", productInput[6].checked)
-    }
-
-
-    const updateButton = document.querySelector(".update-button");
-
-    updateButton.onclick = () => {
-       $.ajax({
-            async: false,
-            type: "put",
-            url: `/api/v1/menu/updateMenu`,
-            enctype: "multipart/form-data",
-            contentType: false,
-            processData: false,
-            data: formData,
-            dataType: "json",
-            success: (response) => {
-                console.log(response.data)
-            },
-            error: (error) => {
-                console.log(error);
-            }
-       })
-    }
-
-}
-
-function getImagePreview(imageValue, productImages, addButton) {
-    const reader = new FileReader();
-    
-    reader.onload = (e) => {
-        productImages.innerHTML += `
-            <div class="img-box">
-                <span class="fa-solid fa-xmark"></span>
-                <img class="product-img" src="${e.target.result}">
-            </div>
-        `;
-
-        addButton.setAttribute("disabled", true);
-        setImageDeleteButtonClickEvent(addButton);
-        
-    }
-    setTimeout(() => { reader.readAsDataURL(imageValue)}, 100);
-   
-}
-
-function menuImg(img, productImages) {
-    productImages.innerHTML = "";
-
-    productImages.innerHTML += `
-    <div class="img-box">
-        <span class="fa-solid fa-xmark"></span>
-        <img class="product-img" src="/static/images/${menuType()}/${img}">
-    </div>
-`;
-}
-
-function setImageDeleteButtonClickEvent(addButton) {
-    const deleteButton = document.querySelectorAll(".fa-xmark");
-    for(let i = 0; i < deleteButton.length; i++) {
-        deleteButton[i].onclick = (e) => {
-            if(confirm("상품 이미지를 지우시겠습니까?")) {
-                e.target.parentNode.parentNode.innerHTML = "";
-                addButton.removeAttribute("disabled");
-            }
-        }
+        })
     }
 }
-
-
-
-
-    
-
-   

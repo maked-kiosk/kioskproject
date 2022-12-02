@@ -5,6 +5,7 @@ import kioskmake.projectkiosk.domain.menu.MenuRepository;
 import kioskmake.projectkiosk.web.dto.admin.GetMenuDetailRespDto;
 import kioskmake.projectkiosk.web.dto.admin.GetMenuListRespDto;
 import kioskmake.projectkiosk.web.dto.admin.InsertMenuReqDto;
+import kioskmake.projectkiosk.web.dto.admin.UpdateMenuDetailRequestDto;
 import kioskmake.projectkiosk.web.dto.menu.ReadMenuRequestDto;
 import kioskmake.projectkiosk.web.dto.menu.ReadMenuResponseDto;
 import lombok.RequiredArgsConstructor;
@@ -87,38 +88,23 @@ public class MenuServiceImpl implements MenuService {
 
 	@Override
 	public boolean insertMenu(InsertMenuReqDto insertMenuReqDto) throws Exception {
-		
 		boolean count = false;
-		
-		MultipartFile img = insertMenuReqDto.getImg();
-		
-		String originName = img.getOriginalFilename();
-        String temp_name = UUID.randomUUID().toString().replaceAll("-", "") + "_" + originName;
-        
-		Menu menu = insertMenuReqDto.menuEntity(temp_name);
-		count = menuRepository.insertMenu(menu);
+		String tempFileName = null;
+		tempFileName = uploadFileAndReturnTempFileName(insertMenuReqDto.getImg(), insertMenuReqDto.getMenuType() + "/");
+
+
+		Menu menu = insertMenuReqDto.menuEntity(tempFileName);
+		count = menuRepository.insertMenu(menu) > 0;
 	
-		Path uploadPath = Paths.get(filePath + insertMenuReqDto.getMenuType() + "/" + temp_name);
-	
-	    File f = new File(filePath + "/product");
-	    if(!f.exists()) {
-	        f.mkdirs();
-	    }
-	
-	    try {
-	        Files.write(uploadPath, img.getBytes());
-	    } catch (IOException e) {
-	        throw new RuntimeException(e);
-	    }
+
 	    
-	    return true;
-    
+	    return count;
 	}
 
 	@Override
 	public List<GetMenuListRespDto> getMenuList(int page, String menuType) throws Exception {
-		List<GetMenuListRespDto> menuList = new ArrayList<GetMenuListRespDto>();
-		Map<String, Object> map = new HashMap<String, Object>();
+		List<GetMenuListRespDto> menuList = new ArrayList<>();
+		Map<String, Object> map = new HashMap<>();
 		menuType = menuType.toLowerCase();
 		
 		int index = (page - 1)  * 10;
@@ -139,16 +125,63 @@ public class MenuServiceImpl implements MenuService {
 	}
 
 	@Override
-	public List<GetMenuDetailRespDto> getMenuDetails(String id, String menuType) throws Exception {
-		List<GetMenuDetailRespDto> detailList = new ArrayList<>();
-		
-		menuRepository.getDetails(id, menuType).forEach(menu -> {
-			detailList.add(menu.toDetailDto());
-		});
+	public GetMenuDetailRespDto getMenuDetail(String id, String menuType) throws Exception {
+		Menu menu = null;
+
+		menu = menuRepository.getMenuDetail(id, menuType);
 			
-		return detailList;
+		return menu != null ? menu.toDetailDto() : null;
 	}
 
-	
-    
+	@Override
+	public boolean updateMenuDetail(UpdateMenuDetailRequestDto updateMenuDetailRequestDto) throws Exception {
+		String tempFileName = null;
+		if(updateMenuDetailRequestDto.getNewFile() != null) {
+			tempFileName = uploadFileAndReturnTempFileName(updateMenuDetailRequestDto.getNewFile(), updateMenuDetailRequestDto.getMenuType() + "/");
+			deleteFile(updateMenuDetailRequestDto.getMenuType() + "/", updateMenuDetailRequestDto.getDeleteFileName());
+		}
+
+
+		return menuRepository.updateMenuDetail(updateMenuDetailRequestDto.toMenuEntity(tempFileName)) > 0;
+	}
+
+
+	private String uploadFileAndReturnTempFileName(MultipartFile file, String customPath) {
+		String tempFileName = makeTempFileName(file);
+		Path path = Paths.get(filePath + customPath + tempFileName);
+
+		File f = new File(filePath + customPath);
+
+		if(!f.exists()) {
+			f.mkdirs();
+		}
+
+		try {
+			Files.write(path, file.getBytes());
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		return tempFileName;
+	}
+
+	private String makeTempFileName(MultipartFile file) {
+		return UUID.randomUUID().toString().replaceAll("-", "") + "_" + file.getOriginalFilename();
+	}
+
+	private void deleteFile(String customPath, String fileName) {
+		Path path = Paths.get(filePath + customPath + fileName);
+
+		log.info(">>>>>>>>>>>>>>>> {}", path);
+
+		File file = new File(path.toString());
+
+		if(file.exists()) {
+			try {
+				Files.delete(path);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+	}
 }

@@ -175,6 +175,10 @@ table {
     border: none;
 }
 
+.menu-type-input {
+    border: none;
+}
+
 th, td {
     border: 1px solid rgb(198, 198, 198);
     padding: 5px 5px;

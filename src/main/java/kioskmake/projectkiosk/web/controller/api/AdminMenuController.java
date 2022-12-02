@@ -1,22 +1,18 @@
 package kioskmake.projectkiosk.web.controller.api;
 
-import java.util.List;
-
 import kioskmake.projectkiosk.handler.aop.annotation.Log;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
 import kioskmake.projectkiosk.service.menu.MenuService;
 import kioskmake.projectkiosk.web.dto.CustomResponseDto;
 import kioskmake.projectkiosk.web.dto.admin.GetMenuDetailRespDto;
 import kioskmake.projectkiosk.web.dto.admin.GetMenuListRespDto;
 import kioskmake.projectkiosk.web.dto.admin.InsertMenuReqDto;
+import kioskmake.projectkiosk.web.dto.admin.UpdateMenuDetailRequestDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @Slf4j
 @RestController
@@ -59,26 +55,35 @@ public class AdminMenuController {
 		
 		return ResponseEntity.ok(new CustomResponseDto<>(1, "menu list load success", menuList));
 	}
-	
-	@GetMapping("/details")
+
+	@Log
+	@GetMapping("/detail")
 	public ResponseEntity<?> getMenuDetails(String id, String menuType){
-		
-		List<GetMenuDetailRespDto> detailList = null;
+
+		GetMenuDetailRespDto menuDetail = null;
 		
 		try {
-			detailList = menuService.getMenuDetails(id, menuType);
+			menuDetail = menuService.getMenuDetail(id, menuType);
 		} catch (Exception e) {
 			e.printStackTrace();
-			return ResponseEntity.internalServerError().body(new CustomResponseDto<>(1, "menu details load fail", detailList));
+			return ResponseEntity.internalServerError().body(new CustomResponseDto<>(1, "menu detail load fail", menuDetail));
 		}
 		
-		return ResponseEntity.ok(new CustomResponseDto<>(1, "menu details load success", detailList));
+		return ResponseEntity.ok(new CustomResponseDto<>(1, "menu detail load success", menuDetail));
 	}
-	
-	@PutMapping("/updateMenu")
-	public ResponseEntity<?> updateMenu(String id, String menuType) {
-		
-		
-		return ResponseEntity.ok(new CustomResponseDto<>(1, "update success", null));
+
+	@Log
+	@PutMapping("/detail/{id}")
+	public ResponseEntity<?> updateMenuDetail(UpdateMenuDetailRequestDto updateMenuDetailRequestDto) {
+		boolean status = false;
+
+		try {
+			menuService.updateMenuDetail(updateMenuDetailRequestDto);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return ResponseEntity.internalServerError().body(new CustomResponseDto<>(-1, "update failed", status));
+		}
+
+		return ResponseEntity.ok(new CustomResponseDto<>(1, "update success", status));
 	}
 }

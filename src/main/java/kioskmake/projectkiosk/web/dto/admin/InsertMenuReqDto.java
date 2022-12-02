@@ -27,7 +27,7 @@ public class InsertMenuReqDto {
 				.burger_type(burgerType)
 				.size(size)
 				.drink_type(drinkType)
-				.name(name)
+				.menu_name(name)
 				.sales(sales)
 				.price(price)
 				.kcal(kcal)
