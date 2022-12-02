@@ -5,6 +5,6 @@ import kioskmake.projectkiosk.web.dto.InsertUserReqDto;
 
 public interface UserService {
 	
-	public User insertUser(InsertUserReqDto insertUserReqDto) throws Exception;
+	public boolean insertUser(InsertUserReqDto insertUserReqDto) throws Exception;
 	public User userCheck(String userName, String userPhoneNumber) throws Exception;
 }

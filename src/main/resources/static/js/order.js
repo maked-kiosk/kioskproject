@@ -11,12 +11,12 @@ const usePoint = document.querySelector(".use-point");
 const havingPointInfo = document.querySelector(".having-point-info");
 const cancelButton = document.querySelectorAll(".cancel-button");
 const addOrdersButton = document.querySelector(".add-orders-button");
-const userCheckButton = document.querySelectorAll(".user-check");
 const insertModal = document.querySelector(".insert-modal");
 const insertUser = document.querySelector(".insert-user");
 const insertCancelButton = document.querySelector(".insert-cancel-button");
 const userName = document.querySelector(".user-name");
 const userPhoneNumber = document.querySelector(".user-phone-number");
+const earnPoints = document.querySelector(".earn-points");
 
 
 let count = 1;
@@ -58,8 +58,18 @@ pointButton.onclick = () => {
     pointModal.classList.remove("modal-visible");
 }
 
+
 usePoint.onclick = () => {
-    havingPointInfo.classList.remove("use-point-visible");
+    if(checkUser()){
+        havingPointInfo.classList.remove("use-point-visible");
+    }
+}
+
+
+earnPoints.onclick = () => {
+    if(checkUser()) {
+        
+    }
 }
 
 cancelButton.forEach(button => {
@@ -69,32 +79,33 @@ cancelButton.forEach(button => {
     }
 })
 
-userCheckButton.forEach(button => {
-    button.onclick = () => {
-        
-        $.ajax({
-            async: false,
-            type: "get",
-            url: `/api/v1/check/user`,
-            data: {
-                "userName": userName.value,
-                "userPhoneNumber": userPhoneNumber.value
-            },
-            dataType: "json",
-            success: (response) => {
-                if(response.data == null) {
-                    insertModalInVisibleEvent();
-                }else {
-                    console.log(response.data);
-                    alert("성공");
-                }
-            },
-            error: (error) => {
-                console.log(error);
+function checkUser() {
+    let status = false;
+    $.ajax({
+        async: false,
+        type: "get",
+        url: `/api/v1/check/user`,
+        data: {
+            "userName": userName.value,
+            "userPhoneNumber": userPhoneNumber.value
+        },
+        dataType: "json",
+        success: (response) => {
+            if(response.data == null) {
+                insertModalInVisibleEvent();
+                status = false;
+            }else {
+                console.log(response.data);
+                status = true;
+                // alert("성공");
             }
-        })
-    }
-})
+        },
+        error: (error) => {
+            console.log(error);
+        }
+    })
+    return status;
+}
 
 function insertModalInVisibleEvent() {
     insertModal.classList.remove("insert-modal-visible");
@@ -112,8 +123,9 @@ insertUser.onclick = () => {
         dataType: "json",
         success: (response) => {
             console.log(response.data);
+            insertModalVisibleEvent();
             alert("등록 성공");
-            insertModalInVisibleEvent();
+            
         },
         error: (error) => {
             console.log(error);
@@ -122,8 +134,12 @@ insertUser.onclick = () => {
     });
 }
 
-insertCancelButton.onclick = () => {
+function insertModalVisibleEvent() {
     insertModal.classList.add("insert-modal-visible");
+}
+
+insertCancelButton.onclick = () => {
+    insertModalVisibleEvent();
 }
 
 

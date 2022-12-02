@@ -54,15 +54,15 @@ public class CheckRestController {
     @PostMapping("/insert-user")
     public ResponseEntity<?> insertUser(InsertUserReqDto insertUSerReqDto) {
     	
-    	User user = null;
+    	boolean status = false;
     	
     	try {
-    		user = userService.insertUser(insertUSerReqDto);
+    		status = userService.insertUser(insertUSerReqDto);
 		} catch (Exception e) {
 			e.printStackTrace();
-			return ResponseEntity.internalServerError().body(new CustomResponseDto(-1, "user insert failed", user));
+			return ResponseEntity.internalServerError().body(new CustomResponseDto(-1, "user insert failed", status));
 		}
     	
-    	return ResponseEntity.ok(new CustomResponseDto<>(1, "user insert successful", user));
+    	return ResponseEntity.ok(new CustomResponseDto<>(1, "user insert successful", status));
     }
 }

@@ -23,13 +23,14 @@ public class UserServiecImpl implements UserService {
 	}
 
 	@Override
-	public User insertUser(InsertUserReqDto insertUserReqDto) throws Exception {
+	public boolean insertUser(InsertUserReqDto insertUserReqDto) throws Exception {
 		
-		User user = null;
+		boolean status = false;
 		
-		user = userRepository.insertUser(insertUserReqDto.toUserEntity());
+		status = userRepository.insertUser(insertUserReqDto.toUserEntity());
+		
 				
-		return user;
+		return status;
 	}
 
 }

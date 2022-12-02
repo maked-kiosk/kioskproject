@@ -6,6 +6,7 @@
 
 	<select id="userCheck" parameterType="String" resultType="kioskmake.projectkiosk.domain.user.User">
 		select
+			id,
 			user_name,
 			user_phone_number,
 			point
