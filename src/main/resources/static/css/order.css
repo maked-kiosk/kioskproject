@@ -16,26 +16,26 @@
     position: absolute;
     top: 0;
     left: 0;
+}
 
-    /* display: none; */
+.modal-visible {
+    display: none;
 }
 
 .point-modal-user {
     width: 900px;
-    height: 1600px;
     display: flex;
     justify-content: center;
-    align-items: center;
 
-    position: relative;
+    margin-top: 250px;
 }
 
 .point-use-info {
     width: 700px;
-    height: 1000px;
     background-color: white;
 
     padding: 80px;
+
 }
 
 .user-input p {
@@ -80,6 +80,10 @@
     margin-bottom: 10px;
 }
 
+.use-point-visible {
+    display: none;
+}
+
 .using-point input{
     width: 540px;
     height: 50px;
@@ -111,8 +115,12 @@
     height: 1600px;
 
     position: absolute;
+    top: 0;
+    left: 0;
+}
 
-    /* display: none; */
+.insert-modal-visible {
+    display: none;
 }
 
 .insert-modal > div {

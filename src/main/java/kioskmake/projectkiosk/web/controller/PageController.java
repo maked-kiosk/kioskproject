@@ -12,7 +12,7 @@ public class PageController {
 	
 	@GetMapping("/kioskmain")
 	public String kioskmain() {
-		return "kioskmain";
+		return "kiosk-main";
 	}
 	
 	@GetMapping("/order")
@@ -25,14 +25,14 @@ public class PageController {
 		return "payment";
 	}
 	
-	@GetMapping("/set/select/view")
+	@GetMapping("/set-select-view")
 	public String setselectview() {
-		return "setselectview";
+		return "set-select-view";
 	}
 	
-	@GetMapping("/size/select/view")
+	@GetMapping("/set-size-select-view")
 	public String sizeselectview() {
-		return "sizeselectview";
+		return "set-size-select-view";
 	}
 	
 	@GetMapping("/basket")
@@ -42,7 +42,7 @@ public class PageController {
 	
 	@GetMapping("/tableservice")
 	public String tableservice() {
-		return "tableservice";
+		return "table-service";
 	}
 	
 }
