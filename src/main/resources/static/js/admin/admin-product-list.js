@@ -101,6 +101,7 @@ class MenuDetailLoader {
     menuTypeGetter = null;
 
     formData = null;
+    menuDetailBox = null;
     addButton = null;
     fileInput = null;
     productImageBox = null;
@@ -227,11 +228,11 @@ class MenuDetailLoader {
     }
     
     setMenuDetail(menuDetail, index) {
-        const menuDetailBox = MenuListLoader.getInstance().menuDetailItems[index];
+        this.menuDetailBox = MenuListLoader.getInstance().menuDetailItems[index];
         this.menuTypeGetter.menuTypeItem = menuDetail.menuCategoryName;
 
 
-        menuDetailBox.innerHTML = `
+        this.menuDetailBox.innerHTML = `
             <td colspan="8">
                 <table class="product-info">
                     <tr>
@@ -272,8 +273,8 @@ class MenuDetailLoader {
                                 <input type="checkbox" name="radio-check" class="product-input set-menu-flag" ${menuDetail.setMenuFlag ? `checked`:``}>세트메뉴
                             </span>
                             <select class="product-input">
-                                <option value="1">음료</option>
-                                <option value="2">커피</option>
+                                <option value="1" ${menuDetail.drinkCategoryCode == 1 ? 'selected' : ''}>음료</option>
+                                <option value="2" ${menuDetail.drinkCategoryCode == 2 ? 'selected' : ''}>커피</option>
                             </select>` : ``}
 
                             ${menuDetail.menuCategoryName == `dessert` ? 
@@ -295,7 +296,7 @@ class MenuDetailLoader {
                                 ${menuDetail.image != null ? `
                                 <div class="img-box">
                                     <span class="fa-solid fa-xmark"></span>
-                                    <img class="product-img" src="/static/images/${MenuTypeGetter.getInstance().getSelectedDetailMenuType(index)}/${menuDetail.image}">
+                                    <img class="product-img" src="/image/images/${MenuTypeGetter.getInstance().getSelectedDetailMenuType(index)}/${menuDetail.image}">
                                 </div>` : ``}
                             </div>
                         </td>
@@ -311,9 +312,9 @@ class MenuDetailLoader {
 
         
 
-        this.addButton = menuDetailBox.querySelector(".add-button");
-        this.fileInput = menuDetailBox.querySelector(".file-input");
-        this.productImageBox = menuDetailBox.querySelector(".product-images");
+        this.addButton = this.menuDetailBox.querySelector(".add-button");
+        this.fileInput = this.menuDetailBox.querySelector(".file-input");
+        this.productImageBox = this.menuDetailBox.querySelector(".product-images");
         
         this.defaultImageName = menuDetail.image;
 
@@ -323,7 +324,7 @@ class MenuDetailLoader {
 
         this.addButton.onclick = () => {
             this.addButton.removeAttribute("disabled");
-            this.setFileImage(menuDetailBox.querySelector("form"));
+            this.setFileImage(this.menuDetailBox.querySelector("form"));
             
         }
 
@@ -331,7 +332,7 @@ class MenuDetailLoader {
 
        this.setImageDeleteButtonClickEvent();
         
-       this.setUpdateButtonClickEvent(menuDetailBox.querySelector(".update-button"), index);
+       this.setUpdateButtonClickEvent(this.menuDetailBox.querySelector(".update-button"), index);
     
     }
 
@@ -339,6 +340,11 @@ class MenuDetailLoader {
         updateButton.onclick = () => {
         
             this.setUpdateData(index);
+
+            this.formData.forEach((v, k) => {
+                console.log("key: " + k);
+                console.log("value: " + v);
+            })
     
             $.ajax({
                 async: false,
@@ -351,10 +357,13 @@ class MenuDetailLoader {
                 dataType: "json",
                 success: (response) => {
                     if(response.data) {
+                        alert("수정 완료")
                         location.replace("/admin/menu-list");
                     }
                 },
-                error: (error) => {
+                error: (request, status, error) => {
+                    console.log(request.status);
+                    console.log(request.responseText);
                     console.log(error);
                 }
             });
@@ -362,17 +371,19 @@ class MenuDetailLoader {
     }
 
     setUpdateData(index) {
-        const productInput = document.querySelectorAll(".product-input");
+        const productInput = this.menuDetailBox.querySelectorAll(".product-input");
+
+        console.log(productInput);
     
         let selectedDetailMenuType = MenuTypeGetter.getInstance().getSelectedDetailMenuType(index);
 
         this.formData = new FormData();
         
-        this.formData.append("menuType", productInput[1].value);
-        this.formData.append("menuName", productInput[2].value);
-        this.formData.append("price", productInput[3].value);
-        this.formData.append("kcal", productInput[4].value);
-        this.formData.append("size", productInput[5].value);
+        this.formData.append("menuType", productInput[0].value);
+        this.formData.append("menuName", productInput[1].value);
+        this.formData.append("price", productInput[2].value);
+        this.formData.append("kcal", productInput[3].value);
+        this.formData.append("size", productInput[4].value);
 
         if(this.imageValue != null) {
             this.formData.append("deleteFileName", this.defaultImageName);
@@ -380,17 +391,17 @@ class MenuDetailLoader {
         }
 
         if(selectedDetailMenuType == 'burger') {
-            this.formData.append("mcLunchFlag", productInput[6].checked);
+            this.formData.append("mcLunchFlag", productInput[5].checked);
             this.formData.append("hamburgerCategoryCode", document.querySelector(".burger-type-select").value);
 
         }else if (selectedDetailMenuType == 'side' || selectedDetailMenuType == 'drink') {
-            this.formData.append("onlyMcMorningFlag", productInput[6].checked);
-            this.formData.append("setMenuFlag", productInput[7].checked);
+            this.formData.append("onlyMcMorningFlag", productInput[5].checked);
+            this.formData.append("setMenuFlag", productInput[6].checked);
             if(selectedDetailMenuType == 'drink') {
-                this.formData.append("drinkCategoryCode", productInput[8].value);
+                this.formData.append("drinkCategoryCode", productInput[7].value);
             }
         }else {
-            this.formData.append("onlyMcMorningFlag", productInput[6].checked);
+            this.formData.append("onlyMcMorningFlag", productInput[5].checked);
         }
     }
     

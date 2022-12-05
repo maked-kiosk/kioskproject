@@ -177,6 +177,11 @@ table {
 
 .menu-type-input {
     border: none;
+
+    width: 80px;
+
+    background-color: #dbdbdb;
+    text-align: center;
 }
 
 th, td {

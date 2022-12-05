@@ -27,8 +27,6 @@ public class AdminMenuController {
 		
 		boolean status = false;
 		
-		System.out.println(insertMenuReqDto);
-		
 		try {
 			status = menuService.insertMenu(insertMenuReqDto);
 		} catch (Exception e) {
@@ -78,7 +76,7 @@ public class AdminMenuController {
 		boolean status = false;
 
 		try {
-			menuService.updateMenuDetail(updateMenuDetailRequestDto);
+			status = menuService.updateMenuDetail(updateMenuDetailRequestDto);
 		} catch (Exception e) {
 			e.printStackTrace();
 			return ResponseEntity.internalServerError().body(new CustomResponseDto<>(-1, "update failed", status));

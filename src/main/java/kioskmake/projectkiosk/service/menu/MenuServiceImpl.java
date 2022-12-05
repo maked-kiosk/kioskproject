@@ -90,14 +90,12 @@ public class MenuServiceImpl implements MenuService {
 	public boolean insertMenu(InsertMenuReqDto insertMenuReqDto) throws Exception {
 		boolean count = false;
 		String tempFileName = null;
-		tempFileName = uploadFileAndReturnTempFileName(insertMenuReqDto.getImg(), insertMenuReqDto.getMenuType() + "/");
+		tempFileName = uploadFileAndReturnTempFileName(insertMenuReqDto.getImg(), "images/" + insertMenuReqDto.getMenuType() + "/");
 
 
 		Menu menu = insertMenuReqDto.menuEntity(tempFileName);
 		count = menuRepository.insertMenu(menu) > 0;
-	
 
-	    
 	    return count;
 	}
 
@@ -115,7 +113,6 @@ public class MenuServiceImpl implements MenuService {
 		menuRepository.getAdminMenuList(map).forEach(menu -> {
 			menuList.add(menu.toMenuList());
 		});
-		log.error("{}", menuList);
 		
 		return isNotData(menuList) ? null : menuList;
 	}
@@ -137,10 +134,9 @@ public class MenuServiceImpl implements MenuService {
 	public boolean updateMenuDetail(UpdateMenuDetailRequestDto updateMenuDetailRequestDto) throws Exception {
 		String tempFileName = null;
 		if(updateMenuDetailRequestDto.getNewFile() != null) {
-			tempFileName = uploadFileAndReturnTempFileName(updateMenuDetailRequestDto.getNewFile(), updateMenuDetailRequestDto.getMenuType() + "/");
-			deleteFile(updateMenuDetailRequestDto.getMenuType() + "/", updateMenuDetailRequestDto.getDeleteFileName());
+			tempFileName = uploadFileAndReturnTempFileName(updateMenuDetailRequestDto.getNewFile(), "images/" + updateMenuDetailRequestDto.getMenuType() + "/");
+			deleteFile("images/" + updateMenuDetailRequestDto.getMenuType() + "/", updateMenuDetailRequestDto.getDeleteFileName());
 		}
-
 
 		return menuRepository.updateMenuDetail(updateMenuDetailRequestDto.toMenuEntity(tempFileName)) > 0;
 	}
