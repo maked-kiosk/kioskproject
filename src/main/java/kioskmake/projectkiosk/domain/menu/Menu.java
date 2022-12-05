@@ -21,7 +21,7 @@ public class Menu {
 	private String burger_type;
 	private String size;
 	private String drink_type;
-	private String name;
+	private String menu_name;
 	private int sales;
 	private int price;
 	private int kcal;
@@ -35,7 +35,8 @@ public class Menu {
 
     public ReadMenuResponseDto toReadMenuResponseDto() {
         return ReadMenuResponseDto.builder()
-                .menuName(name)
+        		.id(id)
+                .menuName(menu_name)
                 .price(price)
                 .kcal(kcal)
                 .image(image)
@@ -47,7 +48,7 @@ public class Menu {
     	return GetMenuListRespDto.builder()
     			.id(id)
     			.menuCategoryName(menu_type)
-    			.name(name)
+    			.name(menu_name)
     			.price(price)
     			.kcal(kcal)
     			.size(size)
@@ -63,7 +64,7 @@ public class Menu {
     public GetMenuDetailRespDto toDetailDto() {
     	return GetMenuDetailRespDto.builder()
     			.id(id)
-    			.name(name)
+    			.name(menu_name)
     			.price(price)
     			.sales(sales)
     			.kcal(kcal)
