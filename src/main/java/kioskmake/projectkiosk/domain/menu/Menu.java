@@ -39,6 +39,7 @@ public class Menu {
 
     public ReadMenuResponseDto toReadMenuResponseDto() {
         return ReadMenuResponseDto.builder()
+        		.id(id)
                 .menuName(menu_name)
                 .price(price)
                 .kcal(kcal)
