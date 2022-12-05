@@ -5,7 +5,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 
 @Controller
 public class PageController {
-	
+
 	@GetMapping("/main")
 	public String mainpage() {
 		return "insert";
@@ -41,7 +41,7 @@ public class PageController {
 		return "basket";
 	}
 	
-	@GetMapping("/tableservice")
+	@GetMapping("/table-service")
 	public String tableservice() {
 		return "table-service";
 	}
