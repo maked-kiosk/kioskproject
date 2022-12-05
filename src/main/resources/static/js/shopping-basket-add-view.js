@@ -1,6 +1,6 @@
 window.onload = () => {
-    ButtonClickEventSetter.getInstance();
     MenuSetter.getInstance();
+    ButtonClickEventSetter.getInstance();
 }
 
 class MenuSetter {
@@ -9,6 +9,9 @@ class MenuSetter {
     menuObject = null;
     sideMenuObject = null;
     drinkMenuObject = null;
+
+    menuType = null;
+    mainMenuModalView = null;
 
     totalPrice = 0;
     totalKcal = 0;
@@ -96,10 +99,59 @@ class MenuSetter {
         `;
 
     }
+
+        getAddMenuList(menuType) {
+            this.menuType = menuType;
+
+            $.ajax({
+                async: false,
+                type: "get",
+                url: `/api/v1/menu/add/${menuType}/list`,
+                dataType: "json",
+                success: (response) => {
+                    this.setModalData(response.data);
+                },
+                error: (request, status, error) => {
+                    alert("에러");
+                    console.log(request.status);
+                    console.log(request.responseText);
+                    console.log(error);
+                }
+            })
+        }
+    
+        setModalData(menuList) {
+            this.mainMenuModalView = document.querySelector(".main-menu-modal-view");
+            const modalMenuUl = document.querySelector(".menu-ul");
+    
+            this.clearDomObject(modalMenuUl);
+            this.mainMenuModalView.classList.remove("visible");
+    
+            menuList.forEach(menu => {
+                modalMenuUl.innerHTML += `
+                    <li>
+                        <div class="menu-image">
+                            <img src="/image/images/${this.menuType}/${menu.image}" alt="${menu.menuName}">
+                        </div>
+                            <div class="modal-menu-information-div">
+                                <p class="menu-name">${menu.menuName}</p>
+                                <p>₩ ${menu.price}</p>
+                                <p>${menu.kcal} Kcal</p>
+                            </div>
+                    </li>
+                `;
+            })
+        }
+        
+        clearDomObject(domObject) {
+            domObject.innerHTML = "";
+        }
 }
 
 class ButtonClickEventSetter {
     static #instance = null;
+
+    menuSetter = null;
 
     
     amountDetailSpan = null;
@@ -120,6 +172,8 @@ class ButtonClickEventSetter {
         this.setMinusButtonClickEvent();
         this.setCancelButtonClickEvent();
         this.setLoadMainPageButtonClickEvent();
+        this.setMaterialAddOrModifyButtonClickEvent();
+        this.modalViewCancelButtonClickEvent();
         this.setShoppingBasketAddButtonClickEvent();
     }
 
@@ -179,8 +233,30 @@ class ButtonClickEventSetter {
 
         loadMainPageButton.onclick = () => location.replace("/kiosk-main");
     }
-    
+
+    setMaterialAddOrModifyButtonClickEvent() {
+        const materialAddOrModifyButtonItems = document.querySelectorAll(".material-add-or-modify-button");
+        this.menuSetter = MenuSetter.getInstance();
+
+        materialAddOrModifyButtonItems.forEach((button, index) => {
+            button.onclick = () => this.menuSetter.getAddMenuList(index == 0 ? "burger" : index == 1 ? "side" : "drink");
+        })
+    }
+
+    setModifyButtonClickEvent() {
+        const modifyButtonItems = document.querySelectorAll(".modify-button");
+
+    }
+
+    modalViewCancelButtonClickEvent() {
+        const cancelMark = document.querySelector(".cancel-mark");
+
+        cancelMark.onclick = () => this.menuSetter.mainMenuModalView.classList.add("visible");
+    }
+
+
     setShoppingBasketAddButtonClickEvent() {
     
     }
+
 }

@@ -6,6 +6,7 @@ import kioskmake.projectkiosk.web.dto.admin.GetMenuDetailRespDto;
 import kioskmake.projectkiosk.web.dto.admin.GetMenuListRespDto;
 import kioskmake.projectkiosk.web.dto.admin.InsertMenuReqDto;
 import kioskmake.projectkiosk.web.dto.admin.UpdateMenuDetailRequestDto;
+import kioskmake.projectkiosk.web.dto.menu.ReadAddMenuListRequestDto;
 import kioskmake.projectkiosk.web.dto.menu.ReadMenuRequestDto;
 import kioskmake.projectkiosk.web.dto.menu.ReadMenuResponseDto;
 import lombok.RequiredArgsConstructor;
@@ -75,7 +76,12 @@ public class MenuServiceImpl implements MenuService {
         return changeToReadMenuResponseDtoList(menuRepository.findChangeMenuInSet(readMenuRequestDto.toMenu()));
     }
 
-    private List<ReadMenuResponseDto> changeToReadMenuResponseDtoList(List<Menu> menuEntityList) {
+	@Override
+	public List<ReadMenuResponseDto> getAddMenuList(ReadAddMenuListRequestDto readAddMenuListRequestDto) throws Exception {
+		return changeToReadMenuResponseDtoList(menuRepository.findAddMenuList(readAddMenuListRequestDto.toMenuEntity()));
+	}
+
+	private List<ReadMenuResponseDto> changeToReadMenuResponseDtoList(List<Menu> menuEntityList) {
         return menuEntityList.isEmpty() ? null
                 : menuEntityList.stream()
                 .map(Menu::toReadMenuResponseDto)

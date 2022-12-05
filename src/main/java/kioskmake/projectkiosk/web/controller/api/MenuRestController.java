@@ -3,6 +3,7 @@ package kioskmake.projectkiosk.web.controller.api;
 import kioskmake.projectkiosk.handler.aop.annotation.Log;
 import kioskmake.projectkiosk.service.menu.MenuService;
 import kioskmake.projectkiosk.web.dto.CustomResponseDto;
+import kioskmake.projectkiosk.web.dto.menu.ReadAddMenuListRequestDto;
 import kioskmake.projectkiosk.web.dto.menu.ReadMenuRequestDto;
 import kioskmake.projectkiosk.web.dto.menu.ReadMenuResponseDto;
 import lombok.RequiredArgsConstructor;
@@ -110,4 +111,18 @@ public class MenuRestController {
     }
 
 
+    @Log
+    @GetMapping("/add/{menuType}/list")
+    public ResponseEntity<?> getAddMenuList(ReadAddMenuListRequestDto readMenuRequestDto) {
+        List<ReadMenuResponseDto> readMenuRequestDtoList = null;
+
+        try {
+            readMenuRequestDtoList = menuService.getAddMenuList(readMenuRequestDto);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.internalServerError().body(new CustomResponseDto(-1, "Failed to load add menu list", readMenuRequestDtoList));
+        }
+
+        return ResponseEntity.ok(new CustomResponseDto(1, "Load add menu list successful", readMenuRequestDtoList));
+    }
 }

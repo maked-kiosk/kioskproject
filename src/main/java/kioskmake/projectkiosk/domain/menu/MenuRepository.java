@@ -24,7 +24,9 @@ public interface MenuRepository {
     public List<Menu> findMcMorningSideMenuList(Menu menu) throws Exception;
 
     public List<Menu> findChangeMenuInSet(Menu menu) throws Exception;
-    
+
+    public List<Menu> findAddMenuList(Menu menu) throws Exception;
+
 
 
 	// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> ADMIN <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
