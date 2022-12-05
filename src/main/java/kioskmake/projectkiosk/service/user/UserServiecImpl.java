@@ -4,7 +4,7 @@ import org.springframework.stereotype.Service;
 
 import kioskmake.projectkiosk.domain.user.User;
 import kioskmake.projectkiosk.domain.user.UserRepository;
-import kioskmake.projectkiosk.web.dto.InsertUserReqDto;
+import kioskmake.projectkiosk.web.dto.UserReqDto;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -23,7 +23,7 @@ public class UserServiecImpl implements UserService {
 	}
 
 	@Override
-	public boolean insertUser(InsertUserReqDto insertUserReqDto) throws Exception {
+	public boolean insertUser(UserReqDto insertUserReqDto) throws Exception {
 		
 		boolean status = false;
 		
@@ -31,6 +31,16 @@ public class UserServiecImpl implements UserService {
 		
 				
 		return status;
+	}
+
+	@Override
+	public boolean updateUserPoint(UserReqDto userReqDto) throws Exception {
+		
+		boolean status = false;
+		
+		status = userRepository.updateUserPoint(userReqDto.updatePoint());
+		
+		return false;
 	}
 
 }

@@ -4,6 +4,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -12,7 +13,7 @@ import kioskmake.projectkiosk.handler.aop.annotation.Log;
 import kioskmake.projectkiosk.service.timeCheck.TimeCheckService;
 import kioskmake.projectkiosk.service.user.UserService;
 import kioskmake.projectkiosk.web.dto.CustomResponseDto;
-import kioskmake.projectkiosk.web.dto.InsertUserReqDto;
+import kioskmake.projectkiosk.web.dto.UserReqDto;
 import lombok.RequiredArgsConstructor;
 
 @RestController
@@ -52,7 +53,7 @@ public class CheckRestController {
     }
     
     @PostMapping("/insert-user")
-    public ResponseEntity<?> insertUser(InsertUserReqDto insertUSerReqDto) {
+    public ResponseEntity<?> insertUser(UserReqDto insertUSerReqDto) {
     	
     	boolean status = false;
     	
@@ -64,5 +65,11 @@ public class CheckRestController {
 		}
     	
     	return ResponseEntity.ok(new CustomResponseDto<>(1, "user insert successful", status));
+    }
+    
+    @PutMapping("/point")
+    public ResponseEntity<?> updateUserPoint(int id, int point) {
+    	
+    	return ResponseEntity.ok(new CustomResponseDto<>(1, "update successful", null));
     }
 }
