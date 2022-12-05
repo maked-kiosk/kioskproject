@@ -41,6 +41,7 @@ public class Menu {
         return ReadMenuResponseDto.builder()
         		.id(id)
                 .menuName(menu_name)
+				.mcMorningFlag(mc_morning_flag)
                 .price(price)
                 .kcal(kcal)
                 .image(image)

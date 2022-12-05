@@ -8,8 +8,8 @@
   <title>setjumun</title>
   <link rel="stylesheet" href="/static/css/style.css">
   <link rel="stylesheet" href="/static/css/set-size-select-view.css">
+  <script src="https://code.jquery.com/jquery-latest.min.js"></script>
 </head>
-
 <body>
   <div id="container">
     <div class="modal">
@@ -17,19 +17,32 @@
         <h2>세트로 주문하시겠습니까?</h2>
       </div>
       <center>
-        <div>
-          <button id="button">
-            <img src="/static/img/set.png" alt="">
-            <br>기본 세트 선택</button>
-          <button id="button">
-            <img src="/static/img/set.png" alt="">
-            <br>라지 세트 선택</button>
-          <button id="button">
-            <img src="/static/img/danpum.png" alt="">
-            <br>단품 선택</button>
+        <div class="main-select-menu-image-div">
+          <div class="select-menu-image-div">
+            <div class="set-menu-image">
+                <img src="/static/images/side-menu/french-fries.png" alt="french-fries">
+                <img src="/static/images/drink/coca-cola-zero.png" alt="coke-zero">
+                <img class="burger-image" src="/static/images/hamburger/bulgogi-burger.png" alt="bulgogi-burger">
+            </div>
+            <span>기본 세트 선택</span>
+          </div>
+          <div class="select-menu-image-div">
+            <div class="set-menu-image">
+                <img src="/static/images/side-menu/french-fries.png" alt="french-fries">
+                <img src="/static/images/drink/coca-cola-zero.png" alt="coke-zero">
+                <img class="burger-image" src="/static/images/hamburger/bulgogi-burger.png" alt="bulgogi-burger">
+            </div>
+            <span>라지 세트 선택</span>
+          </div>
+          <div class="select-menu-image-div">
+            <div class="sigle-menu-image">
+                <img class="burger-image" src="/static/images/hamburger/bulgogi-burger.png" alt="bulgogi-burger">
+            </div>
+            <span>단품 선택</span>
+          </div>
         </div>
         <div class="btns">
-          <button id="cancle-button">취소</button>
+          <button class="location-back-button">취소</button>
         </div>
       </center>
     </div>
@@ -39,5 +52,4 @@
   </div>
   <script src="/static/js/set-size-select-view.js"></script>
 </body>
-
 </html>

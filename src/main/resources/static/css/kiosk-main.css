@@ -31,7 +31,6 @@ article:first-child {
 
 .nav-menu {
   border-right: 2px solid #dbdbdb;
-  height: 820px;
 
   display: flex;
   flex-direction: column;
@@ -216,7 +215,7 @@ h2 {
   display: flex;
   flex-wrap: wrap;
   overflow: auto;
-  height: 1160px;
+  /* height: 1160px; */
 }
 
 .popular-menu-btns {
@@ -422,4 +421,46 @@ footer {
 
 .notice-span {
   font-size: 12px;
+}
+
+.modal-body {
+  display: flex;
+  justify-content: center;
+
+  width: 900px;
+  height: 1600px;
+
+  background-color: #00000070;
+
+  position: absolute;
+}
+
+.show-add-shopping-basket-modal-view {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  margin-top: 500px;
+
+  width: 500px;
+  height: 300px;
+
+  background-color: #dbdbdb;
+}
+
+.show-add-shopping-basket-modal-view h1 {
+  margin-bottom: 50px;
+
+  font-size: 30px;
+  font-weight: 700;
+}
+
+.show-add-shopping-basket-modal-view button {
+  width: 200px;
+  height: 70px;
+}
+
+.visible {
+  display: none;
 }

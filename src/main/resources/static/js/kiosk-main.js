@@ -3,6 +3,8 @@ const navBtnsList = document.querySelectorAll('nav > ul > li'); // 메뉴 버튼
 const foodType = document.querySelectorAll('.food-type li'); 
 const learnMenuBtnsList = document.querySelectorAll('.learn-menu-btns-list li');
 
+const modalBody = document.querySelector(".modal-body");
+
 foodMenus[0].style.display = 'block';// 메인 페이지
 
 
@@ -52,6 +54,7 @@ for (let i = 0; i < navBtnsList.length; i++) {//liList배열이기때문 선택�
     }
 }
 
+removeMenuObjectInLocalStorage();
 setSelectBurgerTypeEvent();
 
 //버거 메뉴 
@@ -60,7 +63,6 @@ function getMenuList(selectValue, index) {
 
     let url = selectValue == "버거" ? `api/v1/menu/burger/list` : `api/v1/menu/${menuType}/list?mcMorning=false`
 
-    console.log(url);
     $.ajax({
         async: false,
         type: "get",
@@ -107,8 +109,6 @@ function setMenuTypeBySelectMenuType(value) {
     return menuType;
 }
 
-
-
 function setList(list, index, menuType){
     const menuButton = document.querySelectorAll(".food-menu-btns");
 
@@ -116,9 +116,9 @@ function setList(list, index, menuType){
 
     list.forEach(menu => {
         menuButton[index].innerHTML += `
-            <li>
+            <li class="menu-li">
                 <div class="food-menu-img">
-                    <img src="/static/images/${menuType}/${menu.image}">
+                    <img src="/image/images/${menuType}/${menu.image}">
                 </div>
                 <div>
                     <p>${menu.menuName}</p>
@@ -130,4 +130,58 @@ function setList(list, index, menuType){
             </li>
         `
     });
+
+    setMenuClickEvent(list, menuType);
+}
+
+function setMenuClickEvent(menuList, menuType) {
+    const menuListLi = document.querySelectorAll(".menu-li");
+    let burgerFlag = setMenuFlagByMenuType(menuType);
+
+    let url = burgerFlag ? "/set-size-select-view" : "/order";
+
+    menuListLi.forEach((menu, index) => {
+        menu.onclick = () => {
+            burgerFlag ? loadSetSizeSelectViewPage(menuList[index], url) : showAddShoppingBasketModalView(menuList[index]);
+        }
+    })
+}
+
+function setMenuFlagByMenuType(menuType) {
+    return menuType == "burger";
+}
+
+function loadSetSizeSelectViewPage(menu, url) {
+    localStorage.menuObject = JSON.stringify(menu);
+    location.href = url;
+}
+
+function showAddShoppingBasketModalView(menu) {
+    modalBody.classList.remove("visible");
+
+    setRequestButtonClickEvent(menu);
+    
+}
+
+function setRequestButtonClickEvent(menu) {
+    const requestButtonItems = document.querySelectorAll(".show-add-shopping-basket-modal-view button");
+
+    requestButtonItems.forEach((button, index) => {
+        button.onclick = () => index == 0 ? showAddShoppingBasket(menu) : cancelModal();
+    });
+}
+
+function showAddShoppingBasket(menu) {
+    alert(menu.id);
+}
+
+function cancelModal() {
+    modalBody.classList.add("visible");
+}
+
+function removeMenuObjectInLocalStorage() {
+    localStorage.removeItem("size");
+    localStorage.removeItem("menuObject");
+    localStorage.removeItem("sideMenuObject");
+    localStorage.removeItem("drinkMenuObject");
 }

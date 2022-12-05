@@ -65,7 +65,7 @@ public class MenuRestController {
 
     @Log
     @GetMapping("/mc-morning/{id}")
-    public ResponseEntity<?> getBurgerByBurgerCode(@PathVariable int id) {
+    public ResponseEntity<?> getMcMorningBurgerByBurgerCode(@PathVariable int id) {
         ReadMenuResponseDto readMenuRequestDto = null;
 
         try {
@@ -80,7 +80,7 @@ public class MenuRestController {
 
     @Log
     @GetMapping("/mc-morning/list")
-    public ResponseEntity<?> getBurgerByBurgerCode() {
+    public ResponseEntity<?> getMcMorningBurgerList() {
         List<ReadMenuResponseDto> readMenuRequestDtoList = null;
 
         try {

@@ -354,7 +354,7 @@
         SELECT
             id,
             'single' AS set_size,
-            hamburger_name,
+            hamburger_name as menu_name,
             kcal,
             image,
             price
@@ -482,6 +482,16 @@
                 set_menu_flag = 1
             </if>
         </if>
+        <choose>
+            <when test="menu_type == 'coffee'">
+                    and
+                drink_category_code = 2
+            </when>
+            <when test="menu_type == 'drink'">
+                    and
+                drink_category_code = 1
+            </when>
+        </choose>
         ;
     </select>
     
@@ -509,7 +519,8 @@
             ht.hamburger_name as menu_name,
             ht.price,
             ht.kcal,
-            ht.image
+            ht.image,
+            true as mc_morning_flag
         FROM
             hamburger_table ht
             inner join mc_morning_table mmt ON(mmt.menu_code = ht.id)
