@@ -175,6 +175,15 @@ table {
     border: none;
 }
 
+.menu-type-input {
+    border: none;
+
+    width: 80px;
+
+    background-color: #dbdbdb;
+    text-align: center;
+}
+
 th, td {
     border: 1px solid rgb(198, 198, 198);
     padding: 5px 5px;

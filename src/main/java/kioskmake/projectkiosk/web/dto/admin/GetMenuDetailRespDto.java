@@ -8,11 +8,18 @@ import lombok.Data;
 public class GetMenuDetailRespDto {
 	
 	private int id;
-	private String name;
+	private String menuName;
 	private int price;
 	private int sales;
 	private int kcal;
-	private String img;
+	private String image;
 	private String size;
-	
+	private String menuCategoryName;
+
+	private int hamburgerCategoryCode;
+	private boolean mcLunchFlag;
+	private boolean setMenuFlag;
+	private boolean onlyMcMorningFlag;
+	private int drinkCategoryCode;
+	private int menuCategoryCode;
 }

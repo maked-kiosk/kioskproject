@@ -29,10 +29,11 @@ public interface MenuRepository {
 
 	// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> ADMIN <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
-    public boolean insertMenu(Menu menu) throws Exception;
+    public int insertMenu(Menu menu) throws Exception;
 
 //    public List<Menu> findMenuListBySelectType(Menu menu) throws Exception;
     public List<Menu> getAdminMenuList(Map<String, Object> map) throws Exception;
-    public List<Menu> getDetails(String id, String menu_type) throws Exception;
+    public Menu getMenuDetail(String id, String menu_type) throws Exception;
+    public int updateMenuDetail(Menu menu) throws Exception;
 
 }
