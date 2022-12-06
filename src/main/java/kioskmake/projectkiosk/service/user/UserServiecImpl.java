@@ -34,11 +34,11 @@ public class UserServiecImpl implements UserService {
 	}
 
 	@Override
-	public boolean updateUserPoint(UserReqDto userReqDto) throws Exception {
+	public boolean updateUserPoint(int id, int point, String pointStatus) throws Exception {
 		
 		boolean status = false;
 		
-		status = userRepository.updateUserPoint(userReqDto.updatePoint());
+		status = userRepository.updateUserPoint(id, point, pointStatus);
 		
 		return false;
 	}

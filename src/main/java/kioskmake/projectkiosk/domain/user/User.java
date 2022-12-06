@@ -14,4 +14,5 @@ public class User {
 	private String user_name;
 	private String user_phone_number;
 	private int point;
+	private String point_status;
 }

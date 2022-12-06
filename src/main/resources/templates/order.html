@@ -90,8 +90,8 @@
                         </div>
                         <div class="point-btns">
                             <div class="point-use-btns po-btns hovers">
-                                <button type="button" class="use-point user-check">사용</button>
-                                <button type="button" class="earn-points user-check">적립</button>
+                                <button type="button" class="use-point user-check modal-point-button">사용</button>
+                                <button type="button" class="earn-points user-check modal-point-button">적립</button>
                             </div>
                             <div class="point-cancel-btn po-btns hovers">
                                 <button class="cancel-button">취소</button>
@@ -103,22 +103,22 @@
                             <div class="current-point">
                                 <p>현재 포인트</p>
                                 <div class="points-input-box">
-                                    <span></span>
+                                    <input class="current-point-value point-input" disabled>
                                 </div>
                             </div>
                             <div class="using-point">
                                 <p>사용할 포인트</p>
-                                <input type="text">
+                                <input type="text" class="using-point-input point-input">
                             </div>
                             <div class="final-amount">
                                 <p>최종 금액</p>
                                 <div class="points-input-box">
-                                    <span></span>
+                                    <input class="final-amount-input point-input" disabled>
                                 </div>
                             </div>
                             <div class="final-amount-confirm hovers">
-                                <button>확인</button>
-                                <button class="cancel-button">취소</button>
+                                <button type="button" class="using-point-button">확인</button>
+                                <button type="button" class="cancel-button">취소</button>
                             </div>
                         </div>
                     </div>

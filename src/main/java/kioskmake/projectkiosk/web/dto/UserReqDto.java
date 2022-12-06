@@ -9,6 +9,7 @@ public class UserReqDto {
 	private String userName;
 	private String userPhoneNumber;
 	private int point;
+	private String status;
 	
 	public User toUserEntity() {
 		return User.builder()
@@ -23,6 +24,7 @@ public class UserReqDto {
 		return User.builder()
 				.id(id)
 				.point(point)
+				.point_status(status)
 				.build();
 	}
 }

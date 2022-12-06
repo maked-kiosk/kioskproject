@@ -27,5 +27,21 @@
 			0
 		)
 	</insert>
+	
+	<update id="updateUserPoint" parameterType="kioskmake.projectkiosk.domain.user.User">
+		update
+			user_point_table
+		set
+		<choose>
+			<when test="point_status == 'earn'">
+				point = point + #{point}
+			</when>
+			<otherwise>
+				point = point - #{point}
+			</otherwise>
+		</choose>
+		where
+			id = #{id}
+	</update>
 
 </mapper>
