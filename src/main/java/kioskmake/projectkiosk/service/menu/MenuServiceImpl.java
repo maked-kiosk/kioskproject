@@ -37,14 +37,14 @@ public class MenuServiceImpl implements MenuService {
 	// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Not ADMIN <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
     @Override
-    public List<ReadMenuResponseDto> getBurgerList() throws Exception {
-        return changeToReadMenuResponseDtoList(menuRepository.findBurgerList());
+    public List<ReadMenuResponseDto> getBurgerList(String burgerType) throws Exception {
+		Map<String, Object> configMap = getBurgerCatgoryConfigMap(burgerType);
+
+        return changeToReadMenuResponseDtoList(menuRepository.findBurgerList(configMap));
     }
 
     @Override
     public List<ReadMenuResponseDto> getBurgerByBurgerCode(int id) throws Exception {
-        Map<String, Object> configMap = new HashMap<>();
-
         return changeToReadMenuResponseDtoList(menuRepository.findBurgerByBurgerCode(id));
     }
 
@@ -73,6 +73,10 @@ public class MenuServiceImpl implements MenuService {
         return changeToReadMenuResponseDtoList(menuRepository.findChangeMenuInSet(readMenuRequestDto.toMenu()));
     }
 
+	@Override
+	public List<ReadMenuResponseDto> getTopRankingMenuList() throws Exception {
+		return changeToReadMenuResponseDtoList(menuRepository.findTopRankingMenuList());
+	}
 
 	private List<ReadMenuResponseDto> changeToReadMenuResponseDtoList(List<Menu> menuEntityList) {
         return menuEntityList.isEmpty() ? null
@@ -81,6 +85,15 @@ public class MenuServiceImpl implements MenuService {
                 .collect(Collectors.toList());
     }
 
+
+	private Map<String, Object> getBurgerCatgoryConfigMap(String burgerType) {
+		Map<String, Object> configMap = new HashMap<>();
+
+		configMap.put("burger_type", burgerType);
+		configMap.put("hamburger_category_code", burgerType.equals("beef") ? 2 : burgerType.equals("seaFood") ? 3 : 4);
+
+		return configMap;
+	}
 
 
 	// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> ADMIN <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<

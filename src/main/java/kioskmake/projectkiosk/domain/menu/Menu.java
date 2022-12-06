@@ -48,6 +48,7 @@ public class Menu {
                 .kcal(kcal)
                 .image(image)
                 .mcLunchFlag(mc_lunch_flag == 1)
+				.menuCategoryCode(menu_category_code)
                 .build();
     }
     

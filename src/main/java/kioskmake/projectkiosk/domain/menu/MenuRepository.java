@@ -13,7 +13,7 @@ public interface MenuRepository {
 	// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Not ADMIN <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
-    public List<Menu> findBurgerList() throws Exception;
+    public List<Menu> findBurgerList(Map<String, Object> config_map) throws Exception;
     public List<Menu> findBurgerByBurgerCode(int id) throws Exception;
 
     public List<Menu> findMenuListByMenuType(Menu menu) throws Exception;
@@ -24,6 +24,8 @@ public interface MenuRepository {
     public List<Menu> findMcMorningSideMenuList(Menu menu) throws Exception;
 
     public List<Menu> findChangeMenuInSet(Menu menu) throws Exception;
+
+    public List<Menu> findTopRankingMenuList() throws Exception;
 
 
 

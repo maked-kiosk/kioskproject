@@ -3,7 +3,6 @@ package kioskmake.projectkiosk.web.controller.api;
 import kioskmake.projectkiosk.handler.aop.annotation.Log;
 import kioskmake.projectkiosk.service.menu.MenuService;
 import kioskmake.projectkiosk.web.dto.CustomResponseDto;
-import kioskmake.projectkiosk.web.dto.menu.ReadAddMenuListRequestDto;
 import kioskmake.projectkiosk.web.dto.menu.ReadMenuRequestDto;
 import kioskmake.projectkiosk.web.dto.menu.ReadMenuResponseDto;
 import lombok.RequiredArgsConstructor;
@@ -21,11 +20,11 @@ public class MenuRestController {
 
     @Log
     @GetMapping("/burger/list")
-    public ResponseEntity<?> getBurgerList() {
+    public ResponseEntity<?> getBurgerList(@RequestParam String burgerType) {
         List<ReadMenuResponseDto> readMenuRequestDtoList = null;
 
         try {
-            readMenuRequestDtoList = menuService.getBurgerList();
+            readMenuRequestDtoList = menuService.getBurgerList(burgerType);
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.internalServerError().body(new CustomResponseDto(-1, "Failed to load hamburger list", readMenuRequestDtoList));
@@ -110,4 +109,19 @@ public class MenuRestController {
         return ResponseEntity.ok(new CustomResponseDto(1, "Load change menu in set list successful", readMenuRequestDtoList));
     }
 
+
+    @Log
+    @GetMapping("/top-ranking/list")
+    public ResponseEntity<?> getTopRankingMenuList() {
+        List<ReadMenuResponseDto> readMenuRequestDtoList = null;
+
+        try {
+            readMenuRequestDtoList = menuService.getTopRankingMenuList();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.internalServerError().body(new CustomResponseDto(-1, "Failed to load top ranking menu list", readMenuRequestDtoList));
+        }
+
+        return ResponseEntity.ok(new CustomResponseDto(1, "Load top ranking menu list successful", readMenuRequestDtoList));
+    }
 }

@@ -5,6 +5,7 @@ const learnMenuBtnsList = document.querySelectorAll('.learn-menu-btns-list li');
 
 const modalBody = document.querySelector(".modal-body");
 
+
 foodMenus[0].style.display = 'block';// 메인 페이지
 
 
@@ -41,7 +42,7 @@ for (let i = 0; i < navBtnsList.length; i++) {//liList배열이기때문 선택�
         //e.target //자식요소에 이벤트를 적용하는 대상
         //e.currentTarget//부모요소 이벤트 적용하는 대상
 
-        getMenuList(navBtnsList[i].querySelector("span").textContent, i);
+        getMenuList(navBtnsList[i].querySelector("span").textContent, i, "all");
 
         for (let j = 0; j < navBtnsList.length; j++) {
             //클릭된 버튼을 비교하고 스타일을 설정하기 위한 반복문
@@ -54,15 +55,77 @@ for (let i = 0; i < navBtnsList.length; i++) {//liList배열이기때문 선택�
     }
 }
 
+setBurgerTypeCategoryClickEvent();
+setTopRankingMenuList();
 removeMenuObjectInLocalStorage();
 setSelectBurgerTypeEvent();
 
-//버거 메뉴 
-function getMenuList(selectValue, index) {
-    let menuType = setMenuTypeBySelectMenuType(selectValue);
+function setBurgerTypeCategoryClickEvent() {
+    const burgerTypeItems = document.querySelectorAll(".burger-type li");
 
-    let url = selectValue == "버거" ? `/api/v1/menu/burger/list` 
-    : selectValue == "맥모닝" ? `/api/v1/menu/mc-morning/list` : `/api/v1/menu/${menuType}/list?mcMorning=false`
+    burgerTypeItems.forEach((burgerTypeLi, index) => {
+
+        burgerTypeLi.onclick = () => {
+            let burgerType = getBurgerType(index);
+
+            getMenuList("버거", 2, burgerType);
+        }
+    })
+}
+
+function getBurgerType(index) {
+    return index == 0 ? "all" : index == 1 ? "beef" : index == 2 ? "chicken" : "seaFood";
+}
+
+function setTopRankingMenuList() {
+    const popularMenuUl = document.querySelector(".popular-menu-btns");
+    let menuList = loadTopRankingMenuList();
+
+    clearDomObject(popularMenuUl);
+
+    menuList.forEach(menu => {
+        popularMenuUl.innerHTML += `
+            <li>
+                <div class="food-menu-img">
+                <img src="/image/images/${menu.menuCategoryCode == 1 ? 'burger' : 'dessert'}/${menu.image}" alt="${menu.menuName}">
+                </div>
+                <div>
+                <p>${menu.menuName}</p>
+                <div class="food-menu-price">
+                    <p>₩ ${menu.price.toLocaleString('ko-KR')}</p>
+                    <p>${menu.kcal.toLocaleString('ko-KR')} Kcal</p>
+                </div>
+                </div>
+            </li>
+        `;
+    })
+}
+
+function loadTopRankingMenuList() {
+    let menuList = null;
+
+    $.ajax({
+        async: false,
+        type: "get",
+        url: `/api/v1/menu/top-ranking/list`,
+        dataType: "json",
+        success: (response) => {
+            menuList = response.data;
+        },
+        error: (request, status, error) => {
+            console.log(request.status);
+            console.log(request.responseText);
+            console.log(error);
+        }
+    })
+
+    return menuList;
+}
+
+//버거 메뉴 
+function getMenuList(selectedValue, index, burgerType) {
+    let menuType = setMenuTypeBySelectMenuType(selectedValue);
+    let url = getUrlBySelectedValut(selectedValue, menuType, burgerType);
 
     $.ajax({
         async: false,
@@ -76,6 +139,12 @@ function getMenuList(selectValue, index) {
             console.log(error);
         }
     });
+}
+
+function getUrlBySelectedValut(selectedValue, menuType, burgerType) {
+    return selectedValue == "버거" ? `/api/v1/menu/burger/list?burgerType=${burgerType}` 
+    : selectedValue == "맥모닝" ? `/api/v1/menu/mc-morning/list` 
+    : selectedValue == "추천메뉴" ? `/api/v1/menu/top-ranking/list` : `/api/v1/menu/${menuType}/list?mcMorning=false`;
 }
 
 function setSelectBurgerTypeEvent() {
@@ -108,6 +177,8 @@ function setMenuTypeBySelectMenuType(value) {
     }else if(value == "맥모닝") {
         menuType = "mcMorning";
         
+    }else if(value == "추천메뉴") {
+        menuType = "recomendedMenu"
     }
 
     return menuType;
@@ -115,6 +186,7 @@ function setMenuTypeBySelectMenuType(value) {
 
 function setList(list, index, menuType){
     const menuButton = document.querySelectorAll(".food-menu-btns");
+    
 
     menuButton.forEach(menuUl => menuUl.innerHTML = "");
 
@@ -122,7 +194,10 @@ function setList(list, index, menuType){
         menuButton[index].innerHTML += `
             <li class="menu-li">
                 <div class="food-menu-img">
-                    <img src="/image/images/${menuType}/${menu.image}">
+                    <img src="/image/images/${menuType == "recomendedMenu" 
+                    ? menu.menuCategoryCode == 1 
+                        ? "burger" : "dessert" 
+                    : menuType}/${menu.image}">
                 </div>
                 <div>
                     <p>${menu.menuName}</p>
@@ -140,19 +215,19 @@ function setList(list, index, menuType){
 
 function setMenuClickEvent(menuList, menuType) {
     const menuListLi = document.querySelectorAll(".menu-li");
-    let burgerFlag = setMenuFlagByMenuType(menuType);
-
-    let url = burgerFlag ? "/set-size-select-view" : "/order";
 
     menuListLi.forEach((menu, index) => {
+        let burgerFlag = setMenuFlagByMenuType(menuType, menuList[index]);
+        let url = burgerFlag ? "/set-size-select-view" : "/order";
+
         menu.onclick = () => {
             burgerFlag ? loadSetSizeSelectViewPage(menuList[index], url) : showAddShoppingBasketModalView(menuList[index]);
         }
     })
 }
 
-function setMenuFlagByMenuType(menuType) {
-    return menuType == "burger";
+function setMenuFlagByMenuType(menuType, menu) {
+    return menuType == "burger" || menu.menuCategoryCode == 1 || menuType == "mcMorning";
 }
 
 function loadSetSizeSelectViewPage(menu, url) {
@@ -181,6 +256,10 @@ function showAddShoppingBasket(menu) {
 
 function cancelModal() {
     modalBody.classList.add("visible");
+}
+
+function clearDomObject(domObject) {
+    domObject.innerHTML = "";
 }
 
 function removeMenuObjectInLocalStorage() {

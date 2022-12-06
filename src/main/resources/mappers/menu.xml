@@ -336,7 +336,7 @@
 
 
     <!-- Burger   -->
-    <select id="findBurgerList" resultType="kioskmake.projectkiosk.domain.menu.Menu">
+    <select id="findBurgerList" parameterType="HashMap" resultType="kioskmake.projectkiosk.domain.menu.Menu">
         SELECT
             id,
             hamburger_name as menu_name,
@@ -347,7 +347,15 @@
         FROM
             hamburger_table
         WHERE
-            hamburger_category_code != -1;
+        <choose>
+            <when test="burger_type != 'all'">
+                hamburger_category_code = #{hamburger_category_code}
+            </when>
+            <otherwise>
+                hamburger_category_code != -1
+            </otherwise>
+        </choose>
+        ;
     </select>
 
     <select id="findBurgerByBurgerCode" parameterType="Integer" resultType="kioskmake.projectkiosk.domain.menu.Menu">
@@ -679,7 +687,40 @@
         </choose>
     </select>
 
+<!--  Top Ranking Menu Load  -->
+    <select id="findTopRankingMenuList" resultType="kioskmake.projectkiosk.domain.menu.Menu">
+        SELECT
+            *
+        FROM
+            (SELECT
+                id,
+                hamburger_name as menu_name,
+                price,
+                sales,
+                kcal,
+                image,
+                menu_category_code
+            FROM
+                hamburger_table
 
+            UNION
+
+            SELECT
+                id,
+                dessert_name as menu_name,
+                price,
+                sales,
+                kcal,
+                image,
+                menu_category_code
+            FROM
+                dessert_table
+            ORDER BY
+                sales desc
+            LIMIT 0 ,6) ranking_table
+        WHERE
+            sales > 0;
+    </select>
     
 <!--    <update id="updateMenu" parameterType="kioskmake.projectkiosk.domain.menu.Menu">-->
 <!--        update-->

@@ -123,12 +123,14 @@ section:first-child {
   justify-content: center;
   align-items: center;
 
-  width: 150px;
-  height: 50px;
   border: 1px solid #dbdbdb;
   border-radius: 15px;
-
   margin: 0 10px 10px 0;
+  
+  width: 150px;
+  height: 50px;
+
+  cursor: pointer;
 }
 
 .food-type li.active {
@@ -226,7 +228,7 @@ h2 {
 }
 
 .burger-menu-btns {
-  height: 970px;
+  /* height: 970px; */
 }
 
 .food-menu-btns li {
