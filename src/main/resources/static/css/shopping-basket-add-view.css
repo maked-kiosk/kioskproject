@@ -83,6 +83,7 @@ header {
 
 .modify-menu-informataion-div {
     display: flex;
+    flex-direction: column;
 
     margin-bottom: 50px;
 
@@ -90,6 +91,12 @@ header {
 }
 
 .modify-menu-detail-div {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.modify-menu-detail-informantion {
     display: flex;
     flex-direction: column;
 }
@@ -105,11 +112,6 @@ header {
 
 .modify-menu-informataion-div img {
     width: 100px;
-
-    position: absolute;
-
-    top: -20px;
-    right: 0px;
 }
 
 .modify-button-div {

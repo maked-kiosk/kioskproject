@@ -26,7 +26,29 @@ class TypeButtonClickEventSetter {
     const selectMenuImageDiv = document.querySelectorAll(".select-menu-image-div");
     this.typeBox = document.querySelector(".type-box");
 
+      
     selectMenuImageDiv[0].onclick = () => {
+      this.typeBox.style.display = 'block';
+      this.typeBox.innerHTML = `
+        <div class="type">
+          <div class="type-content">
+            <p>단품을 선택 하시겠습니까?</p>
+            <div class="type-btns btns">
+              <button type="button" class="single-confirm">확인</button>
+              <button type="button" class="cancel">취소</button>
+            </div>
+          </div>
+        </div>`
+
+      this.setCancelButtonClickEvent();
+    
+      const singleConfirm = document.querySelector(".single-confirm");
+      singleConfirm.onclick = () => {
+        location.replace("/order");
+      }
+    }
+
+    selectMenuImageDiv[1].onclick = () => {
       this.typeBox.style.display = 'block';
       this.typeBox.innerHTML = `<div class="type">
         <div class="type-content">
@@ -47,7 +69,7 @@ class TypeButtonClickEventSetter {
       }
     }
 
-    selectMenuImageDiv[1].onclick = () => {
+    selectMenuImageDiv[2].onclick = () => {
       this.typeBox.style.display = 'block';
       this.typeBox.innerHTML = `
         <div class="type">
@@ -66,27 +88,6 @@ class TypeButtonClickEventSetter {
       lSetConfirm.onclick = () => {
         localStorage.size = "L";
           location.replace("/set-select-view");
-      }
-    }
-      
-    selectMenuImageDiv[2].onclick = () => {
-      this.typeBox.style.display = 'block';
-      this.typeBox.innerHTML = `
-        <div class="type">
-          <div class="type-content">
-            <p>단품을 선택 하시겠습니까?</p>
-            <div class="type-btns btns">
-              <button type="button" class="single-confirm">확인</button>
-              <button type="button" class="cancel">취소</button>
-            </div>
-          </div>
-        </div>`
-
-      this.setCancelButtonClickEvent();
-    
-      const singleConfirm = document.querySelector(".single-confirm");
-      singleConfirm.onclick = () => {
-        location.replace("/order");
       }
     }
   }
@@ -138,19 +139,27 @@ class ImageSetter {
     $.ajax({
       async: false,
       type: "get",
-      url: `/api/v1/menu/${menuType}/${this.menuObject.id}?mcLunch=${this.menuObject.mcLunchFlag}`,
+      url: `/api/v1/menu/${menuType}/${this.menuObject.id}`,
       dataType: "json",
       success: (response) => {
         if(response.data != null) {
+          this.setPriceInformation(response.data);
           this.setBurgerImage(response.data[0].image);
         }
       },
       error: (request, status, error) => {
-        alert("에러");
         console.log(request.status);
         console.log(request.responseText);
         console.log(error);
       }
+    })
+  }
+
+  setPriceInformation(menuList) {
+    const pricePItems = document.querySelectorAll(".price-p");
+
+    pricePItems.forEach((pTag, index) => {
+      pTag.textContent = `￦ ${menuList[index].price.toLocaleString('ko-KR')}`;
     })
   }
 

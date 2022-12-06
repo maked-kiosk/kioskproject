@@ -6,7 +6,6 @@ import kioskmake.projectkiosk.web.dto.admin.GetMenuDetailRespDto;
 import kioskmake.projectkiosk.web.dto.admin.GetMenuListRespDto;
 import kioskmake.projectkiosk.web.dto.admin.InsertMenuReqDto;
 import kioskmake.projectkiosk.web.dto.admin.UpdateMenuDetailRequestDto;
-import kioskmake.projectkiosk.web.dto.menu.ReadAddMenuListRequestDto;
 import kioskmake.projectkiosk.web.dto.menu.ReadMenuRequestDto;
 import kioskmake.projectkiosk.web.dto.menu.ReadMenuResponseDto;
 import lombok.RequiredArgsConstructor;
@@ -43,12 +42,10 @@ public class MenuServiceImpl implements MenuService {
     }
 
     @Override
-    public List<ReadMenuResponseDto> getBurgerByBurgerCode(int id, boolean mcLunchFlag) throws Exception {
+    public List<ReadMenuResponseDto> getBurgerByBurgerCode(int id) throws Exception {
         Map<String, Object> configMap = new HashMap<>();
-        configMap.put("id", id);
-        configMap.put("mc_lunch_flag", mcLunchFlag);
 
-        return changeToReadMenuResponseDtoList(menuRepository.findBurgerByBurgerCode(configMap));
+        return changeToReadMenuResponseDtoList(menuRepository.findBurgerByBurgerCode(id));
     }
 
     @Override
@@ -76,10 +73,6 @@ public class MenuServiceImpl implements MenuService {
         return changeToReadMenuResponseDtoList(menuRepository.findChangeMenuInSet(readMenuRequestDto.toMenu()));
     }
 
-	@Override
-	public List<ReadMenuResponseDto> getAddMenuList(ReadAddMenuListRequestDto readAddMenuListRequestDto) throws Exception {
-		return changeToReadMenuResponseDtoList(menuRepository.findAddMenuList(readAddMenuListRequestDto.toMenuEntity()));
-	}
 
 	private List<ReadMenuResponseDto> changeToReadMenuResponseDtoList(List<Menu> menuEntityList) {
         return menuEntityList.isEmpty() ? null

@@ -30,16 +30,25 @@ class MenuSetter {
         this.drinkMenuObject = JSON.parse(localStorage.drinkMenuObject);
         this.setTotalPriceAndTotalKcal();
         this.setSetMenuInformation();
+        this.setBurgerSetClass();
     }
 
     setTotalPriceAndTotalKcal() {
-        this.totalPrice = this.menuObject.price + this.sideMenuObject.price + this.drinkMenuObject.price;
-        this.totalKcal = this.menuObject.kcal + this.sideMenuObject.kcal + this.drinkMenuObject.kcal;
+        const amount = parseInt(document.querySelector(".amount-detail-span").textContent);
+        const menuInformationTitleDiv = document.querySelector(".menu-information-div");
 
+        this.totalPrice = (this.menuObject.price + this.sideMenuObject.defaultPrice + this.drinkMenuObject.defaultPrice) * amount;
+        this.totalKcal = (this.menuObject.kcal + this.sideMenuObject.kcal + this.drinkMenuObject.kcal) * amount;
+
+
+        menuInformationTitleDiv.innerHTML = `
+            <p>${this.menuObject.menuName} 세트</p>
+            <p>￦<span class="price-span">${this.totalPrice.toLocaleString('ko-KR')}</span><span class="kcal-span">${this.totalKcal.toLocaleString('ko-KR')} Kcal</span></p>
+                
+        `;
     }
 
     setSetMenuInformation() {
-        const menuInformationTitleDiv = document.querySelector(".menu-information-div");
         const selectMenuImageDiv = document.querySelector(".select-menu-image-div");
         const burgerDetailDiv = document.querySelector(".burger-detail-div");
         const sideDetailDiv = document.querySelector(".side-detail-div");
@@ -57,71 +66,71 @@ class MenuSetter {
         const sideAlt = `${sideMenuImage.substring(sideMenuImage.lastIndexOf("_") + 1, sideMenuImage.lastIndexOf("."))}`;
         const drinkAlt = `${drinkMenuImage.substring(drinkMenuImage.lastIndexOf("_") + 1, drinkMenuImage.lastIndexOf("."))}`;
 
-        menuInformationTitleDiv.innerHTML = `
-            <p>${this.menuObject.menuName} 세트</p>
-            <p>￦<span class="price-span">${this.totalPrice}</span><span class="kcal-span">${this.totalKcal} Kcal</span></p>
-                
-        `;
+        
 
         selectMenuImageDiv.innerHTML = `
             <div class="set-menu-image">
-                <img src="${sideSrc}" alt="${sideAlt}">
-                <img src="${drinkSrc}" alt="${drinkAlt}">
+                <img class="side-menu-image" src="${sideSrc}" alt="${sideAlt}">
+                <img class="drink-menu-image" src="${drinkSrc}" alt="${drinkAlt}">
             </div>
             <div class="menu-image">
-                <img src="${burgerSrc}" alt="${burgerAlt}">
+                <img class="burger-menu-image" src="${burgerSrc}" alt="${burgerAlt}">
             </div>
         `;
 
         burgerDetailDiv.innerHTML = `
             <div class="modify-menu-detail-div">
-                <span class="detail-name-span">${this.menuObject.menuName}</span>
-                <span class="detail-kcal-span">${this.menuObject.kcal} Kcal</span>
+                <div class="modify-menu-detail-informantion">
+                    <span class="detail-name-span">${this.menuObject.menuName}</span>
+                    <span class="detail-kcal-span">${this.menuObject.kcal} Kcal</span>
+                </div>
+                <img src="${burgerSrc}" alt="${burgerAlt}">
             </div>
-            <img src="${burgerSrc}" alt="${burgerAlt}">
-        
         `;
+
         sideDetailDiv.innerHTML = `
             <div class="modify-menu-detail-div">
-                <span class="detail-name-span">${this.sideMenuObject.menuName}</span>
-                <span class="detail-kcal-span">${this.sideMenuObject.kcal} Kcal</span>
+                <div class="modify-menu-detail-informantion">
+                    <span class="detail-name-span">${this.sideMenuObject.menuName}</span>
+                    <span class="detail-kcal-span">${this.sideMenuObject.kcal} Kcal</span>
+                </div>
+                <img src="${sideSrc}" alt="${sideAlt}">
             </div>
-            <img src="${sideSrc}" alt="${sideAlt}">
-        
         `;
+
         drinkDetailDiv.innerHTML = `
             <div class="modify-menu-detail-div">
-                <span class="detail-name-span">${this.drinkMenuObject.menuName}</span>
-                <span class="detail-kcal-span">${this.drinkMenuObject.kcal} Kcal</span>
+                <div class="modify-menu-detail-informantion">
+                    <span class="detail-name-span">${this.drinkMenuObject.menuName}</span>
+                    <span class="detail-kcal-span">${this.drinkMenuObject.kcal} Kcal</span>
+                </div>
+                <img src="${drinkSrc}" alt="${drinkAlt}">
             </div>
-            <img src="${drinkSrc}" alt="${drinkAlt}">
-        
         `;
 
     }
 
-        getAddMenuList(menuType) {
-            this.menuType = menuType;
+    getModifyMenuList(menuType) {
+        this.menuType = menuType;
 
-            $.ajax({
-                async: false,
-                type: "get",
-                url: `/api/v1/menu/add/${menuType}/list`,
-                dataType: "json",
-                success: (response) => {
-                    this.setModalData(response.data);
-                },
-                error: (request, status, error) => {
-                    alert("에러");
-                    console.log(request.status);
-                    console.log(request.responseText);
-                    console.log(error);
-                }
-            })
-        }
-    
-        setModalData(menuList) {
-            this.mainMenuModalView = document.querySelector(".main-menu-modal-view");
+        $.ajax({
+            async: false,
+            type: "get",
+            url: `/api/v1/menu/${menuType}/change/list?setSize=${localStorage.size}&mcMorning=${this.menuObject.mcMorningFlag}`,
+            dataType: "json",
+            success: (response) => {
+                this.setModalData(response.data);
+            },
+            error: (request, status, error) => {
+                console.log(request.status);
+                console.log(request.responseText);
+                console.log(error);
+            }
+        })
+    }
+
+    setModalData(menuList) {
+        this.mainMenuModalView = document.querySelector(".main-menu-modal-view");
             const modalMenuUl = document.querySelector(".menu-ul");
     
             this.clearDomObject(modalMenuUl);
@@ -129,23 +138,60 @@ class MenuSetter {
     
             menuList.forEach(menu => {
                 modalMenuUl.innerHTML += `
-                    <li>
+                    <li class="menu-li">
                         <div class="menu-image">
                             <img src="/image/images/${this.menuType}/${menu.image}" alt="${menu.menuName}">
                         </div>
-                            <div class="modal-menu-information-div">
-                                <p class="menu-name">${menu.menuName}</p>
-                                <p>₩ ${menu.price}</p>
-                                <p>${menu.kcal} Kcal</p>
-                            </div>
+                        <div class="modal-menu-information-div">
+                            <p class="menu-name">${menu.menuName}</p>
+                            <p>₩ ${menu.price}</p>
+                            <p>${menu.kcal} Kcal</p>
+                        </div>
                     </li>
                 `;
             })
+
+            this.setModifyMenuClickEvent(menuList);
+    }
+    
+    clearDomObject(domObject) {
+        domObject.innerHTML = "";
+    }
+    
+    setBurgerSetClass() {
+        let burgerSet = BurgerSet.getInstance(this.menuObject, this.sideMenuObject, this.drinkMenuObject);
+
+    }
+
+    setModifyMenuClickEvent(menuList) {
+        const menuLiItems = document.querySelectorAll(".menu-li");
+
+        menuLiItems.forEach((menu, index) => {
+            menu.onclick = () => this.modifyMenu(menuList[index]);
+        })
+
+    }
+
+    modifyMenu(menu) {
+        this.setMenuObjectByMenuType(menu);
+        this.setTotalPriceAndTotalKcal();
+        this.setSetMenuInformation();
+        this.mainMenuModalView.classList.add("visible");
+    }
+
+    setMenuObjectByMenuType(menu) {
+        if(this.menuType == 'side') {
+            BurgerSet.getInstance().setMenuObject.side = menu;
+            this.sideMenuObject = menu;
+
+        }else if(this.menuType == 'drink') {
+            BurgerSet.getInstance().setMenuObject.drink = menu;
+            this.drinkMenuObject = menu;
+
         }
-        
-        clearDomObject(domObject) {
-            domObject.innerHTML = "";
-        }
+
+    }
+  
 }
 
 class ButtonClickEventSetter {
@@ -172,7 +218,7 @@ class ButtonClickEventSetter {
         this.setMinusButtonClickEvent();
         this.setCancelButtonClickEvent();
         this.setLoadMainPageButtonClickEvent();
-        this.setMaterialAddOrModifyButtonClickEvent();
+        this.setModifyButtonClickEvent();
         this.modalViewCancelButtonClickEvent();
         this.setShoppingBasketAddButtonClickEvent();
     }
@@ -194,12 +240,16 @@ class ButtonClickEventSetter {
     increaseAmount() {
         this.amountDetailSpan.textContent = this.getAmount() + 1;
         this.checkToSeeIfTheAmountIsOne();
+
+        MenuSetter.getInstance().setTotalPriceAndTotalKcal();
     }
     
     decreaseAmount() {
         if(this.getAmount() != 1) {
             this.amountDetailSpan.textContent = this.getAmount() - 1;
             this.checkToSeeIfTheAmountIsOne();
+
+            MenuSetter.getInstance().setTotalPriceAndTotalKcal();
         }
     }
     
@@ -234,17 +284,14 @@ class ButtonClickEventSetter {
         loadMainPageButton.onclick = () => location.replace("/kiosk-main");
     }
 
-    setMaterialAddOrModifyButtonClickEvent() {
-        const materialAddOrModifyButtonItems = document.querySelectorAll(".material-add-or-modify-button");
-        this.menuSetter = MenuSetter.getInstance();
-
-        materialAddOrModifyButtonItems.forEach((button, index) => {
-            button.onclick = () => this.menuSetter.getAddMenuList(index == 0 ? "burger" : index == 1 ? "side" : "drink");
-        })
-    }
-
     setModifyButtonClickEvent() {
         const modifyButtonItems = document.querySelectorAll(".modify-button");
+
+        this.menuSetter = MenuSetter.getInstance();
+
+        modifyButtonItems.forEach((button, index) => {
+            button.onclick = () => this.menuSetter.getModifyMenuList(index == 0 ? "side" : "drink");
+        })
 
     }
 
@@ -256,7 +303,56 @@ class ButtonClickEventSetter {
 
 
     setShoppingBasketAddButtonClickEvent() {
+        const shoppingVasketAddButton = document.querySelector(".shopping-vasket-add-button");
+        
+        shoppingVasketAddButton.onclick = () => {
+            BurgerSet.getInstance().setMenuObject.amount = this.getAmount();
+            localStorage.burgerSet = JSON.stringify(BurgerSet.getInstance().setMenuObject);
     
+            location.replace("/order");
+        }
+    }
+
+}
+
+class BurgerSet {
+    static #instance = null;
+
+    setMenuObject = {
+        "setName": null,
+        "amount": 0,
+        "burger": {
+            "menuName": null,
+            "price": 0,
+            "kcal": 0,
+            "image": null
+        },
+        "side": {
+            "menuName": null,
+            "price": 0,
+            "kcal": 0,
+            "image": null
+        },
+        "drink": {
+            "menuName": null,
+            "price": 0,
+            "kcal": 0,
+            "image": null
+        }
+    }
+
+    static getInstance(burger, side, drink) {
+        if(this.#instance == null) {
+            this.#instance = new BurgerSet(burger, side, drink);
+        }
+        return this.#instance;
+    }
+
+    constructor(burger, side, drink) {
+        this.setMenuObject.setName = burger.menuName + " 세트";
+        this.setMenuObject.burger = burger;
+        this.setMenuObject.side = side;
+        this.setMenuObject.drink = drink;
     }
 
 }

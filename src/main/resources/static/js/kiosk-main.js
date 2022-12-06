@@ -61,7 +61,8 @@ setSelectBurgerTypeEvent();
 function getMenuList(selectValue, index) {
     let menuType = setMenuTypeBySelectMenuType(selectValue);
 
-    let url = selectValue == "버거" ? `api/v1/menu/burger/list` : `api/v1/menu/${menuType}/list?mcMorning=false`
+    let url = selectValue == "버거" ? `/api/v1/menu/burger/list` 
+    : selectValue == "맥모닝" ? `/api/v1/menu/mc-morning/list` : `/api/v1/menu/${menuType}/list?mcMorning=false`
 
     $.ajax({
         async: false,
@@ -104,6 +105,9 @@ function setMenuTypeBySelectMenuType(value) {
     }else if(value == "음료") {
         menuType = "drink";
 
+    }else if(value == "맥모닝") {
+        menuType = "mcMorning";
+        
     }
 
     return menuType;
@@ -123,8 +127,8 @@ function setList(list, index, menuType){
                 <div>
                     <p>${menu.menuName}</p>
                     <div class="food-menu-price">
-                    <p><span>₩</span>${menu.price}</p>
-                    <p>${menu.kcal}<span>Kcal</span></p>
+                    <p>₩ ${menu.price.toLocaleString('ko-KR')}</p>
+                    <p>${menu.kcal.toLocaleString('ko-KR')}<span>Kcal</span></p>
                     </div>
                 </div>
             </li>
@@ -184,4 +188,5 @@ function removeMenuObjectInLocalStorage() {
     localStorage.removeItem("menuObject");
     localStorage.removeItem("sideMenuObject");
     localStorage.removeItem("drinkMenuObject");
+    localStorage.removeItem("burgerSet");
 }

@@ -6,7 +6,6 @@ import kioskmake.projectkiosk.web.dto.admin.GetMenuDetailRespDto;
 import kioskmake.projectkiosk.web.dto.admin.GetMenuListRespDto;
 import kioskmake.projectkiosk.web.dto.admin.InsertMenuReqDto;
 import kioskmake.projectkiosk.web.dto.admin.UpdateMenuDetailRequestDto;
-import kioskmake.projectkiosk.web.dto.menu.ReadAddMenuListRequestDto;
 import kioskmake.projectkiosk.web.dto.menu.ReadMenuRequestDto;
 import kioskmake.projectkiosk.web.dto.menu.ReadMenuResponseDto;
 
@@ -15,13 +14,12 @@ public interface MenuService {
 	// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Not ADMIN <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
     
     public List<ReadMenuResponseDto> getBurgerList() throws Exception;
-    public List<ReadMenuResponseDto> getBurgerByBurgerCode(int id, boolean mcLunchFlag) throws Exception;
+    public List<ReadMenuResponseDto> getBurgerByBurgerCode(int id) throws Exception;
     public List<ReadMenuResponseDto> getMenuListByMenuType(ReadMenuRequestDto readMenuRequestDto) throws Exception;
     public ReadMenuResponseDto getMcMorningBurgerByBurgerCode(int id) throws Exception;
     public List<ReadMenuResponseDto> getMcMorningBurgerList() throws Exception;
 
     public List<ReadMenuResponseDto> getChangeMenuInSet(ReadMenuRequestDto readMenuRequestDto) throws Exception;
-    public List<ReadMenuResponseDto> getAddMenuList(ReadAddMenuListRequestDto readAddMenuListRequestDto) throws Exception;
 
 	// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> ADMIN <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 

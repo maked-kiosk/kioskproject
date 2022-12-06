@@ -32,7 +32,6 @@ class MenuLoader {
                     this.setMenuList(response.data);
             },
             error: (request, status, error) => {
-                alert("에러");
                 console.log(request.status);
                 console.log(request.responseText);
                 console.log(error);
@@ -45,8 +44,6 @@ class MenuLoader {
 
         if(menuList != null) {
             this.clearDomObject(foodMenuUl);
-
-            console.log(menuList);
     
             menuList.forEach(menu => {
                 foodMenuUl.innerHTML += `
@@ -57,8 +54,8 @@ class MenuLoader {
                         <div>
                             <p>${menu.menuName}</p>
                             <div class="food-menu-price">
-                                <p>₩ ${menu.price}</p>
-                                <p>${menu.kcal} Kcal</p>
+                                <p>₩ ${menu.price.toLocaleString('ko-KR')}</p>
+                                <p>${menu.kcal.toLocaleString('ko-KR')} Kcal</p>
                             </div>
                         </div>
                     </li>

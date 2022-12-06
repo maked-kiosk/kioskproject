@@ -14,7 +14,7 @@ public interface MenuRepository {
 
 
     public List<Menu> findBurgerList() throws Exception;
-    public List<Menu> findBurgerByBurgerCode(Map<String, Object> config_map) throws Exception;
+    public List<Menu> findBurgerByBurgerCode(int id) throws Exception;
 
     public List<Menu> findMenuListByMenuType(Menu menu) throws Exception;
 
@@ -25,7 +25,6 @@ public interface MenuRepository {
 
     public List<Menu> findChangeMenuInSet(Menu menu) throws Exception;
 
-    public List<Menu> findAddMenuList(Menu menu) throws Exception;
 
 
 
