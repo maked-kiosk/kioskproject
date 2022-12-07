@@ -19,6 +19,7 @@ public class GetMenuDetailRespDto {
 	private int hamburgerCategoryCode;
 	private boolean mcLunchFlag;
 	private boolean setMenuFlag;
+	private boolean mcMorningFlag;
 	private boolean onlyMcMorningFlag;
 	private int drinkCategoryCode;
 	private int menuCategoryCode;

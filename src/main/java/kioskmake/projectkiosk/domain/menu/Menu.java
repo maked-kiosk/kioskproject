@@ -29,6 +29,7 @@ public class Menu {
 	private int kcal;
 	private int mc_lunch_flag;
 	private int set_menu_flag;
+	private int is_mc_morning_flag;
 	private int only_mc_morning_flag;
 	private int drink_category_code;
 	private int menu_category_code;
@@ -82,6 +83,7 @@ public class Menu {
 				.hamburgerCategoryCode(hamburger_category_code)
 				.mcLunchFlag(mc_lunch_flag == 1)
 				.setMenuFlag(set_menu_flag == 1)
+				.mcMorningFlag(is_mc_morning_flag == 1)
 				.onlyMcMorningFlag(only_mc_morning_flag == 1)
 				.drinkCategoryCode(drink_category_code)
 				.menuCategoryCode(menu_category_code)

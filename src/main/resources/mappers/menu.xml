@@ -225,38 +225,59 @@
     
     <select id="getMenuDetail" parameterType="String" resultType="kioskmake.projectkiosk.domain.menu.Menu">
     	select
-    		id,
-            price,
-    		sales,
-            kcal,
-    		image,
-            menu_category_code,
     		<choose>
                 <when test="menu_type == 'burger'">
+                    id,
+                    price,
+                    sales,
+                    kcal,
+                    image,
+                    menu_category_code,
                     hamburger_name as menu_name,
                     hamburger_category_code,
                     mc_lunch_flag,
                     'burger' as menu_category_name
                 </when>
                 <when test="menu_type == 'side'">
-                    side_menu_name as menu_name,
-                    size,
-                    set_menu_flag,
-                    only_mc_morning_flag,
-                    'side' as menu_category_name
+                    smt.id,
+                    smt.price,
+                    smt.sales,
+                    smt.kcal,
+                    smt.image,
+                    smt.menu_category_code,
+                    smt.side_menu_name as menu_name,
+                    smt.size,
+                    smt.set_menu_flag,
+                    smt.only_mc_morning_flag,
+                    'side' as menu_category_name,
+                    if(smt.only_mc_morning_flag = 0 AND ISNULL(mmt.id), 0, 1) AS is_mc_morning_flag
                 </when>
                 <when test="menu_type == 'drink'">
-                    drink_name as menu_name,
-                    size,
-                    set_menu_flag,
-                    drink_category_code,
-                    only_mc_morning_flag,
-                    'drink' as menu_category_name
+                    dt.id,
+                    dt.price,
+                    dt.sales,
+                    dt.kcal,
+                    dt.image,
+                    dt.menu_category_code,
+                    dt.drink_name as menu_name,
+                    dt.size,
+                    dt.set_menu_flag,
+                    dt.drink_category_code,
+                    dt.only_mc_morning_flag,
+                    'drink' as menu_category_name,
+                    if(dt.only_mc_morning_flag = 0 AND ISNULL(mmt.id), 0, 1) AS is_mc_morning_flag
                 </when>
                 <otherwise>
-                    dessert_name as menu_name,
-                    only_mc_morning_flag,
-                    'dessert' as menu_category_name
+                    dt.id,
+                    dt.price,
+                    dt.sales,
+                    dt.kcal,
+                    dt.image,
+                    dt.menu_category_code,
+                    dt.dessert_name as menu_name,
+                    dt.only_mc_morning_flag,
+                    'dessert' as menu_category_name,
+                    if(dt.only_mc_morning_flag = 0 AND ISNULL(mmt.id), 0, 1) AS is_mc_morning_flag
                 </otherwise>
             </choose>
 	    from
@@ -265,17 +286,35 @@
 	    		hamburger_table
 	    	</when>
 	    	<when test="menu_type == 'side'">
-	    		side_menu_table
+	    		side_menu_table smt
+                LEFT OUTER JOIN mc_morning_table mmt ON(mmt.menu_code = smt.id)
 	    	</when>
 	    	<when test="menu_type == 'drink'">
-	    		drink_table
+	    		drink_table dt
+                LEFT OUTER JOIN mc_morning_table mmt ON(mmt.menu_code = dt.id)
 	    	</when>
 	    	<when test="menu_type == 'dessert'">
-	    		dessert_table
+	    		dessert_table dt
+                LEFT OUTER JOIN mc_morning_table mmt ON(mmt.menu_code = dt.id)
 	    	</when>
 	    </choose>
 		where
-			id = #{id}
+        <choose>
+            <when test="menu_type == 'side'">
+                    smt.id = #{id}
+                GROUP BY
+                    smt.id
+            </when>
+            <when test="menu_type == 'drink' or menu_type == 'dessert'">
+                    dt.id = #{id}
+                GROUP BY
+                    dt.id
+            </when>
+            <otherwise>
+                id = #{id}
+            </otherwise>
+        </choose>
+        ;
     </select>
 
     <update id="updateMenuDetail" parameterType="kioskmake.projectkiosk.domain.menu.Menu">

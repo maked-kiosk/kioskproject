@@ -231,6 +231,7 @@ class MenuDetailLoader {
         this.menuDetailBox = MenuListLoader.getInstance().menuDetailItems[index];
         this.menuTypeGetter.menuTypeItem = menuDetail.menuCategoryName;
 
+        console.log(menuDetail);
 
         this.menuDetailBox.innerHTML = `
             <td colspan="8">
@@ -258,16 +259,22 @@ class MenuDetailLoader {
                             </span>` : ``}
 
                             ${menuDetail.menuCategoryName == `side` ? 
-                            `<span class="only-mc-morning-check only-mc-morning-visible">
-                                <input type="checkbox" name="radio-check" class="product-input only-mc-morning" ${menuDetail.onlyMcMorningFlag ? `checked`:``}>맥모닝
+                            `<span class="mc-morning-check mc-morning-visible">
+                                <input type="checkbox" name="radio-check" class="product-input mc-morning" ${menuDetail.mcMorningFlag ? `checked`:``}>맥모닝
+                            </span>
+                            <span class="only-mc-morning-check only-mc-morning-visible">
+                                <input type="checkbox" name="radio-check" class="product-input only-mc-morning" ${menuDetail.onlyMcMorningFlag ? `checked`:``}>※ 맥모닝시간 판매 가능
                             </span>
                             <span class="set-menu-flag-check set-menu-flag-visible">
                                 <input type="checkbox" name="radio-check" class="product-input set-menu-flag" ${menuDetail.setMenuFlag ? `checked`:``}>세트메뉴
                             </span>` : ``}
 
                             ${menuDetail.menuCategoryName == `drink` ? 
-                            `<span class="only-mc-morning-check only-mc-morning-visible">
-                                <input type="checkbox" name="radio-check" class="product-input only-mc-morning" ${menuDetail.onlyMcMorningFlag ? `checked`:``}>맥모닝
+                            `<span class="mc-morning-check mc-morning-visible">
+                                <input type="checkbox" name="radio-check" class="product-input mc-morning" ${menuDetail.mcMorningFlag ? `checked`:``}>맥모닝
+                            </span>
+                            <span class="only-mc-morning-check only-mc-morning-visible">
+                                <input type="checkbox" name="radio-check" class="product-input only-mc-morning" ${menuDetail.onlyMcMorningFlag ? `checked`:``}>※ 맥모닝시간 판매 가능
                             </span>
                             <span class="set-menu-flag-check set-menu-flag-visible">
                                 <input type="checkbox" name="radio-check" class="product-input set-menu-flag" ${menuDetail.setMenuFlag ? `checked`:``}>세트메뉴
@@ -278,8 +285,11 @@ class MenuDetailLoader {
                             </select>` : ``}
 
                             ${menuDetail.menuCategoryName == `dessert` ? 
-                            `<span class="only-mc-morning-check only-mc-morning-visible">
-                                <input type="checkbox" name="radio-check" class="product-input only-mc-morning" ${menuDetail.onlyMcMorningFlag ? `checked`:``}>맥모닝
+                            `<span class="mc-morning-check mc-morning-visible">
+                                <input type="checkbox" name="radio-check" class="product-input mc-morning" ${menuDetail.mcMorningFlag ? `checked`:``}>맥모닝
+                            </span>
+                            <span class="only-mc-morning-check only-mc-morning-visible">
+                                <input type="checkbox" name="radio-check" class="product-input only-mc-morning" ${menuDetail.onlyMcMorningFlag ? `checked`:``}>※ 맥모닝시간 판매 가능
                             </span>` : ``}
                         </td>
                     </tr>
@@ -395,13 +405,15 @@ class MenuDetailLoader {
             this.formData.append("hamburgerCategoryCode", document.querySelector(".burger-type-select").value);
 
         }else if (selectedDetailMenuType == 'side' || selectedDetailMenuType == 'drink') {
-            this.formData.append("onlyMcMorningFlag", productInput[5].checked);
-            this.formData.append("setMenuFlag", productInput[6].checked);
+            this.formData.append("mcMorningFlag", productInput[5].checked);
+            this.formData.append("onlyMcMorningFlag", productInput[6].checked);
+            this.formData.append("setMenuFlag", productInput[7].checked);
             if(selectedDetailMenuType == 'drink') {
                 this.formData.append("drinkCategoryCode", productInput[7].value);
             }
         }else {
-            this.formData.append("onlyMcMorningFlag", productInput[5].checked);
+            this.formData.append("mcMorningFlag", productInput[5].checked);
+            this.formData.append("onlyMcMorningFlag", productInput[6].checked);
         }
     }
     
