@@ -336,7 +336,7 @@
 
 
     <!-- Burger   -->
-    <select id="findBurgerList" resultType="kioskmake.projectkiosk.domain.menu.Menu">
+    <select id="findBurgerList" parameterType="HashMap" resultType="kioskmake.projectkiosk.domain.menu.Menu">
         SELECT
             id,
             hamburger_name as menu_name,
@@ -347,10 +347,18 @@
         FROM
             hamburger_table
         WHERE
-            hamburger_category_code != -1;
+        <choose>
+            <when test="burger_type != 'all'">
+                hamburger_category_code = #{hamburger_category_code}
+            </when>
+            <otherwise>
+                hamburger_category_code != -1
+            </otherwise>
+        </choose>
+        ;
     </select>
 
-    <select id="findBurgerByBurgerCode" parameterType="HashMap" resultType="kioskmake.projectkiosk.domain.menu.Menu">
+    <select id="findBurgerByBurgerCode" parameterType="Integer" resultType="kioskmake.projectkiosk.domain.menu.Menu">
         SELECT
             id,
             'single' AS set_size,
@@ -366,80 +374,78 @@
         union
 
         SELECT
-            id,
+            ht.id,
             'M' AS set_size,
             ht.hamburger_name,
             ht.kcal + dt.kcal + smt.kcal AS set_kcal,
             image,
-            <choose>
-                <when test="mc_lunch_flag == false">
-                    ht.price + dt.price + smt.price AS price
-                </when>
-                <otherwise>
-                    ht.price + dt.price + smt.price - 500 AS price
-                </otherwise>
-            </choose>
+            if((tt.start_time &lt; NOW()
+                    and
+                tt.end_time &gt; NOW())
+                    and
+                ht.mc_lunch_flag = 1,
+                ht.price + dt.price + smt.price - 500 , ht.price + dt.price + smt.price) AS price
         FROM
             hamburger_table ht
-        LEFT OUTER JOIN (select
-                            price,
-                            kcal
-                        from
-                            drink_table
-                         where
-                            drink_name LIKE '코카콜라 제로'
-                                AND
-                            size LIKE 'M') dt ON(1 = 1)
-        LEFT OUTER JOIN (select
-                            price,
-                            kcal
-                        from
-                            side_menu_table
-                        where
-                            side_menu_name LIKE '감자튀김'
-                                AND
-                            size LIKE 'M') smt ON(1 = 1)
+            left outer join time_table tt ON (1 = 1)
+            LEFT OUTER JOIN (select
+                                price,
+                                kcal
+                            from
+                                drink_table
+                            where
+                                drink_name LIKE '코카콜라 제로'
+                                    AND
+                                size LIKE 'M') dt ON(1 = 1)
+            LEFT OUTER JOIN (select
+                                price,
+                                kcal
+                            from
+                                side_menu_table
+                            where
+                                side_menu_name LIKE '감자튀김'
+                                    AND
+                                size LIKE 'M') smt ON(1 = 1)
         WHERE
-            ht.id = #{id}
+            ht.id = #{id} AND tt.id = 2
 
         UNION
 
         SELECT
-            id,
+            ht.id,
             'L' AS set_size,
             ht.hamburger_name,
             ht.kcal + dt.kcal + smt.kcal AS set_kcal,
             image,
-            <choose>
-                <when test="mc_lunch_flag == false">
-                    ht.price + dt.price + smt.price AS price
-                </when>
-                <otherwise>
-                    ht.price + dt.price + smt.price - 500 AS price
-                </otherwise>
-            </choose>
+            if((tt.start_time &lt; NOW()
+                    and
+                tt.end_time &gt; NOW())
+                    and
+                ht.mc_lunch_flag = 1,
+                ht.price + dt.price + smt.price - 500 , ht.price + dt.price + smt.price) AS price
         FROM
             hamburger_table ht
-        LEFT OUTER JOIN (select
-                            price,
-                            kcal
-                        from
-                            drink_table
-                        where
-                            drink_name LIKE '코카콜라 제로'
-                                AND
-                            size LIKE 'L') dt ON(1 = 1)
-        LEFT OUTER JOIN (select
-                            price,
-                            kcal
-                        from
-                            side_menu_table
-                        where
-                            side_menu_name LIKE '감자튀김'
-                                AND
-                            size LIKE 'L') smt ON(1 = 1)
+            LEFT OUTER JOIN time_table tt ON(1 = 1)
+            LEFT OUTER JOIN (select
+                                price,
+                                kcal
+                            from
+                                drink_table
+                            where
+                                drink_name LIKE '코카콜라 제로'
+                                    AND
+                                size LIKE 'L') dt ON(1 = 1)
+            LEFT OUTER JOIN (select
+                                price,
+                                kcal
+                            from
+                                side_menu_table
+                            where
+                                side_menu_name LIKE '감자튀김'
+                                    AND
+                                size LIKE 'L') smt ON(1 = 1)
         WHERE
-            ht.id = #{id};
+            ht.id = #{id} AND tt.id = 2;
     </select>
 
     <!-- Side & Drink & Dessert  -->
@@ -449,39 +455,73 @@
             <choose>
                 <when test="menu_type == 'side'">
                     if(size LIKE 'none', side_menu_name, concat(side_menu_name, ' - ', if(size LIKE 'M', '미디엄', '라지'))) AS menu_name,
+                    smt.price - smt_p.price AS price,
+                    smt.price as default_price,
                 </when>
                 <when test="menu_type == 'dessert'">
                     dessert_name AS menu_name,
+                    price,
                 </when>
                 <otherwise>
                     if(size LIKE 'none', drink_name, concat(drink_name, ' - ', if(size LIKE 'M', '미디엄', '라지'))) AS menu_name,
+                    dt.price - dt_p.price AS price,
+                    dt.price as default_price,
                 </otherwise>
             </choose>
-            price,
             kcal,
             image
         FROM
         <choose>
             <when test="menu_type == 'side'">
-                side_menu_table
+                side_menu_table smt
+                LEFT OUTER JOIN (select
+                                    price
+                                from
+                                    side_menu_table
+                                where
+                                    side_menu_name LIKE '감자튀김'
+                                        and
+                                    size = #{size}) smt_p ON (1 = 1)
             </when>
             <when test="menu_type == 'dessert'">
                 dessert_table
             </when>
             <otherwise>
-                drink_table
+                drink_table dt
+                LEFT OUTER JOIN (select
+                                    price
+                                from
+                                    drink_table
+                                where
+                                    drink_name LIKE '코카콜라'
+                                        and
+                                    size = #{size}) dt_p ON (1 = 1)
             </otherwise>
         </choose>
         WHERE
             only_mc_morning_flag = #{mc_morning_flag}
-        <if test="set_flag == true">
+        <choose>
+            <when test="set_flag == true">
                 and
-            size LIKE #{size}
-            <if test="menu_type == 'side'">
-                    and
-                set_menu_flag = 1
-            </if>
-        </if>
+                size LIKE #{size}
+                <if test="menu_type == 'side' or menu_type == 'drink'">
+                        and
+                    set_menu_flag = 1
+                </if>
+            </when>
+            <otherwise>
+                <choose>
+                    <when test="menu_type == 'coffee'">
+                        and
+                        drink_category_code = 2
+                    </when>
+                    <when test="menu_type == 'drink'">
+                        and
+                        drink_category_code = 1
+                    </when>
+                </choose>
+            </otherwise>
+        </choose>
         ;
     </select>
     
@@ -509,7 +549,8 @@
             ht.hamburger_name as menu_name,
             ht.price,
             ht.kcal,
-            ht.image
+            ht.image,
+            true as mc_morning_flag
         FROM
             hamburger_table ht
             inner join mc_morning_table mmt ON(mmt.menu_code = ht.id)
@@ -549,6 +590,7 @@
                     smt.id,
                     if(size LIKE 'none', smt.side_menu_name, concat(smt.side_menu_name, ' - ', if(smt.size LIKE 'M', '미디엄', '라지'))) AS menu_name,
                     if(smt.price - smt2.price &lt; 0, 0, smt.price - smt2.price) AS price,
+                    smt.price as default_price,
                     smt.kcal,
                     smt.image
                 FROM
@@ -581,6 +623,7 @@
                     smt.id,
                     if(size LIKE 'none', smt.side_menu_name, concat(smt.side_menu_name, ' - ', if(smt.size LIKE 'M', '미디엄', '라지'))) AS menu_name,
                     if(smt.price - smt2.price &lt; 0, 0, smt.price - smt2.price) AS price,
+                    smt.price as default_price,
                     smt.kcal,
                     smt.image
                 FROM
@@ -614,6 +657,7 @@
                     dt.id,
                     if(dt.size LIKE 'none', dt.drink_name, concat(dt.drink_name, ' - ', if(dt.size LIKE 'M', '미디엄', '라지'))) AS menu_name,
                     if(dt.price - dt2.price &lt; 0, 0, dt.price - dt2.price) AS price,
+                    dt.price as default_price,
                     dt.kcal,
                     dt.image
                 FROM
@@ -623,7 +667,7 @@
                                     from
                                         drink_table
                                     where
-                                        drink_name LIKE '코카콜라 제로'
+                                        drink_name LIKE '코카콜라'
                                             and
                                         size LIKE #{size}) dt2 ON(1 = 1)
                 WHERE
@@ -642,48 +686,83 @@
             </otherwise>
         </choose>
     </select>
+
+<!--  Top Ranking Menu Load  -->
+    <select id="findTopRankingMenuList" resultType="kioskmake.projectkiosk.domain.menu.Menu">
+        SELECT
+            *
+        FROM
+            (SELECT
+                id,
+                hamburger_name as menu_name,
+                price,
+                sales,
+                kcal,
+                image,
+                menu_category_code
+            FROM
+                hamburger_table
+
+            UNION
+
+            SELECT
+                id,
+                dessert_name as menu_name,
+                price,
+                sales,
+                kcal,
+                image,
+                menu_category_code
+            FROM
+                dessert_table
+            ORDER BY
+                sales desc
+            LIMIT 0 ,6) ranking_table
+        WHERE
+            sales > 0;
+    </select>
     
-    <update id="updateMenu" parameterType="kioskmake.projectkiosk.domain.menu.Menu">
-        update
-            <choose>
-		    	<when test="menu_type == 'burger'">
-		    		hamburger_table
-		    	</when>
-		    	<when test="menu_type == 'side'">
-		    		side_menu_table
-		    	</when>
-		    	<when test="menu_type == 'drink'">
-		    		drink_table
-		    	</when>
-		    	<when test="menu_type == 'dessert'">
-		    		dessert_table
-		    	</when>
-		    </choose>
-        set
-            name = #{name},
-            price = #{price},
-            sales = #{sales},
-            kcal = #{kcal},
-            image = #{image},
-            <choose>
-		    	<when test="menu_type == 'burger'">
-		    		mc_lunch_flag = #{mc_lunch_flag},
-		    	</when>
-		    	<when test="menu_type == 'side'">
-		    		size = #{size},
-		    		set_menu_flag = #{set_menu_flag},
-		    		only_mc_morning_flag = #{only_mc_morning_flag},
-		    	</when>
-		    	<when test="menu_type == 'drink'">
-		    		size = #{size},
-		    		only_mc_morning_flag = #{only_mc_morning_flag},
-		    	</when>
-		    	<when test="menu_type == 'dessert'">
-		    		only_mc_morning_flag = #{only_mc_morning_flag},
-		    	</when>
-		    </choose>
-            update_date = now()
-        where
-            id = #{id}
-    </update>
+<!--    <update id="updateMenu" parameterType="kioskmake.projectkiosk.domain.menu.Menu">-->
+<!--        update-->
+<!--            <choose>-->
+<!--		    	<when test="menu_type == 'burger'">-->
+<!--		    		hamburger_table-->
+<!--		    	</when>-->
+<!--		    	<when test="menu_type == 'side'">-->
+<!--		    		side_menu_table-->
+<!--		    	</when>-->
+<!--		    	<when test="menu_type == 'drink'">-->
+<!--		    		drink_table-->
+<!--		    	</when>-->
+<!--		    	<when test="menu_type == 'dessert'">-->
+<!--		    		dessert_table-->
+<!--		    	</when>-->
+<!--		    </choose>-->
+<!--        set-->
+<!--            name = #{name},-->
+<!--            price = #{price},-->
+<!--            sales = #{sales},-->
+<!--            kcal = #{kcal},-->
+<!--            image = #{image},-->
+<!--            <choose>-->
+<!--		    	<when test="menu_type == 'burger'">-->
+<!--		    		mc_lunch_flag = #{mc_lunch_flag},-->
+<!--		    	</when>-->
+<!--		    	<when test="menu_type == 'side'">-->
+<!--		    		size = #{size},-->
+<!--		    		set_menu_flag = #{set_menu_flag},-->
+<!--		    		only_mc_morning_flag = #{only_mc_morning_flag},-->
+<!--		    	</when>-->
+<!--		    	<when test="menu_type == 'drink'">-->
+<!--		    		size = #{size},-->
+<!--		    		only_mc_morning_flag = #{only_mc_morning_flag},-->
+<!--		    	</when>-->
+<!--		    	<when test="menu_type == 'dessert'">-->
+<!--		    		only_mc_morning_flag = #{only_mc_morning_flag},-->
+<!--		    	</when>-->
+<!--		    </choose>-->
+<!--            update_date = now()-->
+<!--        where-->
+<!--            id = #{id}-->
+<!--    </update>-->
 </mapper>

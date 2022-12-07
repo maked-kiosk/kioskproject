@@ -13,13 +13,14 @@ public interface MenuService {
     
 	// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Not ADMIN <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
     
-    public List<ReadMenuResponseDto> getBurgerList() throws Exception;
-    public List<ReadMenuResponseDto> getBurgerByBurgerCode(int id, boolean mcLunchFlag) throws Exception;
+    public List<ReadMenuResponseDto> getBurgerList(String burgerType) throws Exception;
+    public List<ReadMenuResponseDto> getBurgerByBurgerCode(int id) throws Exception;
     public List<ReadMenuResponseDto> getMenuListByMenuType(ReadMenuRequestDto readMenuRequestDto) throws Exception;
     public ReadMenuResponseDto getMcMorningBurgerByBurgerCode(int id) throws Exception;
     public List<ReadMenuResponseDto> getMcMorningBurgerList() throws Exception;
 
     public List<ReadMenuResponseDto> getChangeMenuInSet(ReadMenuRequestDto readMenuRequestDto) throws Exception;
+    public List<ReadMenuResponseDto> getTopRankingMenuList() throws Exception;
 
 	// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> ADMIN <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 

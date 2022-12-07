@@ -7,42 +7,42 @@ import org.springframework.web.bind.annotation.GetMapping;
 public class PageController {
 
 	@GetMapping("/main")
-	public String mainpage() {
+	public String loadMainPage() {
 		return "insert";
 	}
 	
-	@GetMapping("/kioskmain")
-	public String kioskmain() {
+	@GetMapping("/kiosk-main")
+	public String loadKioskMainPage() {
 		return "kiosk-main";
 	}
 	
 	@GetMapping("/order")
-	public String order() {
+	public String loadOrderPage() {
 		return "order";
 	}
 	
 	@GetMapping("/payment")
-	public String payment() {
+	public String loadPaymentPage() {
 		return "payment";
 	}
 	
 	@GetMapping("/set-select-view")
-	public String setselectview() {
+	public String loadSetSelectViewPage() {
 		return "set-select-view";
 	}
 	
 	@GetMapping("/set-size-select-view")
-	public String sizeselectview() {
+	public String loadSizeSelectViewPage() {
 		return "set-size-select-view";
 	}
 	
-	@GetMapping("/basket")
-	public String basket() {
-		return "basket";
-	}
-	
 	@GetMapping("/table-service")
-	public String tableservice() {
+	public String loadTableServicePage() {
 		return "table-service";
+	}
+
+	@GetMapping("/shopping-basket")
+	public String loadShoppingBasketPage() {
+		return "shopping-basket-add-view";
 	}
 }

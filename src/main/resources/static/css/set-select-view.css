@@ -17,13 +17,9 @@ article:first-child {
 .food-menus {
     display: flex;
     flex-direction: column;
-    align-items: center;
 
     width: 710px;
     padding: 100px 0px 40px 40px ;
-
-    display: none;
-
 }
 
 /*======== nav 메뉴 ========*/
@@ -198,7 +194,6 @@ h2 {
     display: flex;
     flex-wrap: wrap;
     overflow: auto;
-    height: 1160px;
 }
 
 .popular-menu-btns {

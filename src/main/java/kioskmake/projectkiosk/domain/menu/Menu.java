@@ -25,6 +25,7 @@ public class Menu {
 	private String menu_category_name;
 	private int sales;
 	private int price;
+	private int default_price;
 	private int kcal;
 	private int mc_lunch_flag;
 	private int set_menu_flag;
@@ -41,10 +42,13 @@ public class Menu {
         return ReadMenuResponseDto.builder()
         		.id(id)
                 .menuName(menu_name)
+				.mcMorningFlag(mc_morning_flag)
                 .price(price)
+				.defaultPrice(default_price)
                 .kcal(kcal)
                 .image(image)
                 .mcLunchFlag(mc_lunch_flag == 1)
+				.menuCategoryCode(menu_category_code)
                 .build();
     }
     

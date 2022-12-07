@@ -20,11 +20,11 @@ public class MenuRestController {
 
     @Log
     @GetMapping("/burger/list")
-    public ResponseEntity<?> getBurgerList() {
+    public ResponseEntity<?> getBurgerList(@RequestParam String burgerType) {
         List<ReadMenuResponseDto> readMenuRequestDtoList = null;
 
         try {
-            readMenuRequestDtoList = menuService.getBurgerList();
+            readMenuRequestDtoList = menuService.getBurgerList(burgerType);
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.internalServerError().body(new CustomResponseDto(-1, "Failed to load hamburger list", readMenuRequestDtoList));
@@ -35,11 +35,11 @@ public class MenuRestController {
 
     @Log
     @GetMapping("/burger/{id}")
-    public ResponseEntity<?> getBurgerByBurgerCode(@PathVariable int id, @RequestParam boolean mcLunch) {
+    public ResponseEntity<?> getBurgerByBurgerCode(@PathVariable int id) {
         List<ReadMenuResponseDto> readMenuRequestDtoList = null;
 
         try {
-            readMenuRequestDtoList = menuService.getBurgerByBurgerCode(id, mcLunch);
+            readMenuRequestDtoList = menuService.getBurgerByBurgerCode(id);
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.internalServerError().body(new CustomResponseDto(-1, "Failed to load hamburger by code", readMenuRequestDtoList));
@@ -65,7 +65,7 @@ public class MenuRestController {
 
     @Log
     @GetMapping("/mc-morning/{id}")
-    public ResponseEntity<?> getBurgerByBurgerCode(@PathVariable int id) {
+    public ResponseEntity<?> getMcMorningBurgerByBurgerCode(@PathVariable int id) {
         ReadMenuResponseDto readMenuRequestDto = null;
 
         try {
@@ -80,7 +80,7 @@ public class MenuRestController {
 
     @Log
     @GetMapping("/mc-morning/list")
-    public ResponseEntity<?> getBurgerByBurgerCode() {
+    public ResponseEntity<?> getMcMorningBurgerList() {
         List<ReadMenuResponseDto> readMenuRequestDtoList = null;
 
         try {
@@ -110,4 +110,18 @@ public class MenuRestController {
     }
 
 
+    @Log
+    @GetMapping("/top-ranking/list")
+    public ResponseEntity<?> getTopRankingMenuList() {
+        List<ReadMenuResponseDto> readMenuRequestDtoList = null;
+
+        try {
+            readMenuRequestDtoList = menuService.getTopRankingMenuList();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.internalServerError().body(new CustomResponseDto(-1, "Failed to load top ranking menu list", readMenuRequestDtoList));
+        }
+
+        return ResponseEntity.ok(new CustomResponseDto(1, "Load top ranking menu list successful", readMenuRequestDtoList));
+    }
 }
