@@ -307,8 +307,10 @@ class ButtonClickEventSetter {
         
         shoppingVasketAddButton.onclick = () => {
             const totalPrice = document.querySelector(".price-span").textContent.replaceAll(",", "");
+            const totalKcal = document.querySelector(".kcal-span").textContent.replaceAll(",", "");
 
             BurgerSet.getInstance().setMenuObject.totalPrice = totalPrice;
+            BurgerSet.getInstance().setMenuObject.totalKcal = totalKcal;
             BurgerSet.getInstance().setMenuObject.amount = this.getAmount();
 
             let menuList = JSON.parse(localStorage.orderMenuList);
@@ -331,6 +333,7 @@ class BurgerSet {
         "amount": 0,
         "totalPrice": 0,
         "totalKcal": 0,
+        "setFlag": true,
 
         "burger": {
             "menuName": null,

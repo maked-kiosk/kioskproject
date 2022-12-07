@@ -226,7 +226,7 @@ main {
 .menu-img-info {
     display: flex;
 
-    /* width: 300px; */
+    width: 300px;
 }
 
 .menu-img {

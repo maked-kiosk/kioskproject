@@ -1,8 +1,9 @@
-const minusButton = document.querySelector(".minus-button");
-const plusButton = document.querySelector(".plus-button");
-const setCount = document.querySelector(".set-count-span");
 const homeButton = document.querySelector(".load-main-page-button");
-const menuAmount = document.querySelector(".menu-amount");
+const minusButton = document.querySelectorAll(".minus-button");
+const plusButton = document.querySelectorAll(".plus-button");
+const setCount = document.querySelector(".set-count-span");
+const menuAmount = document.querySelectorAll(".menu-amount");
+
 const subTotalAmountSpan = document.querySelector(".sub-total-amount-span");
 const totalAmountSpan = document.querySelector(".total-amount-span");
 const pointButton = document.querySelector(".point-button");
@@ -26,21 +27,23 @@ let price = amount.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
 let result = amount.toLocaleString('ko-KR');
 console.log(amount);
 
+// result = (setCount.innerHTML * amount).toLocaleString('ko-KR');
+// menuAmount.innerHTML = "￦" + result;
 
-
-
-minusButton.onclick = () => {
-    if(setCount.innerHTML <= 1) {
-        alert("최소 수량은 1입니다");
-    } else if(setCount.innerHTML > 1) { 
-       count = count - 1;
-       setCount.innerHTML = count;
+minusButton.forEach(button => {
+    button.onclick = () => {
+        if(setCount.innerHTML <= 1) {
+            alert("최소 수량은 1입니다");
+        } else if(setCount.innerHTML > 1) { 
+           count = count - 1;
+           setCount.innerHTML = count;
+        }
+        // // menuAmount.innerHTML = "￦" + result;
+        // subTotalAmountSpan.innerHTML = menuAmount.innerHTML;
+        // totalAmountSpan.innerHTML = menuAmount.innerHTML;
     }
-    result = (setCount.innerHTML * amount).toLocaleString('ko-KR');
-    menuAmount.innerHTML = "￦" + result;
-    subTotalAmountSpan.innerHTML = menuAmount.innerHTML;
-    totalAmountSpan.innerHTML = menuAmount.innerHTML;
-}
+})
+
 
 
 plusButton.onclick = () => {
@@ -60,11 +63,11 @@ plusButton.onclick = () => {
 }
 
 homeButton.onclick = () => {
-    location.href = "/kioskmain";
+    location.href = "/kiosk-main";
 }
 
 addOrdersButton.onclick = () => {
-    location.href = "/kioskmain";
+    location.href = "/kiosk-main";
 }
 
 pointButton.onclick = () => {
@@ -278,6 +281,49 @@ function insertModalVisibleEvent() {
 insertCancelButton.onclick = () => {
     insertModalVisibleEvent();
 }
+
+
+
+function orderMenu() {
+    let orderMenuList = JSON.parse(localStorage.orderMenuList);
+    const orderMenuDetails = document.querySelector("main");
+    orderMenuDetails.innerHTML = "";
+    orderMenuList.forEach(menu => {
+        let amount = null;
+        let kcal = null;
+
+        if(menu.setFlag) {
+            amount = "￦" + (setCount.innerHTML * menu.totalPrice).toLocaleString('ko-KR');
+            kcal = menu.totalKcal;
+        }else {
+            amount = "￦" + (setCount.innerHTML * menu.price).toLocaleString('ko-KR');
+            kcal = menu.kcal + "kcal";
+        }
+        
+        orderMenuDetails.innerHTML += `
+            <div class="order-menu">
+                <button type="button" class="cancel-button">취소</button>
+                <div class="menu-img-info">
+                    <div class="menu-info">
+                        <span class="menu-title">${menu.setFlag ? menu.setName : menu.menuName} ${menu.setFlag ? kcal : kcal}</span>
+                        <span class="menu-details">${menu.setFlag ? menu.side.menuName + " " + menu.drink.menuName : menu.menuName}</span>
+                        <button type="button" class="details-button">세부정보 표시</button>
+                    </div>
+                </div>
+                <div class="set-count-modify">
+                    <button class="minus-button" type="button">-</button>
+                    <div class="set-count">
+                        <span class="set-count-span">1</span>
+                    </div>
+                    <button class="plus-button" type="button">+</button>
+                </div>
+                <span class="menu-amount">${menu.setFlag ? amount : amount}</span>
+            </div> 
+        `;
+    });
+}
+
+orderMenu();
 
 
 
