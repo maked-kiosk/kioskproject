@@ -16,7 +16,7 @@ h2{
     padding-bottom: 30px;
 }
 
-#pay-button{
+.pay-button{
     width: 250px;
     height: 250px;
     font-size: 16px;
