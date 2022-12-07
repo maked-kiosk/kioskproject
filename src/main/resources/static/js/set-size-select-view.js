@@ -44,6 +44,15 @@ class TypeButtonClickEventSetter {
     
       const singleConfirm = document.querySelector(".single-confirm");
       singleConfirm.onclick = () => {
+        let menuList = JSON.parse(localStorage.orderMenuList);
+        let menuObject = JSON.parse(localStorage.menuObject);
+
+        menuObject.setFlag = false;
+
+        menuList.push(menuObject);
+
+        localStorage.orderMenuList = JSON.stringify(menuList);
+
         location.replace("/order");
       }
     }

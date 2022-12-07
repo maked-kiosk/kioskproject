@@ -26,7 +26,7 @@ class MenuLoader {
         $.ajax({
             async: false,
             type: "get",
-            url: `/api/v1/menu/${this.menuType}/list?setSize=${size}&mcMorning=${this.menuObject.mcMorningFlag}`,
+            url: `/api/v1/menu/${this.menuType}/list?setSize=${size == null ? 'none' : size}&mcMorning=${this.menuObject.mcMorningFlag}`,
             dataType: "json",
             success: (response) => {
                     this.setMenuList(response.data);
@@ -110,9 +110,11 @@ class MenuLoader {
     }
 
     selectedSideMenu() {
+        const menuTitle = document.querySelector(".menu-title h2");
         const sideITag = document.querySelector(".side-i");
 
         sideITag.classList.remove("fa-circle");
         sideITag.classList.add("fa-circle-check");
+        menuTitle.textContent = "음료";
     }
 }

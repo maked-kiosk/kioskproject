@@ -208,7 +208,7 @@ function setList(list, index, menuType){
                     <img src="/image/images/${menuType == "recomendedMenu" 
                     ? menu.menuCategoryCode == 1 
                         ? "burger" : "dessert" 
-                    : menuType}/${menu.image}">
+                    : menuType == "mcMorning" ? "burger" : menuType}/${menu.image}">
                 </div>
                 <div>
                     <p>${menu.menuName}</p>
@@ -232,6 +232,7 @@ function setMenuClickEvent(menuList, menuType) {
         let url = burgerFlag ? "/set-size-select-view" : "/order";
 
         menu.onclick = () => {
+            menuType == "mcMorning" ? loadSetSelectViewPage(menuList[index]) :
             burgerFlag ? loadSetSizeSelectViewPage(menuList[index], url) : showAddShoppingBasketModalView(menuList[index]);
         }
     })
@@ -241,9 +242,16 @@ function setMenuFlagByMenuType(menuType, menu) {
     return menuType == "burger" || menu.menuCategoryCode == 1 || menuType == "mcMorning";
 }
 
+function loadSetSelectViewPage(menu) {
+    localStorage.menuObject = JSON.stringify(menu);
+
+    location.replace("/set-select-view");
+}
+
 function loadSetSizeSelectViewPage(menu, url) {
     localStorage.menuObject = JSON.stringify(menu);
-    location.href = url;
+
+    location.replace(url);
 }
 
 function showAddShoppingBasketModalView(menu) {

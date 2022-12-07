@@ -63,7 +63,7 @@ public class MenuServiceImpl implements MenuService {
     @Override
     public List<ReadMenuResponseDto> getMenuListByMenuType(ReadMenuRequestDto readMenuRequestDto) throws Exception {
         return readMenuRequestDto.isMcMorning()
-        ? changeToReadMenuResponseDtoList(menuRepository.findMcMorningSideMenuList(readMenuRequestDto.toMenu()))
+        ? changeToReadMenuResponseDtoList(menuRepository.findMcMorningMenuListByMenuType(readMenuRequestDto.toMenu()))
         : changeToReadMenuResponseDtoList(menuRepository.findMenuListByMenuType(readMenuRequestDto.toMenu()));
     }
 
