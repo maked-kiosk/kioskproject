@@ -3,7 +3,7 @@ const navBtnsList = document.querySelectorAll('nav > ul > li'); // 메뉴 버튼
 const foodType = document.querySelectorAll('.food-type li'); 
 const learnMenuBtnsList = document.querySelectorAll('.learn-menu-btns-list li');
 
-const modalBody = document.querySelector(".modal-body");
+const modalBody = document.querySelector(".modal-body")
 
 
 foodMenus[0].style.display = 'block';// 메인 페이지
@@ -55,10 +55,21 @@ for (let i = 0; i < navBtnsList.length; i++) {//liList배열이기때문 선택�
     }
 }
 
+setLocalSorage();
 setBurgerTypeCategoryClickEvent();
 setTopRankingMenuList();
 removeMenuObjectInLocalStorage();
 setSelectBurgerTypeEvent();
+
+function setLocalSorage() {
+    let menuList = localStorage.orderMenuList;
+
+    if(menuList == null) {
+
+        localStorage.orderMenuList = JSON.stringify(new Array());
+    }
+    
+}
 
 function setBurgerTypeCategoryClickEvent() {
     const burgerTypeItems = document.querySelectorAll(".burger-type li");
