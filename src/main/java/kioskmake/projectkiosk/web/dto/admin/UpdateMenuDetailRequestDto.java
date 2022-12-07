@@ -19,6 +19,7 @@ public class UpdateMenuDetailRequestDto {
     private  boolean mcLunchFlag;
     private boolean hamburgerMcMorningFlag;
     private boolean setMenuFlag;
+    private boolean mcMorningFlag;
     private boolean onlyMcMorningFlag;
 
     public Menu toMenuEntity(String tempFileName) {

@@ -310,7 +310,12 @@ class ButtonClickEventSetter {
 
             BurgerSet.getInstance().setMenuObject.totalPrice = totalPrice;
             BurgerSet.getInstance().setMenuObject.amount = this.getAmount();
-            localStorage.burgerSet = JSON.stringify(BurgerSet.getInstance().setMenuObject);
+
+            let menuList = JSON.parse(localStorage.orderMenuList);
+            
+            menuList.push(BurgerSet.getInstance().setMenuObject);
+
+            localStorage.orderMenuList = JSON.stringify(menuList);
     
             location.replace("/order");
         }

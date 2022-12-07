@@ -149,6 +149,7 @@ public class MenuServiceImpl implements MenuService {
 			tempFileName = uploadFileAndReturnTempFileName(updateMenuDetailRequestDto.getNewFile(), "images/" + updateMenuDetailRequestDto.getMenuType() + "/");
 			deleteFile("images/" + updateMenuDetailRequestDto.getMenuType() + "/", updateMenuDetailRequestDto.getDeleteFileName());
 		}
+		boolean update = updateMenuDetailRequestDto.isOnlyMcMorningFlag() || updateMenuDetailRequestDto.isMcMorningFlag();
 
 		return menuRepository.updateMenuDetail(updateMenuDetailRequestDto.toMenuEntity(tempFileName)) > 0;
 	}

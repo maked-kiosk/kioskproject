@@ -213,7 +213,7 @@
             dt.only_mc_morning_flag,
             0
         FROM
-        dessert_table dt
+            dessert_table dt
             LEFT OUTER JOIN menu_category_table mct ON(mct.id = dt.menu_category_code)
         <if test="menu_type != 'ALL'">
         where
@@ -574,27 +574,25 @@
             ht.kcal,
             ht.image
         FROM
-            hamburger_table ht
-            inner join mc_morning_table mmt ON(mmt.menu_code = ht.id)
+            hamburger_table
         WHERE
-            mmt.menu_category_code = 1
+            menu_category_code = -1
                 and
-            ht.id = #{id};
+            id = #{id};
     </select>
 
     <select id="findMcMorningBurgerList" resultType="kioskmake.projectkiosk.domain.menu.Menu">
         SELECT
-            ht.id,
-            ht.hamburger_name as menu_name,
-            ht.price,
-            ht.kcal,
-            ht.image,
+            id,
+            hamburger_name as menu_name,
+            price,
+            kcal,
+            image,
             true as mc_morning_flag
         FROM
-            hamburger_table ht
-            inner join mc_morning_table mmt ON(mmt.menu_code = ht.id)
+            hamburger_table
         WHERE
-            mmt.menu_category_code = 1;
+            mmt.menu_category_code = -1;
     </select>
 
 <!-- McMorningSideMenu   -->
