@@ -21,7 +21,7 @@ public interface MenuRepository {
     public Optional<Menu> findMcMorningBurgerByBurgerCode(int id) throws Exception;
     public List<Menu> findMcMorningBurgerList() throws Exception;
 
-    public List<Menu> findMcMorningSideMenuList(Menu menu) throws Exception;
+    public List<Menu> findMcMorningMenuListByMenuType(Menu menu) throws Exception;
 
     public List<Menu> findChangeMenuInSet(Menu menu) throws Exception;
 

@@ -246,7 +246,7 @@ class MenuDetailLoader {
                         <td><input type="text" class="product-input" value="${menuDetail.size}" placeholder="사이즈"></td>
                     </tr>
                     <tr>
-                        <td colspan="5">
+                        <td class="modify-check-box-td" colspan="5">
                             ${menuDetail.menuCategoryName == `burger` ? 
                             `<select class="burger-type-select">
                                 <option value="-1" ${menuDetail.hamburgerCategoryCode == -1 ? 'selected' : ''}>mcMorning</option>
@@ -255,29 +255,36 @@ class MenuDetailLoader {
                                 <option value="4" ${menuDetail.hamburgerCategoryCode == 4 ? 'selected' : ''}>chicken</option>
                             </select>
                             <span class="mc-lunch-flag-check mc-lunch-flag-visible">
-                                <input type="checkbox" name="radio-check" class="product-input mc-lunch-flag" ${menuDetail.mcLunchFlag ? `checked`:``}>맥런치
+                                <input type="checkbox" name="radio-check" id="mc-lunch-check-box" class="product-input mc-lunch-flag" ${menuDetail.mcLunchFlag ? `checked`:``}>
+                                <label for="mc-lunch-check-box" class="mc-lunch-check-box">맥런치</label>
                             </span>` : ``}
 
                             ${menuDetail.menuCategoryName == `side` ? 
                             `<span class="mc-morning-check mc-morning-visible">
-                                <input type="checkbox" name="radio-check" class="product-input mc-morning" ${menuDetail.mcMorningFlag ? `checked`:``}>맥모닝 메뉴
+                                <input type="checkbox" name="radio-check" id="mc-morning-check-box" class="product-input mc-morning" ${menuDetail.mcMorningFlag ? `checked`:``}>
+                                <label for="mc-morning-check-box" class="mc-morning-check-box">맥모닝 메뉴</label>
                             </span>
                             <span class="only-mc-morning-check only-mc-morning-visible">
-                                <input type="checkbox" name="radio-check" class="product-input only-mc-morning" ${menuDetail.onlyMcMorningFlag ? `checked`:``}>※ 맥모닝시간에도 판매 가능
+                                <input type="checkbox" name="radio-check" id="only-mc-morning-check-box" class="product-input only-mc-morning" ${menuDetail.onlyMcMorningFlag ? `checked`:``}>
+                                <label for="only-mc-morning-check-box" class="only-mc-morning-check-box">※ 맥모닝시간에도 판매 가능</label>
                             </span>
                             <span class="set-menu-flag-check set-menu-flag-visible">
-                                <input type="checkbox" name="radio-check" class="product-input set-menu-flag" ${menuDetail.setMenuFlag ? `checked`:``}>세트메뉴
+                                <input type="checkbox" name="radio-check" id="set-menu-check-box" class="product-input set-menu-flag" ${menuDetail.setMenuFlag ? `checked`:``}>
+                                <label for="set-menu-check-box" class="set-menu-check-box">세트메뉴</label>
                             </span>` : ``}
 
                             ${menuDetail.menuCategoryName == `drink` ? 
                             `<span class="mc-morning-check mc-morning-visible">
-                                <input type="checkbox" name="radio-check" class="product-input mc-morning" ${menuDetail.mcMorningFlag ? `checked`:``}>맥모닝메뉴
+                                <input type="checkbox" name="radio-check" id="mc-morning-check-box" class="product-input mc-morning" ${menuDetail.mcMorningFlag ? `checked`:``}>
+                                <label for="mc-morning-check-box" class="mc-morning-check-box">맥모닝 메뉴</label>
                             </span>
                             <span class="only-mc-morning-check only-mc-morning-visible">
-                                <input type="checkbox" name="radio-check" class="product-input only-mc-morning" ${menuDetail.onlyMcMorningFlag ? `checked`:``}>※ 맥모닝시간에도 판매 가능
+                                <input type="checkbox" name="radio-check" id="only-mc-morning-check-box" class="product-input only-mc-morning" ${menuDetail.onlyMcMorningFlag ? `checked`:``}>
+                                <label for="only-mc-morning-check-box" class="only-mc-morning-check-box">※ 맥모닝시간에도 판매 가능</label>
                             </span>
                             <span class="set-menu-flag-check set-menu-flag-visible">
-                                <input type="checkbox" name="radio-check" class="product-input set-menu-flag" ${menuDetail.setMenuFlag ? `checked`:``}>세트메뉴
+                                <input type="checkbox" name="radio-check" id="set-menu-check-box" class="product-input set-menu-flag" ${menuDetail.setMenuFlag ? `checked`:``}>
+                                <label for="set-menu-check-box" class="set-menu-check-box">세트메뉴</label>
                             </span>
                             <select class="product-input">
                                 <option value="1" ${menuDetail.drinkCategoryCode == 1 ? 'selected' : ''}>음료</option>
@@ -286,10 +293,12 @@ class MenuDetailLoader {
 
                             ${menuDetail.menuCategoryName == `dessert` ? 
                             `<span class="mc-morning-check mc-morning-visible">
-                                <input type="checkbox" name="radio-check" class="product-input mc-morning" ${menuDetail.mcMorningFlag ? `checked`:``}>맥모닝
+                                <input type="checkbox" name="radio-check" id="mc-morning-check-box" class="product-input mc-morning" ${menuDetail.mcMorningFlag ? `checked`:``}>
+                                <label for="mc-morning-check-box" class="mc-morning-check-box">맥모닝 메뉴</label>
                             </span>
                             <span class="only-mc-morning-check only-mc-morning-visible">
-                                <input type="checkbox" name="radio-check" class="product-input only-mc-morning" ${menuDetail.onlyMcMorningFlag ? `checked`:``}>※ 맥모닝시간 판매 가능
+                                <input type="checkbox" name="radio-check" id="only-mc-morning-check-box" class="product-input only-mc-morning" ${menuDetail.onlyMcMorningFlag ? `checked`:``}>
+                                <label for="only-mc-morning-check-box" class="only-mc-morning-check-box">※ 맥모닝시간에도 판매 가능</label>
                             </span>` : ``}
                         </td>
                     </tr>
@@ -338,12 +347,24 @@ class MenuDetailLoader {
             
         }
 
-        
+        if(menuDetail.menuCategoryName != "burger") {
+            this.setMcMorningCheckBoxClickEvent();
+}
 
-       this.setImageDeleteButtonClickEvent();
+        this.setImageDeleteButtonClickEvent();
         
-       this.setUpdateButtonClickEvent(this.menuDetailBox.querySelector(".update-button"), index);
+        this.setUpdateButtonClickEvent(this.menuDetailBox.querySelector(".update-button"), index);
     
+    }
+
+    setMcMorningCheckBoxClickEvent() {
+        const mcMorningCheckBox = this.menuDetailBox.querySelector(".mc-morning");
+
+        mcMorningCheckBox.onchange = () => {
+            if(mcMorningCheckBox.checked) {
+                this.menuDetailBox.querySelector(".only-mc-morning").setAttribute("checked", true);
+            }
+        }
     }
 
     setUpdateButtonClickEvent(updateButton, index) {

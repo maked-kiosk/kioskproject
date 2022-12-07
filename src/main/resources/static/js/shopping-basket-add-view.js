@@ -32,7 +32,7 @@ class MenuSetter {
         this.setSetMenuInformation();
         this.setBurgerSetClass();
     }
-
+    
     setTotalPriceAndTotalKcal() {
         const amount = parseInt(document.querySelector(".amount-detail-span").textContent);
         const menuInformationTitleDiv = document.querySelector(".menu-information-div");
@@ -40,7 +40,7 @@ class MenuSetter {
         this.totalPrice = (this.menuObject.price + this.sideMenuObject.defaultPrice + this.drinkMenuObject.defaultPrice) * amount;
         this.totalKcal = (this.menuObject.kcal + this.sideMenuObject.kcal + this.drinkMenuObject.kcal) * amount;
 
-
+        
         menuInformationTitleDiv.innerHTML = `
             <p>${this.menuObject.menuName} 세트</p>
             <p>￦<span class="price-span">${this.totalPrice.toLocaleString('ko-KR')}</span><span class="kcal-span">${this.totalKcal.toLocaleString('ko-KR')} Kcal</span></p>

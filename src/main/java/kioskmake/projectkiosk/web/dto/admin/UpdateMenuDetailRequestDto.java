@@ -36,6 +36,7 @@ public class UpdateMenuDetailRequestDto {
                 .mc_lunch_flag(mcLunchFlag ? 1 : 0)
                 .hamburger_mc_morning_flag(hamburgerCategoryCode == -1)
                 .set_menu_flag(setMenuFlag ? 1 : 0)
+                .is_mc_morning_flag(mcMorningFlag ? 1 : 0)
                 .only_mc_morning_flag(onlyMcMorningFlag ? 1 : 0)
                 .build();
 
