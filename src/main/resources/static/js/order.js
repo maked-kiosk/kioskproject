@@ -1,5 +1,6 @@
 const homeButton = document.querySelector(".load-main-page-button");
 const menuPrice = document.querySelectorAll(".menu-price");
+const orderCompleteButton = document.querySelector(".order-complete-button");
 
 const subTotalPriceSpan = document.querySelector(".sub-total-price-span");
 const totalPriceSpan = document.querySelector(".total-price-span");
@@ -29,6 +30,11 @@ let orderMenuList = null;
 setOrderMenu();
 setTotalPrice();
 
+orderCompleteButton.onclick = () => {
+    let totalPriceText = document.querySelector(".total-price-span").textContent;
+    localStorage.totalPrice = totalPriceText;
+    location.href = "/table-service";
+}
 
 homeButton.onclick = () => {
     if(confirm("장바구니가 모두 초기화 됩니다.")) {
@@ -36,10 +42,14 @@ homeButton.onclick = () => {
         location.replace("/kiosk-main");
 
     }
+    // let totalPriceText = document.querySelector(".total-price-span").textContent;
+    // localStorage.totalPrice = totalPriceText;
 }
 
 addOrdersButton.onclick = () => {
     updateShoppingBasketInformation();
+    let totalPriceText = document.querySelector(".total-price-span").textContent;
+    localStorage.totalPrice = totalPriceText;
     location.replace("/kiosk-main");
 }
 
@@ -97,7 +107,7 @@ function checkUser(button) {
                     let usingPoint = document.querySelector(".using-point-input");
                     let currentPoint = document.querySelector(".current-point-value");
                     currentPoint.value = user.point;
-                    const point = document.querySelector(".total-amount-span").textContent;
+                    const point = document.querySelector(".total-price-span").textContent;
                     let num = point.replace("￦", "");
                     let num2 = num.replace("," , "");
                     let point2 = parseInt(num2);
@@ -187,7 +197,8 @@ function usePointButtonClick(user, pointStatus) {
 }
 
 function updateUserPoint(user, pointStatus) {
-    const point = document.querySelector(".total-amount-span").textContent;
+    const point = document.querySelector(".total-price-span").textContent;
+    console.log(point)
     let num = point.replace("￦", "");
     let num2 = num.replace("," , "");
     let point2 = parseInt(num2);

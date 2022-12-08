@@ -3,7 +3,16 @@ const navBtnsList = document.querySelectorAll('nav > ul > li'); // 메뉴 버튼
 const foodType = document.querySelectorAll('.food-type li'); 
 const learnMenuBtnsList = document.querySelectorAll('.learn-menu-btns-list li');
 
-const modalBody = document.querySelector(".modal-body")
+const modalBody = document.querySelector(".modal-body");
+
+const totalPriceSpan = document.querySelector(".total-price");
+
+const orderHistory = document.querySelector(".order-history");
+
+
+totalPriceSpan.innerHTML = "";
+
+totalPriceSpan.innerHTML = localStorage.totalPrice;
 
 // nav 버튼 이벤트
 for (let i = 0; i < navBtnsList.length; i++) {//liList배열이기때문 선택할려면for문사용
