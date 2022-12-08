@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 @Controller
 public class AdminPageController {
 
-	@GetMapping("/admin/product-insert")
+	@GetMapping("/admin/menu-insert")
 	public String admin() {
 		return "admin/admin";
 	}

@@ -27,7 +27,7 @@
    		values
    			(
     			0,
-    			#{name},
+    			#{menu_name},
     			#{price},
     			#{sales},
     			#{kcal},

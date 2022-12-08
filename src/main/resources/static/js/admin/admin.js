@@ -18,6 +18,8 @@ function burgerTypeInput() {
     const onlyMcMorningCheck = document.querySelector(".only-mc-morning-check");
 
 
+    productType.value == "burger" ? mcMorningCheck.classList.remove("mc-morning-visible") : "";
+
     setCheckBoxChangeEvent(burgerType, checkBoxItems);
 
     productType.onchange = () => {
