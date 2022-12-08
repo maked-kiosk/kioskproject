@@ -6,6 +6,7 @@ const learnMenuBtnsList = document.querySelectorAll('.learn-menu-btns-list li');
 const modalBody = document.querySelector(".modal-body")
 
 
+
 foodMenus[0].style.display = 'block';// 메인 페이지
 
 
@@ -327,19 +328,22 @@ function isMainPageButton(index) {
 }
 
 function isMcMorningButton(index) {
-    return index == 8;
+    return index == 7;
 }
 
 function isMcMorningTime() {
     let mcMorningTimeFlag = false;
+    
+    let eventType = "mc-morning";
 
     $.ajax({
         async: false,
         type: "get",
-        url: `/api/v1/check/mc-morning`,
+        url: `/api/v1/check/${eventType}`,
         dataType: "json",
         success: (response) => {
             mcMorningTimeFlag = response.data;
+            console.log(mcMorningTimeFlag);
         },
         error: (request, status, error) => {
             console.log(request.status);

@@ -15,7 +15,9 @@ import kioskmake.projectkiosk.service.user.UserService;
 import kioskmake.projectkiosk.web.dto.CustomResponseDto;
 import kioskmake.projectkiosk.web.dto.UserReqDto;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/check")
@@ -34,6 +36,7 @@ public class CheckRestController {
             e.printStackTrace();
             return ResponseEntity.internalServerError().body(new CustomResponseDto(-1, "Event time check failed", status));
         }
+        log.error(">>>>>>>>>>>>>>>>>>>>{}",status);
 
         return ResponseEntity.ok(new CustomResponseDto(1, "Event time check successful", status));
     }
