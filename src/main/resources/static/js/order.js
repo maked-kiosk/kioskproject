@@ -269,7 +269,7 @@ function setOrderMenu() {
             totalPrice = "￦" + (menu.amount * menu.setPrice).toLocaleString('ko-KR');
             totalKcal = (menu.amount * menu.setKcal).toLocaleString("ko-KR") + " Kcal";
         }else {
-            totalPrice = "￦" + (menu.price).toLocaleString('ko-KR');
+            totalPrice = "￦" + (menu.defaultPrice).toLocaleString('ko-KR');
             totalKcal = menu.kcal.toLocaleString("ko-KR") + " Kcal";
         }
         

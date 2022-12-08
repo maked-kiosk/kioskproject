@@ -247,6 +247,7 @@ function setList(list, index, menuType){
     menuButton.forEach(menuUl => menuUl.innerHTML = "");
 
     list.forEach(menu => {
+        let price = menu.price == 0 ? menu.defaultPrice : menu.price;
         menuButton[index].innerHTML += `
             <li class="menu-li">
                 <div class="food-menu-img">
@@ -258,7 +259,7 @@ function setList(list, index, menuType){
                 <div>
                     <p>${menu.menuName}</p>
                     <div class="food-menu-price">
-                    <p>₩ ${menu.price.toLocaleString('ko-KR')}</p>
+                    <p>₩ ${price.toLocaleString('ko-KR')}</p>
                     <p>${menu.kcal.toLocaleString('ko-KR')}<span>Kcal</span></p>
                     </div>
                 </div>
