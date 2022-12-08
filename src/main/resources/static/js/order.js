@@ -1,11 +1,8 @@
 const homeButton = document.querySelector(".load-main-page-button");
-const minusButton = document.querySelectorAll(".minus-button");
-const plusButton = document.querySelectorAll(".plus-button");
-const setCount = document.querySelector(".set-count-span");
-const menuAmount = document.querySelectorAll(".menu-amount");
+const menuPrice = document.querySelectorAll(".menu-price");
 
-const subTotalAmountSpan = document.querySelector(".sub-total-amount-span");
-const totalAmountSpan = document.querySelector(".total-amount-span");
+const subTotalPriceSpan = document.querySelector(".sub-total-price-span");
+const totalPriceSpan = document.querySelector(".total-price-span");
 const pointButton = document.querySelector(".point-button");
 const pointModal = document.querySelector(".point-modal");
 const usePoint = document.querySelector(".use-point");
@@ -25,42 +22,13 @@ let count = 1;
 let amount = 4500;
 let price = amount.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
 let result = amount.toLocaleString('ko-KR');
-console.log(amount);
-
-// result = (setCount.innerHTML * amount).toLocaleString('ko-KR');
-// menuAmount.innerHTML = "￦" + result;
-
-minusButton.forEach(button => {
-    button.onclick = () => {
-        if(setCount.innerHTML <= 1) {
-            alert("최소 수량은 1입니다");
-        } else if(setCount.innerHTML > 1) { 
-           count = count - 1;
-           setCount.innerHTML = count;
-        }
-        // // menuAmount.innerHTML = "￦" + result;
-        // subTotalAmountSpan.innerHTML = menuAmount.innerHTML;
-        // totalAmountSpan.innerHTML = menuAmount.innerHTML;
-    }
-})
+let orderMenuList = null;
 
 
 
-plusButton.onclick = () => {
-    if(setCount.innerHTML >= 1){
-        count = count + 1;
-        setCount.innerHTML = count;
-    }
-    result = (setCount.innerHTML * amount).toLocaleString('ko-KR');
-    menuAmount.innerHTML = "￦" +  result;
-    subTotalAmountSpan.innerHTML = menuAmount.innerHTML;
-    totalAmountSpan.innerHTML = menuAmount.innerHTML;
-    const point = document.querySelector(".total-amount-span").textContent;
-    let num = point.replace("￦", "");
-    console.log(num);
-    let num2 = num.replace("," , "");
-    console.log(num2);
-}
+setOrderMenu();
+setTotalPrice();
+
 
 homeButton.onclick = () => {
     location.href = "/kiosk-main";
@@ -202,8 +170,8 @@ function usePointButtonClick(user, pointStatus) {
                 alert(usingPoint + "가 사용되었습니다.")
                 pointModal.classList.add("modal-visible");
                 havingPointInfo.classList.add("use-point-visible");
-                subTotalAmountSpan.innerHTML = "￦" + finalAmountInput.toLocaleString('ko-KR');
-                totalAmountSpan.innerHTML = "￦" + finalAmountInput.toLocaleString('ko-KR');
+                subTotalPriceSpan.innerHTML = "￦" + finalAmountInput.toLocaleString('ko-KR');
+                totalPriceSpan.innerHTML = "￦" + finalAmountInput.toLocaleString('ko-KR');
             },
             error: (error) => {
                 console.log(error);
@@ -284,20 +252,24 @@ insertCancelButton.onclick = () => {
 
 
 
-function orderMenu() {
-    let orderMenuList = JSON.parse(localStorage.orderMenuList);
+function setOrderMenu() {
+    // const setCountItems = document.querySelectorAll(".set-count-span");
     const orderMenuDetails = document.querySelector("main");
+
+    orderMenuList = JSON.parse(localStorage.orderMenuList);
+
     orderMenuDetails.innerHTML = "";
+
     orderMenuList.forEach(menu => {
-        let amount = null;
-        let kcal = null;
+        let totalPrice = null;
+        let totalKcal = null;
 
         if(menu.setFlag) {
-            amount = "￦" + (setCount.innerHTML * menu.totalPrice).toLocaleString('ko-KR');
-            kcal = menu.totalKcal;
+            totalPrice = "￦" + (menu.amount * menu.setPrice).toLocaleString('ko-KR');
+            totalKcal = (menu.amount * menu.setKcal).toLocaleString("ko-KR") + " Kcal";
         }else {
-            amount = "￦" + (setCount.innerHTML * menu.price).toLocaleString('ko-KR');
-            kcal = menu.kcal + "kcal";
+            totalPrice = "￦" + (menu.price).toLocaleString('ko-KR');
+            totalKcal = menu.kcal.toLocaleString("ko-KR") + " Kcal";
         }
         
         orderMenuDetails.innerHTML += `
@@ -305,7 +277,7 @@ function orderMenu() {
                 <button type="button" class="cancel-button">취소</button>
                 <div class="menu-img-info">
                     <div class="menu-info">
-                        <span class="menu-title">${menu.setFlag ? menu.setName : menu.menuName} ${menu.setFlag ? kcal : kcal}</span>
+                        <span class="menu-title">${menu.setFlag ? menu.setName : menu.menuName} <span class="total-kcal-span">${totalKcal}</span></span>
                         <span class="menu-details">${menu.setFlag ? menu.side.menuName + " " + menu.drink.menuName : menu.menuName}</span>
                         <button type="button" class="details-button">세부정보 표시</button>
                     </div>
@@ -313,20 +285,104 @@ function orderMenu() {
                 <div class="set-count-modify">
                     <button class="minus-button" type="button">-</button>
                     <div class="set-count">
-                        <span class="set-count-span">1</span>
+                        <span class="set-count-span">${menu.setFlag ? menu.amount : 1}</span>
                     </div>
                     <button class="plus-button" type="button">+</button>
                 </div>
-                <span class="menu-amount">${menu.setFlag ? amount : amount}</span>
+                <span class="menu-price">${totalPrice}</span>
             </div> 
         `;
     });
+
+    setMinusButtonClickEvent();
+    setPlusButtonClickEvent();
 }
 
-orderMenu();
+function setTotalPrice() {
+    const subTotalPriceSpan = document.querySelector(".sub-total-price-span");
+    const totalPriceSpan = document.querySelector(".total-price-span");
 
+    let totalPrice = parseInt(getTotalPrice());
 
+    subTotalPriceSpan.textContent = "￦" + totalPrice.toLocaleString("ko-KR");
+    totalPriceSpan.textContent = "￦" + totalPrice.toLocaleString("ko-KR");
+    
+}
 
+function setTotalKcal(index, count) {
+    const totalKcalSpanItems = document.querySelectorAll(".total-kcal-span");
+    let totalKcal = getTotalKcal(index, count);
 
+    totalKcalSpanItems[index].textContent = totalKcal;
+}
 
+function getTotalKcal(index, count) {
+    return (orderMenuList[index].setKcal * count).toLocaleString("ko-KR") + " Kcal";
+}
 
+function getTotalPrice() {
+    const menuPriceItems = document.querySelectorAll(".menu-price");
+
+    let totalPrice = 0;
+
+    menuPriceItems.forEach(menuPrice => {
+        totalPrice += parseInt(menuPrice.textContent.substring(1).replaceAll(",", ""));
+    })
+
+    return totalPrice;
+}
+
+function setMinusButtonClickEvent() {
+    const setCountItems = document.querySelectorAll(".set-count-span");
+    const minusButtons = document.querySelectorAll(".minus-button");
+
+    minusButtons.forEach((button, index) => {
+        button.onclick = () => {
+            let count = parseInt(setCountItems[index].innerHTML);
+            if(count < 2) {
+                alert("최소 수량은 1입니다");
+                
+            }else {
+                count -= 1;
+                setCountItems[index].innerHTML = count;
+            }
+    
+            setMenuPrice(index, count);
+            setTotalKcal(index, count);
+            setTotalPrice();
+        }
+    
+    })
+}
+
+function setPlusButtonClickEvent() {
+    const setCountItems = document.querySelectorAll(".set-count-span");
+    const plusButtons = document.querySelectorAll(".plus-button");
+
+    plusButtons.forEach((button, index) => {
+        button.onclick = () => {
+            let count = parseInt(setCountItems[index].innerHTML);
+    
+            if(setCountItems[index].innerHTML > 0){
+                count += 1;
+                setCountItems[index].innerHTML = count;
+            }
+    
+            setMenuPrice(index, count);
+            setTotalKcal(index, count);
+            setTotalPrice();
+            
+            // const point = document.querySelector(".total-price-span").textContent;
+            // let num = point.replace("￦", "");
+            // console.log(num);
+            // let num2 = num.replace("," , "");
+            // console.log(num2);
+        }
+    })
+}
+
+function setMenuPrice(index, count) {
+    const menuPrice = document.querySelectorAll(".menu-price")[index];
+
+    menuPrice.textContent = "￦" + (orderMenuList[index].setPrice * count).toLocaleString("ko-KR");
+}

@@ -56,6 +56,7 @@ for (let i = 0; i < navBtnsList.length; i++) {//liList배열이기때문 선택�
 }
 
 setLocalSorage();
+setShoppingBasketInformation();
 setBurgerTypeCategoryClickEvent();
 setTopRankingMenuList();
 removeMenuObjectInLocalStorage();
@@ -69,6 +70,35 @@ function setLocalSorage() {
         localStorage.orderMenuList = JSON.stringify(new Array());
     }
     
+}
+
+function setShoppingBasketInformation() {
+    let menuList = localStorage.orderMenuList;
+
+    let test = new Array();
+
+    if(menuList != null) {
+        const shoppingBasketTotalCount = document.querySelector(".order-total-count p");
+        const shoppingBasketTotalPrice = document.querySelector(".order-total-price span");
+        let totalPrice = 0;
+
+        menuList = JSON.parse(menuList);
+
+        shoppingBasketTotalCount.textContent = menuList.length;
+
+
+        menuList.forEach(menu => {
+            if(menu.setFlag) {
+                totalPrice += menu.setPrice * menu.amount;
+
+            }else {
+                totalPrice += menu.price * menu.amount;
+
+            }
+        });
+
+        shoppingBasketTotalPrice.textContent + "￦" + totalPrice.toLocaleString("ko-KR");
+    }
 }
 
 function setBurgerTypeCategoryClickEvent() {

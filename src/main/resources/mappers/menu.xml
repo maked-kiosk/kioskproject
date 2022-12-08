@@ -720,7 +720,7 @@
                     <otherwise>
                         size LIKE #{size}
                             and
-                        dt.mc_morning_flag = 0
+                        dt.mc_morning_flag = 1
                     </otherwise>
                 </choose>
                 ;
