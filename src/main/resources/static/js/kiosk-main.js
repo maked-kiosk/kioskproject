@@ -6,6 +6,7 @@ const learnMenuBtnsList = document.querySelectorAll('.learn-menu-btns-list li');
 const modalBody = document.querySelector(".modal-body")
 
 
+
 foodMenus[0].style.display = 'block';// 메인 페이지
 
 
@@ -44,7 +45,7 @@ for (let i = 0; i < navBtnsList.length; i++) {//liList배열이기때문 선택�
 
         if(isMainPageButton(i)) {
             setTopRankingMenuList();
-        }else if(isMcMorningButton()) {
+        }else if(isMcMorningButton(i)) {
             if(!isMcMorningTime()) {
                 alert("맥모닝 시간이 아닙니다.\n06:00 ~ 10:00");
                 return false;
@@ -321,19 +322,22 @@ function isMainPageButton(index) {
 }
 
 function isMcMorningButton(index) {
-    return index == 8;
+    return index == 7;
 }
 
 function isMcMorningTime() {
     let mcMorningTimeFlag = false;
+    
+    let eventType = "mc-morning";
 
     $.ajax({
         async: false,
         type: "get",
-        url: `/api/v1/check/mc-morning`,
+        url: `/api/v1/check/${eventType}`,
         dataType: "json",
         success: (response) => {
             mcMorningTimeFlag = response.data;
+            console.log(mcMorningTimeFlag);
         },
         error: (request, status, error) => {
             console.log(request.status);
