@@ -40,7 +40,7 @@ homeButton.onclick = () => {
     if(confirm("장바구니가 모두 초기화 됩니다.")) {
         localStorage.removeItem("orderMenuList");
         location.replace("/kiosk-main");
-
+        localStorage.totalPrice = "￦0";
     }
     // let totalPriceText = document.querySelector(".total-price-span").textContent;
     // localStorage.totalPrice = totalPriceText;

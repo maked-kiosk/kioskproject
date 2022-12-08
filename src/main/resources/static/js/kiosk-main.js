@@ -388,8 +388,19 @@ function setOrderHistoryDivClickEvent() {
     const orderHistoryDiv = document.querySelector(".order-history");
 
     orderHistoryDiv.onclick = () => {
-        location.replace("/order");
+        let menuList = localStorage.orderMenuList;
+
+        if(menuList != null) {
+            menuList = JSON.parse(menuList);
+            
+            menuList.length == 0 ? showAlert() : location.replace("/order");
+        }
+        
     }
+}
+
+function showAlert() {
+    alert("주문 내역이 없습니다.");
 }
 
 function removeMenuObjectInLocalStorage() {
