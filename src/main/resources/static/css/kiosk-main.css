@@ -384,9 +384,12 @@ footer {
 }
 
 .order-history {
+  border: 1px solid #dbdbdb;
   width: 250px;
   text-align: center;
   font-size: 18px;
+
+  cursor: pointer;
 }
 
 .footer-menu {

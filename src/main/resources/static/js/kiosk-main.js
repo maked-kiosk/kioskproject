@@ -5,32 +5,6 @@ const learnMenuBtnsList = document.querySelectorAll('.learn-menu-btns-list li');
 
 const modalBody = document.querySelector(".modal-body")
 
-
-
-foodMenus[0].style.display = 'block';// 메인 페이지
-
-
-// 메뉴 알아보기
-learnMenuBtnsList[0].onclick = () => {
-    foodMenus[0].style.display = 'none';
-    foodMenus[1].style.display = 'block';
-}
-
-learnMenuBtnsList[1].onclick = () => {
-    foodMenus[0].style.display = 'none';
-    foodMenus[2].style.display = 'block';
-}
-
-learnMenuBtnsList[2].onclick = () => {
-    foodMenus[0].style.display = 'none';
-    foodMenus[3].style.display = 'block';
-}
-
-learnMenuBtnsList[3].onclick = () => {
-    foodMenus[0].style.display = 'none';
-    foodMenus[4].style.display = 'block';
-}
-
 // nav 버튼 이벤트
 for (let i = 0; i < navBtnsList.length; i++) {//liList배열이기때문 선택할려면for문사용
     // let n = 0;//현재 클릭된 버튼에 인덱스값이 초기값설정
@@ -70,12 +44,42 @@ for (let i = 0; i < navBtnsList.length; i++) {//liList배열이기때문 선택�
     }
 }
 
+foodMenus[0].style.display = 'block';// 메인 페이지
+
+
+// 메뉴 알아보기
+learnMenuBtnsList[0].onclick = () => {
+    navBtnsList[1].click();
+    foodMenus[0].style.display = 'none';
+    foodMenus[1].style.display = 'block';
+}
+
+learnMenuBtnsList[1].onclick = () => {
+    navBtnsList[2].click();
+    foodMenus[0].style.display = 'none';
+    foodMenus[2].style.display = 'block';
+}
+
+learnMenuBtnsList[2].onclick = () => {
+    // foodMenus[0].style.display = 'none';
+    // foodMenus[3].style.display = 'block';
+}
+
+learnMenuBtnsList[3].onclick = () => {
+    navBtnsList[4].click();
+    foodMenus[0].style.display = 'none';
+    foodMenus[4].style.display = 'block';
+}
+
+
+
 setLocalSorage();
 setShoppingBasketInformation();
 setBurgerTypeCategoryClickEvent();
 setTopRankingMenuList();
 removeMenuObjectInLocalStorage();
 setSelectBurgerTypeEvent();
+setOrderHistoryDivClickEvent();
 
 function setLocalSorage() {
     let menuList = localStorage.orderMenuList;
@@ -369,6 +373,14 @@ function isMcMorningTime() {
 
 function clearDomObject(domObject) {
     domObject.innerHTML = "";
+}
+
+function setOrderHistoryDivClickEvent() {
+    const orderHistoryDiv = document.querySelector(".order-history");
+
+    orderHistoryDiv.onclick = () => {
+        location.replace("/order");
+    }
 }
 
 function removeMenuObjectInLocalStorage() {

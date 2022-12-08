@@ -31,7 +31,11 @@ setTotalPrice();
 
 
 homeButton.onclick = () => {
-    location.replace("/kiosk-main");
+    if(confirm("장바구니가 모두 초기화 됩니다.")) {
+        localStorage.removeItem("orderMenuList");
+        location.replace("/kiosk-main");
+
+    }
 }
 
 addOrdersButton.onclick = () => {
@@ -268,7 +272,7 @@ function setOrderMenu() {
             totalPrice = "￦" + (menu.amount * menu.setPrice).toLocaleString('ko-KR');
             totalKcal = (menu.amount * menu.setKcal).toLocaleString("ko-KR") + " Kcal";
         }else {
-            totalPrice = "￦" + (menu.defaultPrice).toLocaleString('ko-KR');
+            totalPrice = "￦" + (menu.defaultPrice == 0 ? menu.price : menu.defaultPrice).toLocaleString('ko-KR');
             totalKcal = menu.kcal.toLocaleString("ko-KR") + " Kcal";
         }
         
@@ -285,7 +289,7 @@ function setOrderMenu() {
                 <div class="set-count-modify">
                     <button class="minus-button" type="button">-</button>
                     <div class="set-count">
-                        <span class="set-count-span">${menu.setFlag ? menu.amount : 1}</span>
+                        <span class="set-count-span">${menu.amount}</span>
                     </div>
                     <button class="plus-button" type="button">+</button>
                 </div>
@@ -296,6 +300,7 @@ function setOrderMenu() {
 
     setMinusButtonClickEvent();
     setPlusButtonClickEvent();
+    setCancelButtonClickEvent();
 }
 
 function setTotalPrice() {
@@ -317,7 +322,13 @@ function setTotalKcal(index, count) {
 }
 
 function getTotalKcal(index, count) {
-    return (orderMenuList[index].setKcal * count).toLocaleString("ko-KR") + " Kcal";
+    if(orderMenuList[index].setFlag) {
+        return (orderMenuList[index].setKcal * count).toLocaleString("ko-KR") + " Kcal";
+
+    }else {
+        return (orderMenuList[index].kcal * count).toLocaleString("ko-KR") + " Kcal";
+
+    }
 }
 
 function getTotalPrice() {
@@ -384,18 +395,37 @@ function setPlusButtonClickEvent() {
 function setMenuPrice(index, count) {
     const menuPrice = document.querySelectorAll(".menu-price")[index];
 
-    menuPrice.textContent = "￦" + (orderMenuList[index].setPrice * count).toLocaleString("ko-KR");
+    if(orderMenuList[index].setFlag) {
+        menuPrice.textContent = "￦" + (orderMenuList[index].setPrice * count).toLocaleString("ko-KR");
+
+    }else {
+        let price = orderMenuList[index].defaultPrice == 0 ? orderMenuList[index].price : orderMenuList[index].defaultPrice;
+        menuPrice.textContent = "￦" + (price * count).toLocaleString("ko-KR");
+
+    }
 }
 
 function updateShoppingBasketInformation() {
     const setCountItems = document.querySelectorAll(".set-count-span");
 
-    console.log(setCountItems);
-
     orderMenuList.forEach((menu, index) => {
-        console.log(menu);
         menu.amount = setCountItems[index].textContent;
     })
 
     localStorage.orderMenuList = JSON.stringify(orderMenuList);
+}
+
+function setCancelButtonClickEvent() {
+    const cancelButtonItems = document.querySelectorAll(".cancel-button");
+
+
+    cancelButtonItems.forEach((button, buttonIndex) => {
+        button.onclick = () => {
+            orderMenuList = orderMenuList.filter((menu, filterIndex) => buttonIndex != filterIndex);
+            
+            localStorage.orderMenuList = JSON.stringify(orderMenuList);
+            location.replace("/order");
+        }
+    })
+
 }
