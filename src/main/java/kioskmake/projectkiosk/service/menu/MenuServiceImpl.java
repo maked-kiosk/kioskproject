@@ -2,10 +2,7 @@ package kioskmake.projectkiosk.service.menu;
 
 import kioskmake.projectkiosk.domain.menu.Menu;
 import kioskmake.projectkiosk.domain.menu.MenuRepository;
-import kioskmake.projectkiosk.web.dto.admin.GetMenuDetailRespDto;
-import kioskmake.projectkiosk.web.dto.admin.GetMenuListRespDto;
-import kioskmake.projectkiosk.web.dto.admin.InsertMenuReqDto;
-import kioskmake.projectkiosk.web.dto.admin.UpdateMenuDetailRequestDto;
+import kioskmake.projectkiosk.web.dto.admin.*;
 import kioskmake.projectkiosk.web.dto.menu.ReadMenuRequestDto;
 import kioskmake.projectkiosk.web.dto.menu.ReadMenuResponseDto;
 import lombok.RequiredArgsConstructor;
@@ -154,6 +151,10 @@ public class MenuServiceImpl implements MenuService {
 		return menuRepository.updateMenuDetail(updateMenuDetailRequestDto.toMenuEntity(tempFileName)) > 0;
 	}
 
+	@Override
+	public boolean deleteMenu(DeleteMenuRequestDto deleteMenuRequestDto) throws Exception {
+		return menuRepository.deleteMenu(deleteMenuRequestDto.toMenuEntity()) > 0;
+	}
 
 	private String uploadFileAndReturnTempFileName(MultipartFile file, String customPath) {
 		String tempFileName = makeTempFileName(file);

@@ -340,6 +340,27 @@
         WHERE
             id = #{id}
     </update>
+
+    <delete id="deleteMenu" parameterType="kioskmake.projectkiosk.domain.menu.Menu">
+        delete
+        from
+            <choose>
+                <when test="menu_type == 'burger'">
+                    hamburger_table
+                </when>
+                <when test="menu_type == 'side'">
+                    side_menu_table
+                </when>
+                <when test="menu_type == 'drink'">
+                    drink_table
+                </when>
+                <otherwise>
+                    dessert_table
+                </otherwise>
+            </choose>
+        where
+            id = #{id}
+    </delete>
         
 
     <!-- >>>>>>>>>>>>>>>>>>>>>>>>>>>> Not ADMIN <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<   -->

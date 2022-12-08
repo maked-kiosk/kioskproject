@@ -3,10 +3,7 @@ package kioskmake.projectkiosk.web.controller.api;
 import kioskmake.projectkiosk.handler.aop.annotation.Log;
 import kioskmake.projectkiosk.service.menu.MenuService;
 import kioskmake.projectkiosk.web.dto.CustomResponseDto;
-import kioskmake.projectkiosk.web.dto.admin.GetMenuDetailRespDto;
-import kioskmake.projectkiosk.web.dto.admin.GetMenuListRespDto;
-import kioskmake.projectkiosk.web.dto.admin.InsertMenuReqDto;
-import kioskmake.projectkiosk.web.dto.admin.UpdateMenuDetailRequestDto;
+import kioskmake.projectkiosk.web.dto.admin.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -83,5 +80,20 @@ public class AdminMenuController {
 		}
 
 		return ResponseEntity.ok(new CustomResponseDto<>(1, "update success", status));
+	}
+
+	@Log
+	@DeleteMapping("/{menuType}/{id}")
+	public ResponseEntity<?> updateMenuDetail(DeleteMenuRequestDto deleteMenuRequestDto) {
+		boolean status = false;
+
+		try {
+			status = menuService.deleteMenu(deleteMenuRequestDto);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return ResponseEntity.internalServerError().body(new CustomResponseDto<>(-1, "delete failed", status));
+		}
+
+		return ResponseEntity.ok(new CustomResponseDto<>(1, "update delete", status));
 	}
 }

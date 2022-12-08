@@ -38,5 +38,6 @@ public interface MenuRepository {
     public List<Menu> getAdminMenuList(Map<String, Object> map) throws Exception;
     public Menu getMenuDetail(String id, String menu_type) throws Exception;
     public int updateMenuDetail(Menu menu) throws Exception;
+    public int deleteMenu(Menu menu) throws Exception;
 
 }

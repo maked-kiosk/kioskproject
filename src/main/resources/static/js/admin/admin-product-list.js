@@ -83,7 +83,47 @@ class MenuListLoader {
             `;
         })
 
+        this.setDeleteButtonClickEvent(menuList);
         this.menuDetailItems = document.querySelectorAll(".menu-detail");
+    }
+
+    setDeleteButtonClickEvent(menuList) {
+        const deleteButtons = document.querySelectorAll(".delete-button");
+
+        deleteButtons.forEach((button, index) => {
+            button.onclick = () => {
+                if(confirm("정말로 삭제하시겠습니까?")) {
+                    this.deleteMenu(menuList[index + 1]);
+
+                }
+            }
+        })
+    }
+
+    deleteMenu(menu) {
+        console.log(menu);
+
+        $.ajax({
+            async: false,
+            type: "delete",
+            url: `/api/v1/menu/${menu.menuCategoryName}/${menu.id}`,
+            dataType: "json",
+            success: (response) => {
+                if(response.data) {
+                    alert("삭제 성공");
+                    location.replace("/admin/menu-list");
+
+                }else {
+                    alert("삭제 실패");
+
+                }
+            },
+            error: (request, status, error) => {
+                console.log(request.status);
+                console.log(request.responseText);
+                console.log(error);
+            }
+        })
     }
 
     setProductSelectChangeEvent() {
