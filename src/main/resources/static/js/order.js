@@ -31,11 +31,12 @@ setTotalPrice();
 
 
 homeButton.onclick = () => {
-    location.href = "/kiosk-main";
+    location.replace("/kiosk-main");
 }
 
 addOrdersButton.onclick = () => {
-    location.href = "/kiosk-main";
+    updateShoppingBasketInformation();
+    location.replace("/kiosk-main");
 }
 
 pointButton.onclick = () => {
@@ -253,7 +254,6 @@ insertCancelButton.onclick = () => {
 
 
 function setOrderMenu() {
-    // const setCountItems = document.querySelectorAll(".set-count-span");
     const orderMenuDetails = document.querySelector("main");
 
     orderMenuList = JSON.parse(localStorage.orderMenuList);
@@ -385,4 +385,14 @@ function setMenuPrice(index, count) {
     const menuPrice = document.querySelectorAll(".menu-price")[index];
 
     menuPrice.textContent = "￦" + (orderMenuList[index].setPrice * count).toLocaleString("ko-KR");
+}
+
+function updateShoppingBasketInformation() {
+    const setCountItems = document.querySelectorAll(".set-count-span");
+
+    orderMenuList.forEach((menu, index) => {
+        menu.amount = setCountItems[index].textContent;
+    })
+
+    JSON.stringify(localStorage.orderMenuList);
 }

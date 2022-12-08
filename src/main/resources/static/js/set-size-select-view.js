@@ -48,6 +48,7 @@ class TypeButtonClickEventSetter {
         let menuObject = JSON.parse(localStorage.menuObject);
 
         menuObject.setFlag = false;
+        menuObject.amount = 1;
 
         menuList.push(menuObject);
 

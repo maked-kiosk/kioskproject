@@ -42,6 +42,15 @@ for (let i = 0; i < navBtnsList.length; i++) {//liList배열이기때문 선택�
         //e.target //자식요소에 이벤트를 적용하는 대상
         //e.currentTarget//부모요소 이벤트 적용하는 대상
 
+        if(isMainPageButton(i)) {
+            setTopRankingMenuList();
+        }else if(isMcMorningButton()) {
+            if(!isMcMorningTime()) {
+                alert("맥모닝 시간이 아닙니다.\n06:00 ~ 10:00");
+                return false;
+            }
+        }
+
         getMenuList(navBtnsList[i].querySelector("span").textContent, i, "all");
 
         for (let j = 0; j < navBtnsList.length; j++) {
@@ -74,8 +83,6 @@ function setLocalSorage() {
 
 function setShoppingBasketInformation() {
     let menuList = localStorage.orderMenuList;
-
-    let test = new Array();
 
     if(menuList != null) {
         const shoppingBasketTotalCount = document.querySelector(".order-total-count p");
@@ -140,6 +147,8 @@ function setTopRankingMenuList() {
             </li>
         `;
     })
+
+    setMenuClickEvent(menuList, "topRankingMenuType");
 }
 
 function loadTopRankingMenuList() {
@@ -305,6 +314,35 @@ function showAddShoppingBasket(menu) {
 
 function cancelModal() {
     modalBody.classList.add("visible");
+}
+
+function isMainPageButton(index) {
+    return index == 0;
+}
+
+function isMcMorningButton(index) {
+    return index == 8;
+}
+
+function isMcMorningTime() {
+    let mcMorningTimeFlag = false;
+
+    $.ajax({
+        async: false,
+        type: "get",
+        url: `/api/v1/check/mc-morning`,
+        dataType: "json",
+        success: (response) => {
+            mcMorningTimeFlag = response.data;
+        },
+        error: (request, status, error) => {
+            console.log(request.status);
+            console.log(request.responseText);
+            console.log(error);
+        }
+    });
+
+    return mcMorningTimeFlag;
 }
 
 function clearDomObject(domObject) {

@@ -10,7 +10,7 @@
             IF(
                 start_time &lt; NOW()
                     and
-                end_time > NOW()
+                end_time &gt; NOW()
                 , 1, 0
              ) AS flag
         FROM
