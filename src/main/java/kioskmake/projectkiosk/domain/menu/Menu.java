@@ -50,6 +50,7 @@ public class Menu {
                 .image(image)
                 .mcLunchFlag(mc_lunch_flag == 1)
 				.menuCategoryCode(menu_category_code)
+				.hamburgerCategoryCode(hamburger_category_code)
                 .build();
     }
     
