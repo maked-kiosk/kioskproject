@@ -43,15 +43,20 @@ for (let i = 0; i < navBtnsList.length; i++) {//liList배열이기때문 선택�
         //e.currentTarget//부모요소 이벤트 적용하는 대상
 
         if(isMainPageButton(i)) {
+            const menuButton = document.querySelectorAll(".food-menu-btns");
+            menuButton.forEach(menuUl => menuUl.innerHTML = "");
+
             setTopRankingMenuList();
-        }else if(isMcMorningButton()) {
+        }else if(isMcMorningButton(i)) {
             if(!isMcMorningTime()) {
                 alert("맥모닝 시간이 아닙니다.\n06:00 ~ 10:00");
                 return false;
             }
+        }else {
+            getMenuList(navBtnsList[i].querySelector("span").textContent, i, "all");
+
         }
 
-        getMenuList(navBtnsList[i].querySelector("span").textContent, i, "all");
 
         for (let j = 0; j < navBtnsList.length; j++) {
             //클릭된 버튼을 비교하고 스타일을 설정하기 위한 반복문
@@ -133,7 +138,7 @@ function setTopRankingMenuList() {
 
     menuList.forEach(menu => {
         popularMenuUl.innerHTML += `
-            <li>
+            <li class="menu-li">
                 <div class="food-menu-img">
                 <img src="/image/images/${menu.menuCategoryCode == 1 ? 'burger' : 'dessert'}/${menu.image}" alt="${menu.menuName}">
                 </div>
@@ -278,6 +283,7 @@ function setMenuClickEvent(menuList, menuType) {
 }
 
 function setMenuFlagByMenuType(menuType, menu) {
+    console.log(menu);
     return menuType == "burger" || menu.menuCategoryCode == 1 || menuType == "mcMorning";
 }
 

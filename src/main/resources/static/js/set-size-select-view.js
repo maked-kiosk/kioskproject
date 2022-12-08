@@ -113,7 +113,7 @@ class TypeButtonClickEventSetter {
   setLocationBackButtonClickEvent() {
     const locationBackButton = document.querySelector(".location-back-button");
 
-    locationBackButton.onclick = () => location.replace("/kioskmain");
+    locationBackButton.onclick = () => location.replace("/kiosk-main");
   }
 }
 

@@ -36,6 +36,7 @@ homeButton.onclick = () => {
 
 addOrdersButton.onclick = () => {
     updateShoppingBasketInformation();
+    alert("잠시 대기")
     location.replace("/kiosk-main");
 }
 
@@ -390,9 +391,12 @@ function setMenuPrice(index, count) {
 function updateShoppingBasketInformation() {
     const setCountItems = document.querySelectorAll(".set-count-span");
 
+    console.log(setCountItems);
+
     orderMenuList.forEach((menu, index) => {
+        console.log(menu);
         menu.amount = setCountItems[index].textContent;
     })
 
-    JSON.stringify(localStorage.orderMenuList);
+    localStorage.orderMenuList = JSON.stringify(orderMenuList);
 }
