@@ -740,7 +740,8 @@
                 sales,
                 kcal,
                 image,
-                menu_category_code
+                menu_category_code,
+                hamburger_category_code
             FROM
                 hamburger_table
 
@@ -753,13 +754,16 @@
                 sales,
                 kcal,
                 image,
-                menu_category_code
+                menu_category_code,
+                0
             FROM
                 dessert_table
             ORDER BY
                 sales desc
             LIMIT 0 ,6) ranking_table
         WHERE
-            sales > 0;
+            sales > 0
+                and
+            hamburger_category_code != -1;
     </select>
 </mapper>

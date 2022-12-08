@@ -88,7 +88,7 @@ function setLocalSorage() {
 }
 
 function setShoppingBasketInformation() {
-    let menuList = localStorage.orderMenuList;
+    let menuList = localStorage.orderMenuList;``
 
     if(menuList != null) {
         const shoppingBasketTotalCount = document.querySelector(".order-total-count p");
@@ -277,15 +277,15 @@ function setMenuClickEvent(menuList, menuType) {
         let burgerFlag = setMenuFlagByMenuType(menuType, menuList[index]);
         let url = burgerFlag ? "/set-size-select-view" : "/order";
 
+
         menu.onclick = () => {
-            menuType == "mcMorning" ? loadSetSelectViewPage(menuList[index]) :
+            menuType == "mcMorning" || menuList[index].menuCategoryCode == -1 ? loadSetSelectViewPage(menuList[index]) :
             burgerFlag ? loadSetSizeSelectViewPage(menuList[index], url) : showAddShoppingBasketModalView(menuList[index]);
         }
     })
 }
 
 function setMenuFlagByMenuType(menuType, menu) {
-    console.log(menu);
     return menuType == "burger" || menu.menuCategoryCode == 1 || menuType == "mcMorning";
 }
 
@@ -317,7 +317,18 @@ function setRequestButtonClickEvent(menu) {
 }
 
 function showAddShoppingBasket(menu) {
-    alert(menu.id);
+    let menuList = localStorage.orderMenuList;
+
+    if(menuList != null) {
+        menuList = JSON.parse(menuList);
+
+        menu.amount = 1;
+
+        menuList.push(menu);
+    }
+
+    localStorage.orderMenuList = JSON.stringify(menuList);
+    location.replace("/order")
 }
 
 function cancelModal() {

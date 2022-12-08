@@ -36,7 +36,6 @@ homeButton.onclick = () => {
 
 addOrdersButton.onclick = () => {
     updateShoppingBasketInformation();
-    alert("잠시 대기")
     location.replace("/kiosk-main");
 }
 
