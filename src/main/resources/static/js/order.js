@@ -18,7 +18,6 @@ const userPhoneNumber = document.querySelector(".user-phone-number");
 const earnPoints = document.querySelector(".earn-points");
 const usingPointButton = document.querySelector(".using-point-button");
 
-
 let count = 1;
 let amount = 4500;
 let price = amount.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
@@ -80,6 +79,10 @@ cancelButton.forEach(button => {
         havingPointInfo.classList.add("use-point-visible");
         userName.value = "";
         userPhoneNumber.value = "";
+        let finalAmount = document.querySelector(".final-amount-input");
+        let usingPoint = document.querySelector(".using-point-input");
+        finalAmount.value = "";
+        usingPoint.value = "";
     }
 })
 
@@ -112,20 +115,28 @@ function checkUser(button) {
                     let num2 = num.replace("," , "");
                     let point2 = parseInt(num2);
                     let finalAmount = document.querySelector(".final-amount-input");
-
+                    finalAmount
 
                     usingPoint.onkeydown = () => {
 
                         setTimeout(() => {
                             let usingPointValue = parseInt(usingPoint.value);
 
-                            console.log("된다")
-                            console.log(point2);
-                            console.log(usingPointValue)
-                            
+                            console.log(usingPoint.value);
+
+                            if(usingPoint.value.length == 0) {
+                                console.log("된다")
+                                usingPoint.value = 0;
+                                usingPointValue = parseInt(usingPoint.value);
+                                finalAmount.value = point2 - usingPointValue;
+                            }
+
                             if(usingPointValue + 1 > user.point) {
 
-                                usingPointValue = user.point;
+                                usingPoint.value = user.point;
+                                usingPointValue = parseInt(usingPoint.value);
+
+                                console.log(usingPointValue);
                                 finalAmount.value = point2 - usingPointValue;
 
                                 if(finalAmount.value < 0) {
@@ -135,11 +146,12 @@ function checkUser(button) {
                             } else if(usingPointValue + 1 > point2) {
                                 usingPoint.value =  point2;
                                 finalAmount.value = 0;
-                            }else if(usingPointValue < 0) {
+                            }else if(usingPointValue < 1) {
                                 usingPoint.value = 0;
                             }else {
                                 finalAmount.value = point2 - usingPointValue;
                             }
+                       
 
                             console.log(finalAmount.value);
 
@@ -185,6 +197,10 @@ function usePointButtonClick(user, pointStatus) {
                 alert(usingPoint + "가 사용되었습니다.")
                 pointModal.classList.add("modal-visible");
                 havingPointInfo.classList.add("use-point-visible");
+                userName.value = "";
+                userPhoneNumber.value = "";
+                
+
                 subTotalPriceSpan.innerHTML = "￦" + finalAmountInput.toLocaleString('ko-KR');
                 totalPriceSpan.innerHTML = "￦" + finalAmountInput.toLocaleString('ko-KR');
             },

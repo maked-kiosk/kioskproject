@@ -32,6 +32,7 @@ mybatis:
   
 file:
   path: C:/project/workspace/git/kioskproject/upload/
+#  path: E:/project/workspace/git/kioskproject/upload/
 
 # log4jdbc, Mybatis Console Log
 logging:

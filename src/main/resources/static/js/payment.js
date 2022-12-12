@@ -12,6 +12,6 @@ cardPayment.onclick = () => {
   localStorage.removeItem("orderMenuList");
   localStorage.totalPrice = "￦0";
   
-  location.replace("/kiosk-main");
+  location.replace("/main");
 }
 
