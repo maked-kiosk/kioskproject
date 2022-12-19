@@ -372,7 +372,7 @@
         SELECT
             id,
             hamburger_name as menu_name,
-            price,
+            price as default_price,
             kcal,
             image,
             mc_lunch_flag
@@ -397,7 +397,7 @@
             hamburger_name,
             kcal,
             image,
-            price
+            price as default_price
         FROM
             hamburger_table
         WHERE
@@ -416,7 +416,7 @@
                 tt.end_time &gt; NOW())
                     and
                 ht.mc_lunch_flag = 1,
-                ht.price + dt.price + smt.price - 500 , ht.price + dt.price + smt.price) AS price
+                ht.price + dt.price + smt.price - 500, ht.price + dt.price + smt.price) AS default_price
         FROM
             hamburger_table ht
             left outer join time_table tt ON (1 = 1)
@@ -454,7 +454,7 @@
                 tt.end_time &gt; NOW())
                     and
                 ht.mc_lunch_flag = 1,
-                ht.price + dt.price + smt.price - 500 , ht.price + dt.price + smt.price) AS price
+                ht.price + dt.price + smt.price - 500 , ht.price + dt.price + smt.price) AS default_price
         FROM
             hamburger_table ht
             LEFT OUTER JOIN time_table tt ON(1 = 1)
@@ -492,7 +492,7 @@
                 </when>
                 <when test="menu_type == 'dessert'">
                     dessert_name AS menu_name,
-                    price,
+                    price as default_price,
                 </when>
                 <otherwise>
                     if(size LIKE 'none', drink_name, concat(drink_name, ' - ', if(size LIKE 'M', '미디엄', '라지'))) AS menu_name,
@@ -563,7 +563,7 @@
         SELECT
             id,
             hamburger_name as menu_name,
-            price,
+            price as default_price,,
             kcal,
             image
         FROM
@@ -578,7 +578,7 @@
         SELECT
             id,
             hamburger_name as menu_name,
-            price,
+            price as default_price,,
             kcal,
             image,
             true as mc_morning_flag
@@ -600,7 +600,6 @@
                     drink_name AS menu_name,
                 </otherwise>
             </choose>
-            price,
             price as default_price,
             kcal,
             image
@@ -757,7 +756,7 @@
             (SELECT
                 id,
                 hamburger_name as menu_name,
-                price,
+                price as default_price,
                 sales,
                 kcal,
                 image,
@@ -771,7 +770,7 @@
             SELECT
                 id,
                 dessert_name as menu_name,
-                price,
+                price as default_price,
                 sales,
                 kcal,
                 image,

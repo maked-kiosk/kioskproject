@@ -200,6 +200,7 @@ function usePointButtonClick(user, pointStatus) {
                 userName.value = "";
                 userPhoneNumber.value = "";
                 
+                localStorage.usingPoint = usingPoint;
 
                 subTotalPriceSpan.innerHTML = "￦" + finalAmountInput.toLocaleString('ko-KR');
                 totalPriceSpan.innerHTML = "￦" + finalAmountInput.toLocaleString('ko-KR');
@@ -299,8 +300,8 @@ function setOrderMenu() {
             totalPrice = "￦" + (menu.amount * menu.setPrice).toLocaleString('ko-KR');
             totalKcal = (menu.amount * menu.setKcal).toLocaleString("ko-KR") + " Kcal";
         }else {
-            totalPrice = "￦" + (menu.defaultPrice == 0 ? menu.price : menu.defaultPrice).toLocaleString('ko-KR');
-            totalKcal = menu.kcal.toLocaleString("ko-KR") + " Kcal";
+            totalPrice = "￦" + (menu.amount * menu.defaultPrice).toLocaleString('ko-KR');
+            totalKcal = (menu.amount * menu.kcal).toLocaleString("ko-KR") + " Kcal";
         }
         
         orderMenuDetails.innerHTML += `
@@ -360,12 +361,15 @@ function getTotalKcal(index, count) {
 
 function getTotalPrice() {
     const menuPriceItems = document.querySelectorAll(".menu-price");
+    const usingPoint = localStorage.usingPoint;
 
     let totalPrice = 0;
 
     menuPriceItems.forEach(menuPrice => {
         totalPrice += parseInt(menuPrice.textContent.substring(1).replaceAll(",", ""));
     })
+
+    totalPrice = usingPoint != null ? totalPrice -= usingPoint : totalPrice;
 
     return totalPrice;
 }
@@ -409,12 +413,6 @@ function setPlusButtonClickEvent() {
             setMenuPrice(index, count);
             setTotalKcal(index, count);
             setTotalPrice();
-            
-            // const point = document.querySelector(".total-price-span").textContent;
-            // let num = point.replace("￦", "");
-            // console.log(num);
-            // let num2 = num.replace("," , "");
-            // console.log(num2);
         }
     })
 }
@@ -426,7 +424,7 @@ function setMenuPrice(index, count) {
         menuPrice.textContent = "￦" + (orderMenuList[index].setPrice * count).toLocaleString("ko-KR");
 
     }else {
-        let price = orderMenuList[index].defaultPrice == 0 ? orderMenuList[index].price : orderMenuList[index].defaultPrice;
+        let price = orderMenuList[index].defaultPrice;
         menuPrice.textContent = "￦" + (price * count).toLocaleString("ko-KR");
 
     }

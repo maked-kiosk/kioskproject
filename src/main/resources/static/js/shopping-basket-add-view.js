@@ -37,7 +37,7 @@ class MenuSetter {
         const amount = parseInt(document.querySelector(".amount-detail-span").textContent);
         const menuInformationTitleDiv = document.querySelector(".menu-information-div");
 
-        this.totalPrice = (this.menuObject.price + this.sideMenuObject.defaultPrice + this.drinkMenuObject.defaultPrice) * amount;
+        this.totalPrice = (this.menuObject.defaultPrice + this.sideMenuObject.defaultPrice + this.drinkMenuObject.defaultPrice) * amount;
         this.totalKcal = (this.menuObject.kcal + this.sideMenuObject.kcal + this.drinkMenuObject.kcal) * amount;
 
         
@@ -312,7 +312,7 @@ class ButtonClickEventSetter {
 
             // const totalPrice = document.querySelector(".price-span").textContent.replaceAll(",", "");
             // const totalKcal = document.querySelector(".kcal-span").textContent.replaceAll(",", "");
-            const setPrice = (menuObject.price + sideMenuObject.defaultPrice + drinkMenuObject.defaultPrice);
+            const setPrice = (menuObject.defaultPrice + sideMenuObject.defaultPrice + drinkMenuObject.defaultPrice);
             const setKcal = this.totalKcal = (menuObject.kcal + sideMenuObject.kcal + drinkMenuObject.kcal);
 
 

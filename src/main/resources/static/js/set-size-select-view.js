@@ -169,7 +169,7 @@ class ImageSetter {
     const pricePItems = document.querySelectorAll(".price-p");
 
     pricePItems.forEach((pTag, index) => {
-      pTag.textContent = `￦ ${menuList[index].price.toLocaleString('ko-KR')}`;
+      pTag.textContent = `￦ ${menuList[index].defaultPrice.toLocaleString('ko-KR')}`;
     })
   }
 

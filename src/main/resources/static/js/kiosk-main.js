@@ -9,10 +9,9 @@ const totalPriceSpan = document.querySelector(".total-price");
 
 const orderHistory = document.querySelector(".order-history");
 
-
 totalPriceSpan.innerHTML = "";
 
-totalPriceSpan.innerHTML = localStorage.totalPrice;
+totalPriceSpan.innerHTML = localStorage.totalPrice == undefined ? "₩0" : localStorage.totalPrice;
 
 // nav 버튼 이벤트
 for (let i = 0; i < navBtnsList.length; i++) {//liList배열이기때문 선택할려면for문사용
@@ -159,7 +158,7 @@ function setTopRankingMenuList() {
                 <div>
                 <p>${menu.menuName}</p>
                 <div class="food-menu-price">
-                    <p>₩ ${menu.price.toLocaleString('ko-KR')}</p>
+                    <p>₩ ${menu.defaultPrice.toLocaleString('ko-KR')}</p>
                     <p>${menu.kcal.toLocaleString('ko-KR')} Kcal</p>
                 </div>
                 </div>
@@ -260,7 +259,7 @@ function setList(list, index, menuType){
     menuButton.forEach(menuUl => menuUl.innerHTML = "");
 
     list.forEach(menu => {
-        let price = menu.price == 0 ? menu.defaultPrice : menu.price;
+        console.log(menu);
         menuButton[index].innerHTML += `
             <li class="menu-li">
                 <div class="food-menu-img">
@@ -272,7 +271,7 @@ function setList(list, index, menuType){
                 <div>
                     <p>${menu.menuName}</p>
                     <div class="food-menu-price">
-                    <p>₩ ${price.toLocaleString('ko-KR')}</p>
+                    <p>₩ ${menu.defaultPrice.toLocaleString('ko-KR')}</p>
                     <p>${menu.kcal.toLocaleString('ko-KR')}<span>Kcal</span></p>
                     </div>
                 </div>
