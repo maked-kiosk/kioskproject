@@ -1,4 +1,5 @@
 window.onload = () => {
+  EventTypeSetter.getInstacne();
   TypeButtonClickEventSetter.getInstacne();
   ImageSetter.getInstacne();
   ImageSetter.getInstacne().loadBurgerObjectById();
@@ -74,6 +75,7 @@ class TypeButtonClickEventSetter {
 
       const mSetConfirm = document.querySelector(".m-set-confirm");
       mSetConfirm.onclick = () => {
+        this.setLunchPrice();
         localStorage.size = "M";
         location.replace("/set-select-view");
       }
@@ -96,6 +98,7 @@ class TypeButtonClickEventSetter {
 
       const lSetConfirm = document.querySelector(".l-set-confirm");
       lSetConfirm.onclick = () => {
+        this.setLunchPrice();
         localStorage.size = "L";
           location.replace("/set-select-view");
       }
@@ -114,6 +117,16 @@ class TypeButtonClickEventSetter {
     const locationBackButton = document.querySelector(".location-back-button");
 
     locationBackButton.onclick = () => location.replace("/kiosk-main");
+  }
+
+  setLunchPrice() {
+    let menuObject = JSON.parse(localStorage.menuObject);
+
+    if(EventTypeSetter.getInstacne().mcLunchFlag && menuObject.mcLunchFlag) {
+      menuObject.defaultPrice -= 500;
+
+      localStorage.menuObject = JSON.stringify(menuObject);
+    }
   }
 }
 
@@ -197,4 +210,42 @@ class MenuTypeSetter {
   getMenuType(mcMorningFlag) {
     return mcMorningFlag ? "mc-morning" : "burger";
   }
+}
+
+class EventTypeSetter {
+  static #instance = null;
+
+  mcLunchFlag = false;
+
+  static getInstacne() {
+    if(this.#instance == null) {
+      this.#instance = new EventTypeSetter();
+    }
+
+    return this.#instance;
+  }
+
+  constructor() {
+    this.mcLunchFlag = this.setMcLunchFlag();
+  }
+
+  setMcLunchFlag() {
+    let mcLunchFlag = false;
+    $.ajax({
+        async: false,
+        type: "get",
+        url: `/api/v1/check/mc-lunch`,
+        dataType: "json",
+        success: (response) => {
+            mcLunchFlag = response.data;
+        },
+        error: (request, status, error) => {
+            console.log(request.status);
+            console.log(request.responseText);
+            console.log(error);
+        }
+    })
+
+    return mcLunchFlag;
+}
 }

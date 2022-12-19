@@ -112,3 +112,67 @@ article {
     align-items: center;
 }
 
+
+
+
+/*           Modal             */
+
+
+.main-modal-div {
+    display: flex;
+    justify-content: center;
+    
+    width: 900px;
+    height: 1600px;
+
+    position: absolute;
+    background-color: rgba(0, 0, 0, 0.4);
+}
+
+.user-info-input {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    width: 700px;
+    height: 400px;
+
+    background-color: white;
+
+    position: absolute;
+    top: 500px;
+}
+
+.user-input p {
+    font-size: 25px;
+    margin-bottom: 5px;
+    
+}
+
+.user-input input {
+    width: 540px;
+    height: 50px;
+    font-size: 30px;
+    padding: 5px;
+    margin-bottom: 20px;
+}
+
+.point-btns {
+    width: 540px;
+
+    display: flex;
+    justify-content: space-between;
+}
+
+.po-btns button {
+    border: 1px solid #dbdbdb;
+    width: 100px;
+    height: 50px;
+}
+
+.hovers button:hover{
+    transition: 0.3s;
+    background-color: #dbdbdb;
+    color: white;
+}

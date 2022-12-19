@@ -38,7 +38,7 @@
 
 }
 
-.user-input p {
+/* .user-input p {
     font-size: 25px;
     margin-bottom: 5px;
     
@@ -50,16 +50,16 @@
     font-size: 30px;
     padding: 5px;
     margin-bottom: 20px;
-}
+} */
 
-.point-btns {
+/* .point-btns {
     width: 540px;
 
     display: flex;
     justify-content: space-between;
-}
+} */
 
-.po-btns button {
+/* .po-btns button {
     border: 1px solid #dbdbdb;
     width: 100px;
     height: 50px;
@@ -69,7 +69,7 @@
     transition: 0.3s;
     background-color: #dbdbdb;
     color: white;
-}
+} */
 
 .having-point-info {
     margin-top: 100px;

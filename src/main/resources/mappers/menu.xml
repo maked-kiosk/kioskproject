@@ -387,7 +387,8 @@
                 hamburger_category_code != -1
             </otherwise>
         </choose>
-        ;
+        ORDER BY
+            mc_lunch_flag DESC;
     </select>
 
     <select id="findBurgerByBurgerCode" parameterType="Integer" resultType="kioskmake.projectkiosk.domain.menu.Menu">

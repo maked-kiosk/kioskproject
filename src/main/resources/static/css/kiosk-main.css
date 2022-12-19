@@ -243,6 +243,10 @@ h2 {
   margin: 0 10px 10px 0;
 }
 
+.menu-li {
+  position: relative;
+}
+
 .food-menu-img {
   display: flex;
   justify-content: center;
@@ -267,6 +271,23 @@ h2 {
   font-weight: 700;
 }
 
+.mc-lunch-div {
+  width: 203px;
+  height: 30px;
+
+  position: absolute;
+  top: 0px;
+  left: 0px;
+
+  background-color: rgb(243, 173, 43);
+  
+  text-align: center;
+}
+
+.mc-lunch-div span {
+  font-weight: 700;
+  font-size: 20px;
+}
 
 
 /* 하단 */

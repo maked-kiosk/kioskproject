@@ -239,6 +239,7 @@ function setMenuTypeBySelectMenuType(value) {
 
 function setList(list, index, menuType){
     const menuButton = document.querySelectorAll(".food-menu-btns");
+    const mcLunchFlag = setMcLunchFlag();
     
 
     menuButton.forEach(menuUl => menuUl.innerHTML = "");
@@ -259,6 +260,7 @@ function setList(list, index, menuType){
                     <p>${menu.kcal.toLocaleString('ko-KR')}<span>Kcal</span></p>
                     </div>
                 </div>
+                ${mcLunchFlag && menu.mcLunchFlag ? `<div class="mc-lunch-div"><span>맥런치</span></div>` : ``}
             </li>
         `
     });
@@ -384,6 +386,26 @@ function setOrderHistoryDivClickEvent() {
 
 function showAlert() {
     alert("주문 내역이 없습니다.");
+}
+
+function setMcLunchFlag() {
+    let mcLunchFlag = false;
+    $.ajax({
+        async: false,
+        type: "get",
+        url: `/api/v1/check/mc-lunch`,
+        dataType: "json",
+        success: (response) => {
+            mcLunchFlag = response.data;
+        },
+        error: (request, status, error) => {
+            console.log(request.status);
+            console.log(request.responseText);
+            console.log(error);
+        }
+    })
+
+    return mcLunchFlag;
 }
 
 function removeMenuObjectInLocalStorage() {

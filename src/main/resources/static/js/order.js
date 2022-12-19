@@ -122,10 +122,7 @@ function checkUser(button) {
                         setTimeout(() => {
                             let usingPointValue = parseInt(usingPoint.value);
 
-                            console.log(usingPoint.value);
-
                             if(usingPoint.value.length == 0) {
-                                console.log("된다")
                                 usingPoint.value = 0;
                                 usingPointValue = parseInt(usingPoint.value);
                                 finalAmount.value = point2 - usingPointValue;
@@ -151,9 +148,7 @@ function checkUser(button) {
                             }else {
                                 finalAmount.value = point2 - usingPointValue;
                             }
-                       
-
-                            console.log(finalAmount.value);
+                    
 
                         }, 100);
                        
