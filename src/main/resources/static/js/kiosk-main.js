@@ -5,13 +5,9 @@ const learnMenuBtnsList = document.querySelectorAll('.learn-menu-btns-list li');
 
 const modalBody = document.querySelector(".modal-body");
 
-const totalPriceSpan = document.querySelector(".total-price");
 
 const orderHistory = document.querySelector(".order-history");
 
-totalPriceSpan.innerHTML = "";
-
-totalPriceSpan.innerHTML = localStorage.totalPrice == undefined ? "₩0" : localStorage.totalPrice;
 
 // nav 버튼 이벤트
 for (let i = 0; i < navBtnsList.length; i++) {//liList배열이기때문 선택할려면for문사용
@@ -34,6 +30,9 @@ for (let i = 0; i < navBtnsList.length; i++) {//liList배열이기때문 선택�
             if(!isMcMorningTime()) {
                 alert("맥모닝 시간이 아닙니다.\n06:00 ~ 10:00");
                 return false;
+            }else {
+                getMenuList(navBtnsList[i].querySelector("span").textContent, i, "all");
+
             }
         }else {
             getMenuList(navBtnsList[i].querySelector("span").textContent, i, "all");
@@ -100,30 +99,16 @@ function setLocalSorage() {
 }
 
 function setShoppingBasketInformation() {
-    let menuList = localStorage.orderMenuList;``
+    const totalPriceSpan = document.querySelector(".total-price");
+    const shoppingBasketTotalCount = document.querySelector(".order-total-count p");
+    let menuList = localStorage.orderMenuList;
 
     if(menuList != null) {
-        const shoppingBasketTotalCount = document.querySelector(".order-total-count p");
-        const shoppingBasketTotalPrice = document.querySelector(".order-total-price span");
-        let totalPrice = 0;
-
         menuList = JSON.parse(menuList);
-
-        shoppingBasketTotalCount.textContent = menuList.length;
-
-
-        menuList.forEach(menu => {
-            if(menu.setFlag) {
-                totalPrice += menu.setPrice * menu.amount;
-
-            }else {
-                totalPrice += menu.price * menu.amount;
-
-            }
-        });
-
-        shoppingBasketTotalPrice.textContent + "￦" + totalPrice.toLocaleString("ko-KR");
     }
+
+    totalPriceSpan.innerHTML = localStorage.totalPrice == undefined ? "₩0" : localStorage.totalPrice;
+    shoppingBasketTotalCount.textContent = menuList == null ? 0 : menuList.length;
 }
 
 function setBurgerTypeCategoryClickEvent() {
@@ -259,7 +244,6 @@ function setList(list, index, menuType){
     menuButton.forEach(menuUl => menuUl.innerHTML = "");
 
     list.forEach(menu => {
-        console.log(menu);
         menuButton[index].innerHTML += `
             <li class="menu-li">
                 <div class="food-menu-img">
@@ -291,7 +275,7 @@ function setMenuClickEvent(menuList, menuType) {
 
 
         menu.onclick = () => {
-            menuType == "mcMorning" || menuList[index].menuCategoryCode == -1 ? loadSetSelectViewPage(menuList[index]) :
+            menuType == "mcMorning" || menuList[index].hamburgerCategoryCode == -1 ? loadSetSelectViewPage(menuList[index]) :
             burgerFlag ? loadSetSizeSelectViewPage(menuList[index], url) : showAddShoppingBasketModalView(menuList[index]);
         }
     })

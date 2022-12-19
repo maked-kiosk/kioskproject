@@ -1,4 +1,5 @@
 window.onload = () => {
+    ShoppingBasketInformationSetter.getInstance();
     MenuLoader.getInstance().getMenuList();
 }
 
@@ -46,6 +47,9 @@ class MenuLoader {
             this.clearDomObject(foodMenuUl);
     
             menuList.forEach(menu => {
+                const price = this.menuObject.mcMorningFlag ? menu.defaultPrice : menu.price;
+
+                console.log(menu);
                 foodMenuUl.innerHTML += `
                     <li class="menu-detail-li">
                         <div class="food-menu-img">
@@ -54,7 +58,7 @@ class MenuLoader {
                         <div>
                             <p>${menu.menuName}</p>
                             <div class="food-menu-price">
-                                <p>₩ ${menu.price.toLocaleString('ko-KR')}</p>
+                                <p>₩ ${price.toLocaleString('ko-KR')}</p>
                                 <p>${menu.kcal.toLocaleString('ko-KR')} Kcal</p>
                             </div>
                         </div>
@@ -79,6 +83,9 @@ class MenuLoader {
                 </li>
             `;
         }
+
+        this.setLoadMainPageButtonClickEvent();
+        this.setOrderHistoryButtonClickEvent();
     }
 
     clearDomObject(domObject) {
@@ -116,5 +123,47 @@ class MenuLoader {
         sideITag.classList.remove("fa-circle");
         sideITag.classList.add("fa-circle-check");
         menuTitle.textContent = "음료";
+    }
+
+    setLoadMainPageButtonClickEvent() {
+        const loadMainPageButton = document.querySelector(".load-main-page-button");
+
+        loadMainPageButton.onclick = () => location.replace("/kiosk-main");
+    }
+
+    setOrderHistoryButtonClickEvent() {
+        const orderHistoryButton = document.querySelector(".order-history");
+
+        orderHistoryButton.onclick = () => location.replace("/order");
+    }
+}
+
+class ShoppingBasketInformationSetter {
+    static #instance = null;
+
+    static getInstance() {
+        if(this.#instance == null) {
+            this.#instance = new ShoppingBasketInformationSetter();
+        }
+
+        return this.#instance;
+    }
+
+    constructor() {
+        this.setShoppingBasketInformation();
+    }
+
+    setShoppingBasketInformation() {
+        const totalPriceSpan = document.querySelector(".order-total-price span");
+        const shoppingBasketTotalCount = document.querySelector(".order-total-count p");
+    
+        let menuList = localStorage.orderMenuList;
+
+        if(menuList != null) {
+            menuList = JSON.parse(menuList);
+        }
+    
+        totalPriceSpan.innerHTML = localStorage.totalPrice == undefined ? "₩0" : localStorage.totalPrice;
+        shoppingBasketTotalCount.textContent = menuList == null ? 0 : menuList.length;
     }
 }
