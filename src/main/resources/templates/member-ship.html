@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+    <link rel="stylesheet" href="/static/css/member-ship.css">
+    <script src="https://kit.fontawesome.com/87ed282d9d.js" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-latest.min.js"></script>
+</head>
+<body>
+    <div id="container">
+        <header>
+            <div class="title">
+                <span class="title-text">멤버십 등록</span>
+            </div>
+        </header>
+        <main>
+            <div class="select-service">
+                <div class="member-ship-registration member-ship-boxs">
+                    <span>멤버십 등록</span>
+                    <img src="/static/images/member-ship.png" alt="" class="member-ship">
+                </div>
+                <div class="order-service member-ship-boxs">
+                    <span>주문하기</span>
+                    <img src="/static/images/order.png" alt="" class="order">
+                </div>
+            </div>
+        </main>
+    </div>
+    <div class="main-modal-div member-ship-modal-visible">
+        <div class="user-info-input">
+            <div class="name-input user-input">
+                <p>이름</p>
+                <input type="text" class="user-name user-check-input">
+            </div>
+            <div class="tel-input user-input">
+                <p>전화번호</p>
+                <input type="text" class="user-phone-number user-check-input">
+            </div>
+            <div class="point-btns">
+                <div class="point-use-btns po-btns hovers">
+                    <button type="button" class="use-point user-check registration-button">등록</button>
+                </div>
+                <div class="point-cancel-btn po-btns hovers">
+                    <button class="cancel-button">취소</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="/static/js/member-ship.js"></script>
+</body>
+</html>

@@ -17,7 +17,8 @@
 			and user_phone_number = #{user_phone_number};
 	</select>
 	
-	<insert id="insertUser" parameterType="kioskmake.projectkiosk.domain.user.User">
+	<insert id="insertUser" parameterType="kioskmake.projectkiosk.domain.user.User"
+	useGeneratedKeys="true" keyProperty="id">
 		insert into
 			user_point_table
 		values(

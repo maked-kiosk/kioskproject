@@ -13,7 +13,6 @@ public class UserReqDto {
 	
 	public User toUserEntity() {
 		return User.builder()
-				.id(id)
 				.user_name(userName)
 				.user_phone_number(userPhoneNumber)
 				.point(point)

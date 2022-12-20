@@ -1,5 +1,6 @@
 package kioskmake.projectkiosk.domain.user;
 
+import kioskmake.projectkiosk.web.dto.UserRespDto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -15,4 +16,13 @@ public class User {
 	private String user_phone_number;
 	private int point;
 	private String point_status;
+	
+	public UserRespDto toUserDto() {
+		return UserRespDto.builder()
+				.id(id)
+				.userName(user_name)
+				.userPhoneNumber(user_phone_number)
+				.point(point)
+				.build();
+	}
 }
