@@ -23,7 +23,6 @@ h2{
     font-weight: 600;
 }
 
-
 .button{
     width: 505px;
     height: 250px;
@@ -45,47 +44,7 @@ h2{
     background-color: #00000000;
 }
 
-#reset-button button{
-    margin-top: 100px;
-    width: 250px;
-    height: 30px;
-}
 
-.footer-menu {
-    width: 500px;
-
-    position: absolute;
-    right: 50px;
-    bottom: 40px;
-}
-
-.footer-menu > div {
-    margin-bottom: 30px;
-}
-
-.load-main-page-button {
-    border: 1px solid black;
-    border-radius: 5px;
-
-    width: 248px;;
-    height: 40px;
-
-    background-color: white;
-}
-
-.help-menu-button {
-    border: 1px solid black;
-    border-radius: 5px;
-
-    width: 248px;;
-    height: 40px;
-
-    background-color: white;
-}
-
-.notice-span {
-    font-size: 12px;
-}
 
 .pay-button {
     border: 1px solid #dbdbdb;
@@ -98,3 +57,135 @@ h2{
     height: 200px;
 }
 
+/*----------------------------------------------------*/
+
+
+.point-use-question-modal {
+    display: flex;
+    justify-content: center;
+
+    position: absolute;
+    
+    
+    width: 900px;
+    height: 1600px;
+
+    background-color: #00000040;
+}
+
+.point-use {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    position: absolute;
+    top: 350px;
+
+    padding: 30px;
+
+    width: 500px;
+    height: 300px;
+
+    background-color: white;
+}
+
+.question-title {
+    margin-top: 30px;
+
+    font-size: 30px;
+    font-weight: 700;
+}
+
+.point-use div {
+    margin-top: 50px;
+}
+
+.question-button {
+    width: 180px;
+    height: 100px;
+
+    font-size: 25px;
+}
+
+.question-visible {
+    display: none;
+}
+
+.having-point-info {
+    display: flex;
+    justify-content: center;
+    
+    position: absolute;
+
+    width: 900px;
+    height: 1600px;
+
+    background-color: #00000040;
+}
+
+.use-point-body {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    position: absolute;
+    top: 400px;
+
+    width: 600px;
+    height: 480px;
+
+    background-color: white;
+}
+
+.having-point-info p {
+    font-size: 30px;
+    margin-bottom: 10px;
+}
+
+.using-point input{
+    width: 540px;
+    height: 50px;
+    border: 1px solid #dbdbdb;
+
+    margin-bottom: 10px;
+}
+
+.points-input-box {
+    border: none;
+    outline: none;
+
+    width: 540px;
+    height: 50px;
+}
+
+.point-input {
+    border: 1px solid #dbdbdb;
+    
+    margin-bottom: 10px;
+    padding: 5px;
+
+    width: 540px;
+    height: 50px;
+
+    font-size: 30px;
+}
+
+.final-amount-confirm {
+    display: flex;
+    justify-content: space-between;
+
+    margin-top: 30px;
+
+    width: 550px;
+}
+
+.final-amount-confirm button {
+    width: 265px;
+    height: 50px;
+    border: 1px solid #dbdbdb;
+}
+
+.use-point-visible {
+    display: none;
+}

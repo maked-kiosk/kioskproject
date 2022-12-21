@@ -9,6 +9,7 @@ public class UserReqDto {
 	private String userName;
 	private String userPhoneNumber;
 	private int point;
+	private int point2;
 	private String status;
 	
 	public User toUserEntity() {
