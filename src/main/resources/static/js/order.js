@@ -115,7 +115,6 @@ function checkUser(button) {
                     let num2 = num.replace("," , "");
                     let point2 = parseInt(num2);
                     let finalAmount = document.querySelector(".final-amount-input");
-                    finalAmount
 
                     usingPoint.onkeydown = () => {
 
