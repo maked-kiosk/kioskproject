@@ -11,6 +11,11 @@ public class PageController {
 		return "insert";
 	}
 	
+	@GetMapping("/member-ship")
+	public String memberShipPage() {
+		return "member-ship";
+	}
+	
 	@GetMapping("/kiosk-main")
 	public String loadKioskMainPage() {
 		return "kiosk-main";

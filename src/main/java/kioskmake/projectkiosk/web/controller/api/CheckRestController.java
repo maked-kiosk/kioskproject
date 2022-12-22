@@ -14,6 +14,7 @@ import kioskmake.projectkiosk.service.timeCheck.TimeCheckService;
 import kioskmake.projectkiosk.service.user.UserService;
 import kioskmake.projectkiosk.web.dto.CustomResponseDto;
 import kioskmake.projectkiosk.web.dto.UserReqDto;
+import kioskmake.projectkiosk.web.dto.UserRespDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -58,25 +59,25 @@ public class CheckRestController {
     @PostMapping("/insert-user")
     public ResponseEntity<?> insertUser(UserReqDto insertUSerReqDto) {
     	
-    	boolean status = false;
+    	UserRespDto user = null;
     	
     	try {
-    		status = userService.insertUser(insertUSerReqDto);
+    		user = userService.insertUser(insertUSerReqDto);
 		} catch (Exception e) {
 			e.printStackTrace();
-			return ResponseEntity.internalServerError().body(new CustomResponseDto(-1, "user insert failed", status));
+			return ResponseEntity.internalServerError().body(new CustomResponseDto(-1, "user insert failed", user));
 		}
     	
-    	return ResponseEntity.ok(new CustomResponseDto<>(1, "user insert successful", status));
+    	return ResponseEntity.ok(new CustomResponseDto<>(1, "user insert successful", user));
     }
     
     @PutMapping("/point")
-    public ResponseEntity<?> updateUserPoint(int id, int point, String pointStatus){
+    public ResponseEntity<?> updateUserPoint(int id, int point, int point2){
     	
     	boolean status = false;
     	
     	try {
-			status = userService.updateUserPoint(id, point, pointStatus);
+			status = userService.updateUserPoint(id, point, point2);
 		} catch (Exception e) {
 			e.printStackTrace();
 			return ResponseEntity.internalServerError().body(new CustomResponseDto(-1, "update failed", status));

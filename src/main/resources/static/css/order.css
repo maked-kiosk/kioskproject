@@ -71,58 +71,6 @@
     color: white;
 } */
 
-.having-point-info {
-    margin-top: 100px;
-}
-
-.having-point-info p {
-    font-size: 30px;
-    margin-bottom: 10px;
-}
-
-.use-point-visible {
-    display: none;
-}
-
-.using-point input{
-    width: 540px;
-    height: 50px;
-    border: 1px solid #dbdbdb;
-
-    margin-bottom: 10px;
-}
-
-.points-input-box {
-    border: none;
-    outline: none;
-
-    width: 540px;
-    height: 50px;
-}
-
-.point-input {
-    border: 1px solid #dbdbdb;
-    
-    margin-bottom: 10px;
-    padding: 5px;
-
-    width: 540px;
-    height: 50px;
-
-
-    font-size: 30px;
-}
-
-.final-amount-confirm {
-    display: flex;
-    justify-content: space-between;
-}
-
-.final-amount-confirm button {
-    width: 265px;
-    height: 50px;
-    border: 1px solid #dbdbdb;
-}
 
 .insert-modal {
     width: 900px;
