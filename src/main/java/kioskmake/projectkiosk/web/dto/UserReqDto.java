@@ -24,7 +24,7 @@ public class UserReqDto {
 		return User.builder()
 				.id(id)
 				.point(point)
-				.point_status(status)
+				.point2(point2)
 				.build();
 	}
 }

@@ -72,12 +72,12 @@ public class CheckRestController {
     }
     
     @PutMapping("/point")
-    public ResponseEntity<?> updateUserPoint(int id, int point, int point2, String pointStatus){
+    public ResponseEntity<?> updateUserPoint(int id, int point, int point2){
     	
     	boolean status = false;
     	
     	try {
-			status = userService.updateUserPoint(id, point, point2, pointStatus);
+			status = userService.updateUserPoint(id, point, point2);
 		} catch (Exception e) {
 			e.printStackTrace();
 			return ResponseEntity.internalServerError().body(new CustomResponseDto(-1, "update failed", status));

@@ -8,5 +8,5 @@ public interface UserService {
 	
 	public UserRespDto insertUser(UserReqDto insertUserReqDto) throws Exception;
 	public User userCheck(String userName, String userPhoneNumber) throws Exception;
-	public boolean updateUserPoint(int id, int point, int point2, String pointStatus) throws Exception;
+	public boolean updateUserPoint(int id, int point, int point2) throws Exception;
 }

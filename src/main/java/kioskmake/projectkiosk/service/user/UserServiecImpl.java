@@ -37,11 +37,11 @@ public class UserServiecImpl implements UserService {
 	}
 
 	@Override
-	public boolean updateUserPoint(int id, int point, int point2, String pointStatus) throws Exception {
+	public boolean updateUserPoint(int id, int point, int point2) throws Exception {
 		
 		boolean status = false;
 		
-		status = userRepository.updateUserPoint(id, point, point2, pointStatus);
+		status = userRepository.updateUserPoint(id, point, point2);
 		
 		return false;
 	}
