@@ -375,7 +375,8 @@
             price as default_price,
             kcal,
             image,
-            mc_lunch_flag
+            mc_lunch_flag,
+            menu_category_code
         FROM
             hamburger_table
         WHERE

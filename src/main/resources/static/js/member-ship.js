@@ -1,4 +1,5 @@
 const memberShipRegistration = document.querySelector(".member-ship-registration");
+const orderService = document.querySelector(".order-service");
 const mainModalDiv = document.querySelector(".main-modal-div");
 const registrationButton = document.querySelector(".registration-button");
 const cancelButton = document.querySelector(".cancel-button");
@@ -6,9 +7,12 @@ const userCheckInput = document.querySelectorAll(".user-check-input");
 const userName = document.querySelector(".user-name");
 const userPhoneNumber = document.querySelector(".user-phone-number");
 
+
 memberShipRegistration.onclick = () => {
     mainModalDiv.classList.remove("member-ship-modal-visible");
 }
+
+orderService.onclick = () => location.replace("/kiosk-main");
 
 cancelButton.onclick = () => {
     mainModalDiv.classList.add("member-ship-modal-visible");

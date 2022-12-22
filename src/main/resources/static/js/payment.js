@@ -1,141 +1,167 @@
-
-const backButton = document.querySelector(".back-button");
-const cardPayment = document.querySelector(".card-payment");
-const pointUseQuestionModal = document.querySelector(".point-use-question-modal");
-const payment = document.querySelector(".payment");
-const pointUseButton = document.querySelector(".point-use-button");
-const havingPointInfo = document.querySelector(".having-point-info");
-const cancelButton = document.querySelector(".cancel-button");
-const currentPointValue = document.querySelector(".current-point-value");
-const usingPointInput = document.querySelector(".using-point-input");
-const finalAmountInput = document.querySelector(".final-amount-input");
-const usingPointButton = document.querySelector(".using-point-button");
-
-currentPointValue.value =  JSON.parse(localStorage.user).point
-
-let userId = JSON.parse(localStorage.user).id;
-let totalPrice = parseInt(localStorage.totalPrice.replace("￦", "").replace(",", ""));
-let usingPointValue = null
-
-
-
 window.onload = () => {
+  PointViewer.getInstance();
+  PageLoader.getInstance();
   Imp.getInstance();
   ButtonClickEventSetter.getInstance();
 }
 
-
-cardPayment.onclick = () => {
-  pointUseQuestionModal.classList.remove("question-visible");
-}
-
-payment.onclick = () => {
-  paymentEvent();
-  pointUseQuestionModal.classList.add("question-visible");
-  updateUserPoint();
-}
-
-pointUseButton.onclick = () => {
-  pointUseQuestionModal.classList.add("question-visible");
-  havingPointInfo.classList.remove("use-point-visible");
-}
-
-cancelButton.onclick = () => {
-  usingPointInput.value = "";
-  havingPointInfo.classList.add("use-point-visible");
-}
-
-usingPointInput.onkeydown = () => {
-
-  setTimeout(() => {
-      usingPointValue = parseInt(usingPointInput.value);
-
-      console.log("check: " + usingPointValue);
-      // if(usingPointInput.value.length == 0) {
-      //     // usingPointInput.value = 0;
-      //     // usingPointValue = usingPointInput.value ;
-      //     finalAmountInput.value = totalPrice;
-      //     console.log(totalPrice);
-      // }
-
-      if(usingPointValue + 1 > currentPointValue.value) {
-
-        usingPointInput.value = currentPointValue.value;
-          usingPointValue = parseInt(usingPointInput.value);
-
-          console.log(usingPointValue);
-          finalAmountInput.value = totalPrice - usingPointValue;
-
-          if(finalAmountInput.value < 0) {
-              usingPoint.value =  totalPrice;
-              finalAmountInput.value = 0;
-          }
-      } else if(usingPointValue + 1 > totalPrice) {
-        usingPointInput.value =  totalPrice;
-          finalAmountInput.value = 0;
-      }else if(usingPointValue < 1 || usingPointInput.value.length == 0) {
-        usingPointInput.value = "";
-        finalAmountInput.value = totalPrice - 0;
-      }else {
-        finalAmountInput.value = totalPrice - usingPointValue;
-      }
-      localStorage.totalPrice = finalAmountInput.value
-
-
-  }, 100);
-
-}
-
-usingPointButton.onclick = () => {
-  usingPointInput.value = "";
-  paymentEvent();
-  havingPointInfo.classList.add("use-point-visible");
-  updateUserPoint();
-}
-
-
-function updateUserPoint() {
-  let point = parseInt(localStorage.totalPrice.replace("￦", "").replace(",", "")) * (5/100);
-  let point2 = usingPointValue;
-  $.ajax({
-    async: false,
-    type: "put",
-    url: `/api/v1/check/point`,
-    data:{
-        "id": userId,
-        "point": point,
-        "point2": point2
-    },
-    dataType: "json",
-    success: (response) => {
-        console.log(response.data);
-        alert(point + "포인트 적립 성공");
-    },
-    error: (error) => {
-        console.log(error);
-        alert("포인트 적립 실패");
-    }
-  });
-}
-
-function paymentEvent() {
-  let price = localStorage.totalPrice.replace("￦", "");
-  alert(price + "원 결제 되었습니다")
-}
-
-class PageLoader {
+class User {
   static #instance = null;
+
+  user = null;
+  userFlag = false;
 
   static getInstance() {
     if(this.#instance == null) {
-      this.#instance = new pageLoader();
+      this.#instance = new User();
     }
 
     return this.#instance;
   }
 
-  paymentSuccessfulAndLoadMainPage() {
-    let price = localStorage.totalPrice.replace("￦", "");
+  constructor() {
+    this.setUser();
+  }
+
+  setUser() {
+    this.user = localStorage.user;
+
+    if(this.user != null) {
+      this.user = JSON.parse(this.user);
+    }
+
+    this.userFlag = this.user != null;
+  }
+}
+
+class Point {
+  static #instance = null;
+
+  usingPointValue = 0;
+
+  static getInstance() {
+    if(this.#instance == null) {
+      this.#instance = new Point();
+    }
+
+    return this.#instance;
+  }
+}
+
+class PointViewer {
+  static #instance = null;
+
+  usingPointInput = null;
+  pointUseQuestionModal = null;
+
+  static getInstance() {
+    if(this.#instance == null) {
+      this.#instance = new PointViewer();
+    }
+
+    return this.#instance;
+  }
+
+  constructor() {
+    this.pointUseQuestionModal = document.querySelector(".point-use-question-modal");
+    if(User.getInstance().userFlag) {
+      this.setPointEvent();
+
+    }
+
+  }
+
+  setPointEvent() {
+    const finalAmountInput = document.querySelector(".final-amount-input");
+    this.usingPointInput = document.querySelector(".using-point-input");
+    let currentPointValue = document.querySelector(".current-point-value");
+    let totalPrice = parseInt(localStorage.totalPrice.replace("￦", "").replace(",", ""));
+
+    currentPointValue.value = User.getInstance().user.point;
+
+    this.usingPointInput.onkeydown = () => {
+
+      setTimeout(() => {
+        let usingPointValue = parseInt(this.usingPointInput.value);
+          // usingPointValue = parseInt(usingPointInput.value);
+        Point.getInstance().usingPointValue = usingPointValue;
+
+
+          // if(usingPointInput.value.length == 0) {
+          //     // usingPointInput.value = 0;
+          //     // usingPointValue = usingPointInput.value ;
+          //     finalAmountInput.value = totalPrice;
+          //     console.log(totalPrice);
+          // }
+    
+          if(usingPointValue + 1 > currentPointValue.value) {
+    
+            this.usingPointInput.value = currentPointValue.value;
+              usingPointValue = parseInt(this.usingPointInput.value);
+    
+              console.log(usingPointValue);
+              finalAmountInput.value = totalPrice - usingPointValue;
+    
+              if(finalAmountInput.value < 0) {
+                  this.usingPointInput.value =  totalPrice;
+                  finalAmountInput.value = 0;
+              }
+          } else if(usingPointValue + 1 > totalPrice) {
+              this.usingPointInput.value =  totalPrice;
+              finalAmountInput.value = 0;
+          }else if(usingPointValue < 1 || this.usingPointInput.value.length == 0) {
+            this.usingPointInput.value = "";
+            finalAmountInput.value = totalPrice - 0;
+          }else {
+            finalAmountInput.value = totalPrice - usingPointValue;
+          }
+          localStorage.totalPrice = finalAmountInput.value
+    
+    
+      }, 100);
+    
+    }
+  }
+
+  
+}
+
+
+class PageLoader {
+  static #instance = null;
+
+
+  static getInstance() {
+    if(this.#instance == null) {
+      this.#instance = new PageLoader();
+    }
+
+    return this.#instance;
+  }
+
+  setProductName() {
+    let productName = null;
+
+    let orderMenuList = localStorage.orderMenuList;
+
+    if(orderMenuList != null) {
+      orderMenuList = JSON.parse(orderMenuList);
+
+      const product = orderMenuList[0];
+
+      if(product.menuCategoryCode != 0) {
+        productName = product.setFlag ? product.setName : product.menuName;
+      }else {
+        productName = product.menuName;
+      }
+
+      productName += orderMenuList.length > 1 ? `외 ${orderMenuList.length - 1}` : '';
+    }
+
+    return productName;
+  }
+
+  paymentSuccessfulAndLoadMainPage(price) {
     localStorage.removeItem("orderMenuList");
     localStorage.totalPrice = "￦0";
   
@@ -167,24 +193,26 @@ class Imp {
   }
 
   requestPay() {
+    let price = localStorage.totalPrice.replace("￦", "");
+
     this.IMP.request_pay({
       pg: "kakaopay.TC0ONETIME",
       pay_method: "card",
       merchant_uid: "mc_" + new Date().getTime(),
-      name: "불고기 버거",
-      amount: 100,
-      buyer_email : 'dhmk47@naver.com',
-      buyer_name : '한대경',
-      buyer_tel : '010-4966-3160',
-      buyer_addr : '서울 강남구 도곡동',
-      buyer_postcode : '123-456'
+      name: PageLoader.getInstance().setProductName(),
+      amount: price
     },
     (response) => {
       console.log(response);
       if(response.success) {
 
         alert("결제 성공");
-        PageLoader.getInstance().paymentSuccessfulAndLoadMainPage();
+        if(User.getInstance().userFlag) {
+          this.updateUserPoint();
+
+        }
+
+        PageLoader.getInstance().paymentSuccessfulAndLoadMainPage(price);
         
         // $.ajax({
         //   async: false,
@@ -211,10 +239,39 @@ class Imp {
     }
     );
   }
+  
+  updateUserPoint() {
+    let point = parseInt(localStorage.totalPrice.replace("￦", "").replace(",", "")) * (5/100);
+    let point2 = parseInt(Point.getInstance().usingPointValue);
+    let userId = JSON.parse(localStorage.user).id;
+
+    $.ajax({
+      async: false,
+      type: "put",
+      url: `/api/v1/check/point`,
+      data:{
+          "id": userId,
+          "point": point,
+          "point2": point2
+      },
+      dataType: "json",
+      success: (response) => {
+          console.log(response.data);
+          alert(point + "포인트 적립 성공");
+      },
+      error: (error) => {
+          console.log(error);
+          alert("포인트 적립 실패");
+      }
+    });
+  }
 }
 
 class ButtonClickEventSetter {
   static #instance = null;
+
+  havingPointInfo = null;
+  usingPointInput = null;
 
   static getInstance() {
     if(this.#instance == null) {
@@ -225,8 +282,21 @@ class ButtonClickEventSetter {
   }
 
   constructor() {
+    this.havingPointInfo = document.querySelector(".having-point-info");
+    this.usingPointInput = document.querySelector(".using-point-input");
+    this.pointUseQuestionModal = PointViewer.getInstance().pointUseQuestionModal;
+
     this.setBackButtonClickEvent();
     this.setCardPaymentClickEvent();
+
+    if(User.getInstance().userFlag) {
+      this.setCardPaymentButotnClickEvent();
+
+    }
+    this.setPaymentClickEvent();
+    this.setPointUseButtonClickEvent();
+    this.setCancelButtonClickEvent();
+    this.setUsingPointButtonClickEvent();
   }
 
   setBackButtonClickEvent() {
@@ -244,4 +314,64 @@ class ButtonClickEventSetter {
       Imp.getInstance().requestPay();
     }
   }
+
+  setCardPaymentButotnClickEvent() {
+    const cardPayment = document.querySelector(".card-payment");
+
+    cardPayment.onclick = () => {
+      this.pointUseQuestionModal.classList.remove("question-visible");
+    }
+  }
+
+  setPaymentClickEvent() {
+    const payment = document.querySelector(".payment");
+
+    payment.onclick = () => {
+      Imp.getInstance().requestPay();
+      this.pointUseQuestionModal.classList.add("question-visible");
+    }
+  }
+  
+  setPointUseButtonClickEvent() {
+    const pointUseButton = document.querySelector(".point-use-button");
+
+    pointUseButton.onclick = () => {
+      this.pointUseQuestionModal.classList.add("question-visible");
+      this.havingPointInfo.classList.remove("use-point-visible");
+    }
+  }
+  
+  setCancelButtonClickEvent() {
+    const cancelButton = document.querySelector(".cancel-button");
+
+    cancelButton.onclick = () => {
+      this.usingPointInput.value = "";
+      this.havingPointInfo.classList.add("use-point-visible");
+    }
+  }
+
+  setUsingPointButtonClickEvent() {
+    const usingPointButton = document.querySelector(".using-point-button");
+
+    usingPointButton.onclick = () => {
+      let price = localStorage.totalPrice.replace("￦", "");
+      
+      this.usingPointInput.value = "";
+      this.havingPointInfo.classList.add("use-point-visible");
+
+      if(price == 0) {
+        alert("결제 성공");
+        if(User.getInstance().userFlag) {
+          Imp.getInstance().updateUserPoint();
+
+        }
+
+        PageLoader.getInstance().paymentSuccessfulAndLoadMainPage(price);
+      }else {
+        Imp.getInstance().requestPay();
+
+      }
+    }
+  }
+  
 }

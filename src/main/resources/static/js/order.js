@@ -4,19 +4,8 @@ const orderCompleteButton = document.querySelector(".order-complete-button");
 
 const subTotalPriceSpan = document.querySelector(".sub-total-price-span");
 const totalPriceSpan = document.querySelector(".total-price-span");
-const pointButton = document.querySelector(".point-button");
-const pointModal = document.querySelector(".point-modal");
-const usePoint = document.querySelector(".use-point");
-const havingPointInfo = document.querySelector(".having-point-info");
 const cancelButton = document.querySelectorAll(".cancel-button");
 const addOrdersButton = document.querySelector(".add-orders-button");
-const insertModal = document.querySelector(".insert-modal");
-const insertUser = document.querySelector(".insert-user");
-const insertCancelButton = document.querySelector(".insert-cancel-button");
-const userName = document.querySelector(".user-name");
-const userPhoneNumber = document.querySelector(".user-phone-number");
-const earnPoints = document.querySelector(".earn-points");
-const usingPointButton = document.querySelector(".using-point-button");
 
 let count = 1;
 let amount = 4500;
@@ -51,232 +40,6 @@ addOrdersButton.onclick = () => {
     localStorage.totalPrice = totalPriceText;
     location.replace("/kiosk-main");
 }
-
-pointButton.onclick = () => {
-    pointModal.classList.remove("modal-visible");
-}
-
-
-usePoint.onclick = (e) => {
-    if(checkUser(e.target)){
-       
-    }
-}
-
-
-earnPoints.onclick = (e) => {
-    if(checkUser(e.target)) {
-        // alert(earnPoint + "포인트 적립되었습니다.");
-        pointModal.classList.add("modal-visible");
-        havingPointInfo.classList.add("use-point-visible");
-        // updateUserPoint(user)     
-    }
-}
-
-cancelButton.forEach(button => {
-    button.onclick = () => {
-        pointModal.classList.add("modal-visible");
-        havingPointInfo.classList.add("use-point-visible");
-        userName.value = "";
-        userPhoneNumber.value = "";
-        let finalAmount = document.querySelector(".final-amount-input");
-        let usingPoint = document.querySelector(".using-point-input");
-        finalAmount.value = "";
-        usingPoint.value = "";
-    }
-})
-
-function checkUser(button) {
-    let status = false;
-    let pointStatus = button.classList.contains("use-point") ? "use" : "earn";
-    console.log(pointStatus);
-    $.ajax({
-        async: false,
-        type: "get",
-        url: `/api/v1/check/user`,
-        data: {
-            "userName": userName.value,
-            "userPhoneNumber": userPhoneNumber.value
-        },
-        dataType: "json",
-        success: (response) => {
-            user = response.data;
-            if(response.data == null) {
-                insertModalInVisibleEvent();
-                status = false;
-            }else {
-                if(pointStatus == "use") {
-                    havingPointInfo.classList.remove("use-point-visible");
-                    let usingPoint = document.querySelector(".using-point-input");
-                    let currentPoint = document.querySelector(".current-point-value");
-                    currentPoint.value = user.point;
-                    const point = document.querySelector(".total-price-span").textContent;
-                    let num = point.replace("￦", "");
-                    let num2 = num.replace("," , "");
-                    let point2 = parseInt(num2);
-                    let finalAmount = document.querySelector(".final-amount-input");
-
-                    usingPoint.onkeydown = () => {
-
-                        setTimeout(() => {
-                            let usingPointValue = parseInt(usingPoint.value);
-
-                            if(usingPoint.value.length == 0) {
-                                usingPoint.value = 0;
-                                usingPointValue = parseInt(usingPoint.value);
-                                finalAmount.value = point2 - usingPointValue;
-                            }
-
-                            if(usingPointValue + 1 > user.point) {
-
-                                usingPoint.value = user.point;
-                                usingPointValue = parseInt(usingPoint.value);
-
-                                console.log(usingPointValue);
-                                finalAmount.value = point2 - usingPointValue;
-
-                                if(finalAmount.value < 0) {
-                                    usingPoint.value =  point2;
-                                    finalAmount.value = 0;
-                                }
-                            } else if(usingPointValue + 1 > point2) {
-                                usingPoint.value =  point2;
-                                finalAmount.value = 0;
-                            }else if(usingPointValue < 1) {
-                                usingPoint.value = 0;
-                            }else {
-                                finalAmount.value = point2 - usingPointValue;
-                            }
-                    
-
-                        }, 100);
-                       
-                    }
-                    usingPointButton.onclick = () => {
-                        usePointButtonClick(response.data, pointStatus);
-                    }
-                }else {
-                    updateUserPoint(response.data, pointStatus);
-                }
-                // console.log(response.data);
-                status = true;
-                // alert("성공");
-            }
-        },
-        error: (error) => {
-            console.log(error);
-        }
-    })
-    return status;
-}
-
-function usePointButtonClick(user, pointStatus) {
-    const id = user.id;
-    let usingPoint = document.querySelector(".using-point-input").value;
-    let finalAmountInput = document.querySelector(".final-amount-input").value;
-    
-    if(confirm(usingPoint + "포인트를 사용하시겠습니까?")) {
-        $.ajax({
-            async: false,
-            type: "put",
-            url: `/api/v1/check/point`,
-            data:{
-                "id": id,
-                "point": usingPoint,
-                "pointStatus": pointStatus
-            },
-            dataType: "json",
-            success: (response) => {
-                console.log(response.data);
-                alert(usingPoint + "가 사용되었습니다.")
-                pointModal.classList.add("modal-visible");
-                havingPointInfo.classList.add("use-point-visible");
-                userName.value = "";
-                userPhoneNumber.value = "";
-                
-                localStorage.usingPoint = usingPoint;
-
-                subTotalPriceSpan.innerHTML = "￦" + finalAmountInput.toLocaleString('ko-KR');
-                totalPriceSpan.innerHTML = "￦" + finalAmountInput.toLocaleString('ko-KR');
-            },
-            error: (error) => {
-                console.log(error);
-                alert("포인트 사용 실패");
-            }
-        });
-    }
-}
-
-function updateUserPoint(user, pointStatus) {
-    const point = document.querySelector(".total-price-span").textContent;
-    console.log(point)
-    let num = point.replace("￦", "");
-    let num2 = num.replace("," , "");
-    let point2 = parseInt(num2);
-    let earnPoint = (point2 / 100) * 5;
-
-    const id = user.id;
-    console.log(id);
-
-    $.ajax({
-        async: false,
-        type: "put",
-        url: `/api/v1/check/point`,
-        data:{
-            "id": id,
-            "point": earnPoint,
-            "pointStatus": pointStatus
-        },
-        dataType: "json",
-        success: (response) => {
-            console.log(response.data);
-            alert(earnPoint + "포인트 적립 성공");
-            pointModal.classList.add("modal-visible");
-            havingPointInfo.classList.add("use-point-visible");
-        },
-        error: (error) => {
-            console.log(error);
-            alert("포인트 적립 실패");
-        }
-    });
-
-}
-
-function insertModalInVisibleEvent() {
-    insertModal.classList.remove("insert-modal-visible");
-}
-
-insertUser.onclick = () => {
-    $.ajax({
-        async: false,
-        type: "post",
-        url: `/api/v1/check/insert-user`,
-        data: {
-            "userName": userName.value,
-            "userPhoneNumber": userPhoneNumber.value
-        },
-        dataType: "json",
-        success: (response) => {
-            console.log(response.data);
-            insertModalVisibleEvent();
-            alert("등록 성공");
-            
-        },
-        error: (error) => {
-            console.log(error);
-            alert("등록 실패");
-        }
-    });
-}
-
-function insertModalVisibleEvent() {
-    insertModal.classList.add("insert-modal-visible");
-}
-
-insertCancelButton.onclick = () => {
-    insertModalVisibleEvent();
-}
-
 
 
 function setOrderMenu() {
@@ -355,15 +118,12 @@ function getTotalKcal(index, count) {
 
 function getTotalPrice() {
     const menuPriceItems = document.querySelectorAll(".menu-price");
-    const usingPoint = localStorage.usingPoint;
 
     let totalPrice = 0;
 
     menuPriceItems.forEach(menuPrice => {
         totalPrice += parseInt(menuPrice.textContent.substring(1).replaceAll(",", ""));
     })
-
-    totalPrice = usingPoint != null ? totalPrice -= usingPoint : totalPrice;
 
     return totalPrice;
 }
