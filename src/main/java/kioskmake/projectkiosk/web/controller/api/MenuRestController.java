@@ -5,12 +5,15 @@ import kioskmake.projectkiosk.service.menu.MenuService;
 import kioskmake.projectkiosk.web.dto.CustomResponseDto;
 import kioskmake.projectkiosk.web.dto.menu.ReadMenuRequestDto;
 import kioskmake.projectkiosk.web.dto.menu.ReadMenuResponseDto;
+import kioskmake.projectkiosk.web.dto.menu.UpdateMenuSalesRequestDto;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@Slf4j
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/menu")
@@ -123,5 +126,21 @@ public class MenuRestController {
         }
 
         return ResponseEntity.ok(new CustomResponseDto(1, "Load top ranking menu list successful", readMenuRequestDtoList));
+    }
+
+
+    @Log
+    @PutMapping("/sales")
+    public ResponseEntity<?> updateMenuSales(@RequestBody UpdateMenuSalesRequestDto updateMenuSalesRequestDto) {
+        boolean status = false;
+
+        try {
+            status = menuService.updateMenuSales(updateMenuSalesRequestDto);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.internalServerError().body(new CustomResponseDto(-1, "Failed to update menu sales", status));
+        }
+
+        return ResponseEntity.ok(new CustomResponseDto(1, "Update menu sales successful", status));
     }
 }

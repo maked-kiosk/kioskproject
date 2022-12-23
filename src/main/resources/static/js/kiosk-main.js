@@ -321,6 +321,7 @@ function showAddShoppingBasket(menu) {
         menuList = JSON.parse(menuList);
 
         menu.amount = 1;
+        menu.setFlag = false;
 
         menuList.push(menu);
     }

@@ -5,6 +5,7 @@ import kioskmake.projectkiosk.domain.menu.MenuRepository;
 import kioskmake.projectkiosk.web.dto.admin.*;
 import kioskmake.projectkiosk.web.dto.menu.ReadMenuRequestDto;
 import kioskmake.projectkiosk.web.dto.menu.ReadMenuResponseDto;
+import kioskmake.projectkiosk.web.dto.menu.UpdateMenuSalesRequestDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -73,6 +74,11 @@ public class MenuServiceImpl implements MenuService {
 	@Override
 	public List<ReadMenuResponseDto> getTopRankingMenuList() throws Exception {
 		return changeToReadMenuResponseDtoList(menuRepository.findTopRankingMenuList());
+	}
+
+	@Override
+	public boolean updateMenuSales(UpdateMenuSalesRequestDto updateMenuSalesRequestDto) throws Exception {
+		return menuRepository.updateMenuSales(updateMenuSalesRequestDto.toMenuIdentityEntityList()) > 0;
 	}
 
 	private List<ReadMenuResponseDto> changeToReadMenuResponseDtoList(List<Menu> menuEntityList) {

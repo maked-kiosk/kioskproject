@@ -48,12 +48,17 @@ class MenuLoader {
     
             menuList.forEach(menu => {
                 const price = this.menuObject.mcMorningFlag ? menu.defaultPrice : menu.price;
+                let menuType = "side";
+
+                if(this.menuType == 'drink') {
+                    menuType = menu.drinkCategoryName;
+                }
 
                 console.log(menu);
                 foodMenuUl.innerHTML += `
                     <li class="menu-detail-li">
                         <div class="food-menu-img">
-                            <img src="/image/images/${this.menuType}/${menu.image}" alt="${menu.menuName}">
+                            <img src="/image/images/${menuType}/${menu.image}" alt="${menu.menuName}">
                         </div>
                         <div>
                             <p>${menu.menuName}</p>

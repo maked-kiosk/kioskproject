@@ -130,6 +130,7 @@ class PointViewer {
 class PageLoader {
   static #instance = null;
 
+  orderMenuList = null;
 
   static getInstance() {
     if(this.#instance == null) {
@@ -142,12 +143,12 @@ class PageLoader {
   setProductName() {
     let productName = null;
 
-    let orderMenuList = localStorage.orderMenuList;
+    this.orderMenuList = localStorage.orderMenuList;
 
-    if(orderMenuList != null) {
-      orderMenuList = JSON.parse(orderMenuList);
+    if(this.orderMenuList != null) {
+      this.orderMenuList = JSON.parse(this.orderMenuList);
 
-      const product = orderMenuList[0];
+      const product = this.orderMenuList[0];
 
       if(product.menuCategoryCode != 0) {
         productName = product.setFlag ? product.setName : product.menuName;
@@ -155,7 +156,7 @@ class PageLoader {
         productName = product.menuName;
       }
 
-      productName += orderMenuList.length > 1 ? `외 ${orderMenuList.length - 1}` : '';
+      productName += this.orderMenuList.length > 1 ? `외 ${this.orderMenuList.length - 1}` : '';
     }
 
     return productName;
@@ -212,8 +213,12 @@ class Imp {
 
         }
 
+        let status = this.updateSalesQuantityRequest();
         PageLoader.getInstance().paymentSuccessfulAndLoadMainPage(price);
         
+        if(!status) {
+          alert("판매 수량 업데이트 실패");
+        }
         // $.ajax({
         //   async: false,
         //   type: "post",
@@ -264,6 +269,61 @@ class Imp {
           alert("포인트 적립 실패");
       }
     });
+  }
+
+  updateSalesQuantityRequest() {
+    const menuObject = this.setMenuObject();
+    let status = false;
+
+    $.ajax({
+      async: false,
+      type: "put",
+      url: `/api/v1/menu/sales`,
+      contentType: "application/json",
+      data: JSON.stringify(menuObject),
+      dataType: "json",
+      success: (response) => {
+        status = response.data;
+      },
+      error: (request, status, error) => {
+        console.log(request.status);
+        console.log(request.responseText);
+        console.log(error);
+      }
+    })
+
+    return status;
+  }
+
+  setMenuObject() {
+    const orderMenuList = PageLoader.getInstance().orderMenuList;
+
+    let menuObject = {
+      "menuIdentityDtoList": new Array()
+    }
+
+    orderMenuList.forEach(menu => {
+      let menuIdentityDto = {
+        "menuCode": 0,
+        "menuCategoryCode": 0
+      }
+
+      if(menu.setFlag) {
+        menuIdentityDto.menuCode = menu.burger.id;
+        menuIdentityDto.menuCategoryCode = 1;
+
+      }else {
+        menuIdentityDto.menuCode = menu.id;
+        menuIdentityDto.menuCategoryCode = menu.menuCategoryCode;
+
+      }
+
+      menuObject.menuIdentityDtoList.push(menuIdentityDto);
+    })
+
+    menuObject.menuIdentityDtoList = menuObject.menuIdentityDtoList.filter(menu => menu.menuCategoryCode == 1 || menu.menuCategoryCode == 4);
+
+    return menuObject;
   }
 }
 

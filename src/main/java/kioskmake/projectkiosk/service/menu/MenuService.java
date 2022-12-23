@@ -5,6 +5,7 @@ import java.util.List;
 import kioskmake.projectkiosk.web.dto.admin.*;
 import kioskmake.projectkiosk.web.dto.menu.ReadMenuRequestDto;
 import kioskmake.projectkiosk.web.dto.menu.ReadMenuResponseDto;
+import kioskmake.projectkiosk.web.dto.menu.UpdateMenuSalesRequestDto;
 
 public interface MenuService {
     
@@ -18,6 +19,8 @@ public interface MenuService {
 
     public List<ReadMenuResponseDto> getChangeMenuInSet(ReadMenuRequestDto readMenuRequestDto) throws Exception;
     public List<ReadMenuResponseDto> getTopRankingMenuList() throws Exception;
+
+    public boolean updateMenuSales(UpdateMenuSalesRequestDto updateMenuSalesRequestDto) throws Exception;
 
 	// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> ADMIN <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 

@@ -27,6 +27,8 @@ public interface MenuRepository {
 
     public List<Menu> findTopRankingMenuList() throws Exception;
 
+    public int updateMenuSales(List<MenuIdentity> menu_identity_list) throws Exception;
+
 
 
 

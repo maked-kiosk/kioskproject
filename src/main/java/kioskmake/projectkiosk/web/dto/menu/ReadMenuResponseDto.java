@@ -8,6 +8,7 @@ import lombok.Data;
 public class ReadMenuResponseDto {
     private int id;
     private String menuName;
+    private String drinkCategoryName;
     private int price;
     private int defaultPrice;
     private int kcal;

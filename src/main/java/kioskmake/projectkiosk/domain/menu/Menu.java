@@ -23,6 +23,7 @@ public class Menu {
 	private String drink_type;
 	private String menu_name;
 	private String menu_category_name;
+	private String drink_category_name;
 	private int sales;
 	private int price;
 	private int default_price;
@@ -43,6 +44,7 @@ public class Menu {
         return ReadMenuResponseDto.builder()
         		.id(id)
                 .menuName(menu_name)
+                .drinkCategoryName(drink_category_name)
 				.mcMorningFlag(mc_morning_flag)
                 .price(price)
 				.defaultPrice(default_price)

@@ -491,15 +491,19 @@
                     if(size LIKE 'none', side_menu_name, concat(side_menu_name, ' - ', if(size LIKE 'M', '미디엄', '라지'))) AS menu_name,
                     smt.price - smt_p.price AS price,
                     smt.price as default_price,
+                    smt.menu_category_code,
                 </when>
                 <when test="menu_type == 'dessert'">
                     dessert_name AS menu_name,
                     price as default_price,
+                    menu_category_code,
                 </when>
                 <otherwise>
                     if(size LIKE 'none', drink_name, concat(drink_name, ' - ', if(size LIKE 'M', '미디엄', '라지'))) AS menu_name,
                     dt.price - dt_p.price AS price,
                     dt.price as default_price,
+                    dt.menu_category_code,
+                    if(dt.drink_category_code = 1, 'drink', 'coffee') as drink_category_name,
                 </otherwise>
             </choose>
             kcal,
@@ -600,8 +604,10 @@
                 </when>
                 <otherwise>
                     drink_name AS menu_name,
+                    if(drink_category_code = 1, 'drink', 'coffee') as drink_category_name,
                 </otherwise>
             </choose>
+            menu_category_code,
             price as default_price,
             kcal,
             image
@@ -644,6 +650,7 @@
                     if(smt.price - smt2.price &lt; 0, 0, smt.price - smt2.price) AS price,
                     smt.price as default_price,
                     smt.kcal,
+                    smt.menu_category_code,
                     smt.image
                 FROM
                     side_menu_table smt
@@ -678,6 +685,7 @@
                     if(smt.price - smt2.price &lt; 0, 0, smt.price - smt2.price) AS price,
                     smt.price as default_price,
                     smt.kcal,
+                    smt.menu_category_code,
                     smt.image
                 FROM
                     side_menu_table smt
@@ -719,6 +727,8 @@
                     if(dt.price - dt2.price &lt; 0, 0, dt.price - dt2.price) AS price,
                     dt.price as default_price,
                     dt.kcal,
+                    dt.menu_category_code,
+                    if(dt.drink_category_code = 1, 'drink', 'coffee') as drink_category_name,
                     dt.image
                 FROM
                     drink_table dt
@@ -804,4 +814,28 @@
                 where
                     id = 1) &gt; NOW()), hamburger_category_code != 0, hamburger_category_code != -1);
     </select>
+
+
+    <update id="updateMenuSales" parameterType="java.util.List">
+        <foreach collection="menu_identity_list" item="menu_identity">
+            <choose>
+                <when test="menu_identity.menu_category_code == 1">
+                    UPDATE
+                        hamburger_table
+                    SET
+                        sales = sales + 1
+                    WHERE
+                        id = #{menu_identity.menu_code};
+                </when>
+                <otherwise>
+                    UPDATE
+                        dessert_table
+                    SET
+                        sales = sales + 1
+                    WHERE
+                        id = #{menu_identity.menu_code};
+                </otherwise>
+            </choose>
+        </foreach>
+    </update>
 </mapper>
