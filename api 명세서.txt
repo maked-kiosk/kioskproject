@@ -1,0 +1,99 @@
+*************************************
+[ ] 묶음은 하나의 API를 의미합니다.
+*************************************
+
+햄버거 리스트 조회
+GET: /api/v1/menu/burger/list?burgerType=all&beef&seafood&chicken
+
+
+햄버거 메뉴 조회
+GET: /api/v1/menu/burger/{id}
+
+
+메뉴 판매 수량 업데이트
+PUT: /api/v1/menu/sales
+
+
+인기 메뉴 리스트 조회
+GET: /api/v1/menu/top-ranking/list
+
+
+맥모닝 햄버거 메뉴 리스트 조회
+GET: /api/v1/menu/mc-morning/list
+
+
+맥모닝 햄버거 단품 조회
+GET: /api/v1/menu/mc-morning/{id}
+
+
+
+[
+
+디저트 단품 리스트 조회
+GET: /api/v1/menu/{menuType}/list?mcMorning=false
+
+사이드 단품 리스트 조회
+GET: /api/v1/menu/{menuType}/list?mcMorning=false
+
+세트 메뉴 선택 시 선택 가능한 사이드 메뉴 리스트 조회
+GET: /api/v1/menu/{menuType}/list?setSize=L&mcMorning=false
+
+
+드링크 단품 리스트 조회
+GET: /api/v1/menu/{menuType}/list?mcMorning=false
+
+세트 메뉴 선택 시 선택 가능한 드링크 메뉴 리스트 조회
+GET: /api/v1/menu/{menuType}/list?setSize=L&mcMorning=false
+
+
+맥모닝 사이드 단품 메뉴 리스트 조회
+GET: /api/v1/menu/side/list?mcMorning=true
+
+맥모닝 사이드 세트 메뉴 리스트 조회
+GET: /api/v1/menu/side/list?setSize=M&mcMorning=true
+
+]
+
+
+[
+	
+맥모닝 세트 사이드 메뉴 변경 가능 메뉴 조회
+GET: /api/v1/menu/{side}/change/list?mcMorning=true
+
+					
+side_menu 재료 변경 시 변경 가능 메뉴 조회
+GET: /api/v1/menu/{side}/change/list?setSize=M@L&mcMorning=false
+	
+	
+drink_menu 재료 변경 시 변경 가능 메뉴 조회
+GET: /api/v1/menu/{drink}/change/list?setSize=M@L&mcMorning=false
+
+]
+
+
+[
+
+맥모닝 검사 쿼리 1 => 맥모닝 활성화 2 => 맥모닝 비활성화
+GET: /api/v1/check/mc-morning
+	
+
+맥런치 검사 쿼리 1 => 맥런치 활성화 2 => 맥런치 비활성화
+GET: /api/v1/check/mc-lunch
+
+]
+
+
+-------------------관지자 페이지-------------------
+
+
+메뉴 리스트 조회
+GET: /api/v1/menu/list
+
+메뉴 상세 정보 조회
+GET: /api/v1/menu/detail
+
+메뉴 정보 수정
+PUT: /api/v1/menu/detail/{id}
+
+메뉴 정보 삭제
+DELETE: /api/v1/menu/{menuType}/{id}

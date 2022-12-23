@@ -36,7 +36,7 @@ public class AdminMenuController {
 	}
 
 	@Log
-	@GetMapping("/menu/list")
+	@GetMapping("/list")
 	public ResponseEntity<?> getMenuList(int page, String menuType) {
 		
 		List<GetMenuListRespDto> menuList = null;

@@ -32,7 +32,7 @@ class MenuListLoader {
         $.ajax({
             async: false,
             type: "get",
-            url: `/api/v1/menu/menu/list`,
+            url: `/api/v1/menu/list`,
             data: {
                 "page" : nowPage,
                 "menuType": MenuTypeGetter.getInstance().getSelectMenuType()
