@@ -21,7 +21,7 @@
   <img src="https://img.shields.io/badge/Apache Maven-C71A36?style=flat-square&logo=Apache Maven&logoColor=white"/>
 </p>
 
-# **주요 구현 기능**
+# **배포**
 
 [배포주소](http://13.209.147.180:8000/main)  
 
